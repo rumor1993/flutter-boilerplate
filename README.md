@@ -67,7 +67,41 @@ lib/
 - Flutter SDK ^3.7.0
 - Dart SDK ^3.7.0
 
-### Installation
+### Quick Setup
+
+Use the automated setup script:
+```bash
+./setup.sh
+```
+
+This will:
+- Install dependencies
+- Generate code
+- Create `.env` file from template
+- Run tests and analyzer
+
+### Project Renaming
+
+To customize the project name from the default boilerplate:
+
+```bash
+# Rename project to 'my_app'
+./setup.sh --rename my_app
+
+# Rename with spaces (automatically converted to snake_case)
+./setup.sh --rename "My Cool App"
+
+# Show help
+./setup.sh --help
+```
+
+This automatically updates:
+- `pubspec.yaml` name field
+- Android `namespace` and `applicationId`
+- iOS `CFBundleDisplayName` and `CFBundleName`
+- Cleans and rebuilds the project
+
+### Manual Installation
 
 1. Clone the repository:
 ```bash

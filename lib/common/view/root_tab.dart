@@ -1,7 +1,7 @@
-import 'package:flutter_boilerplate/common/const/colors.dart';
-import 'package:flutter_boilerplate/common/layout/default_layout.dart';
-import 'package:flutter_boilerplate/common/view/placeholder_screen.dart';
-import 'package:flutter_boilerplate/home/view/home_screen.dart';
+import 'package:meal/common/const/colors.dart';
+import 'package:meal/common/layout/default_layout.dart';
+import 'package:meal/common/view/placeholder_screen.dart';
+import 'package:meal/home/view/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class RootTab extends StatefulWidget {

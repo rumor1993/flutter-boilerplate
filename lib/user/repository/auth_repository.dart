@@ -1,9 +1,9 @@
-import 'package:flutter_boilerplate/common/const/data.dart';
-import 'package:flutter_boilerplate/common/const/oauth_type.dart';
-import 'package:flutter_boilerplate/common/dio/dio.dart';
-import 'package:flutter_boilerplate/user/model/login_user_model.dart';
-import 'package:flutter_boilerplate/user/model/social_login_response.dart';
-import 'package:flutter_boilerplate/user/model/token_response.dart';
+import 'package:meal/common/const/data.dart';
+import 'package:meal/common/const/oauth_type.dart';
+import 'package:meal/common/dio/dio.dart';
+import 'package:meal/user/model/login_user_model.dart';
+import 'package:meal/user/model/social_login_response.dart';
+import 'package:meal/user/model/token_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
