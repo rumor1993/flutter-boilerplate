@@ -3,6 +3,8 @@ import 'package:meal/common/layout/default_layout.dart';
 import 'package:meal/common/view/placeholder_screen.dart';
 import 'package:meal/home/view/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:meal/meal_plan/view/meal_plan_screen.dart';
+import 'package:meal/recipe/view/recipe_screen.dart';
 
 class RootTab extends StatefulWidget {
   static String get routeName => '/';
@@ -30,8 +32,8 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  void tabListener(){
-    setState((){
+  void tabListener() {
+    setState(() {
       index = controller.index;
     });
   }
@@ -50,14 +52,8 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         },
         currentIndex: index,
         items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.explore),
-            label: 'Explore',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
@@ -67,11 +63,7 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
       child: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: controller,
-        children: [
-          HomeScreen(),
-          PlaceholderScreen(title: 'Tab 2'),
-          PlaceholderScreen(title: 'Tab 3'),
-        ],
+        children: [HomeScreen(), RecipeScreen(), MealPlanScreen()],
       ),
     );
   }
