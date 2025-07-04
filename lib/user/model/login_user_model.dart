@@ -1,4 +1,4 @@
-import 'package:meal/common/const/oauth_type.dart';
+import 'package:flutter_boilerplate/common/const/oauth_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'login_user_model.freezed.dart';
@@ -12,9 +12,9 @@ class LoginUserModel with _$LoginUserModel {
     required String picture,
     required String accessToken,
     required String refreshToken,
-    required OauthType socialType
+    required OauthType socialType,
   }) = _LoginUserModel;
 
-  factory LoginUserModel.fromJson(Map<String, Object?> json)
-  => _$LoginUserModelFromJson(json);
+  factory LoginUserModel.fromJson(Map<String, Object?> json) =>
+      _$LoginUserModelFromJson(json);
 }

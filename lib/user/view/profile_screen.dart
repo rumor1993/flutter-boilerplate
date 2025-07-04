@@ -1,4 +1,4 @@
-import 'package:meal/user/provider/user_me_provider.dart';
+import 'package:flutter_boilerplate/user/provider/user_me_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +10,7 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Center(
       child: ElevatedButton(
-        onPressed: (){
+        onPressed: () {
           ref.read(userMeProvider.notifier).logout();
         },
         child: Text('로그아웃'),

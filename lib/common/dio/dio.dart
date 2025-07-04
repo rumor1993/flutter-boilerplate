@@ -1,9 +1,9 @@
-import 'package:meal/common/const/data.dart';
-import 'package:meal/common/config/app_config.dart';
-import 'package:meal/common/utils/logger.dart';
+import 'package:flutter_boilerplate/common/const/data.dart';
+import 'package:flutter_boilerplate/common/config/app_config.dart';
+import 'package:flutter_boilerplate/common/utils/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:meal/common/secoure_storage/secoure_storage.dart';
+import 'package:flutter_boilerplate/common/secoure_storage/secoure_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final dioProvider = Provider<Dio>((ref) {
@@ -16,18 +16,10 @@ final dioProvider = Provider<Dio>((ref) {
     connectTimeout: Duration(milliseconds: AppConfig.apiTimeout),
     receiveTimeout: Duration(milliseconds: AppConfig.apiTimeout),
     sendTimeout: Duration(milliseconds: AppConfig.apiTimeout),
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    },
+    headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
   );
 
-  dio.interceptors.add(
-    CustomInterceptor(
-      storage: storage,
-      ref: ref,
-    ),
-  );
+  dio.interceptors.add(CustomInterceptor(storage: storage, ref: ref));
 
   return dio;
 });
@@ -36,13 +28,13 @@ class CustomInterceptor extends Interceptor {
   final FlutterSecureStorage storage;
   final Ref ref;
 
-  CustomInterceptor({
-    required this.storage,
-    required this.ref,
-  });
+  CustomInterceptor({required this.storage, required this.ref});
 
   @override
-  void onRequest(RequestOptions options, RequestInterceptorHandler handler) async {
+  void onRequest(
+    RequestOptions options,
+    RequestInterceptorHandler handler,
+  ) async {
     Logger.network(options.method, options.uri.toString(), data: options.data);
 
     if (options.headers['accessToken'] == 'true') {
@@ -51,9 +43,7 @@ class CustomInterceptor extends Interceptor {
       final token = await storage.read(key: ACCESS_TOKEN_KEY);
 
       if (token != null) {
-        options.headers.addAll({
-          'authorization': 'Bearer $token',
-        });
+        options.headers.addAll({'authorization': 'Bearer $token'});
       }
     }
 
@@ -63,9 +53,7 @@ class CustomInterceptor extends Interceptor {
       final token = await storage.read(key: REFRESH_TOKEN_KEY);
 
       if (token != null) {
-        options.headers.addAll({
-          'authorization': 'Bearer $token',
-        });
+        options.headers.addAll({'authorization': 'Bearer $token'});
       }
     }
 
@@ -75,7 +63,7 @@ class CustomInterceptor extends Interceptor {
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) async {
     Logger.network(
-      response.requestOptions.method, 
+      response.requestOptions.method,
       response.requestOptions.uri.toString(),
       response: response.data,
     );
@@ -105,19 +93,13 @@ class CustomInterceptor extends Interceptor {
       try {
         final resp = await dio.post(
           '${AppConfig.apiBaseUrl}/auth/token',
-          options: Options(
-            headers: {
-              'authorization': 'Bearer $refreshToken',
-            },
-          ),
+          options: Options(headers: {'authorization': 'Bearer $refreshToken'}),
         );
 
         final accessToken = resp.data['accessToken'];
         final options = err.requestOptions;
 
-        options.headers.addAll({
-          'authorization': 'Bearer $accessToken',
-        });
+        options.headers.addAll({'authorization': 'Bearer $accessToken'});
 
         await storage.write(key: ACCESS_TOKEN_KEY, value: accessToken);
         final response = await dio.fetch(options);

@@ -1,13 +1,9 @@
-import 'package:meal/common/provider/go_router.dart';
+import 'package:flutter_boilerplate/common/provider/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  runApp(
-    ProviderScope(
-      child: _App(),
-    ),
-  );
+  runApp(ProviderScope(child: _App()));
 }
 
 class _App extends ConsumerWidget {
@@ -19,9 +15,7 @@ class _App extends ConsumerWidget {
 
     return MaterialApp.router(
       theme: ThemeData(
-        cardTheme: const CardTheme(
-          color: Colors.white,
-        ),
+        cardTheme: const CardTheme(color: Colors.white),
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: const Color(0xFFF8F8F8), // 연한 회색 배경

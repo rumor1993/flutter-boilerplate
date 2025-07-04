@@ -1,9 +1,9 @@
-import 'package:meal/common/const/data.dart';
-import 'package:meal/common/const/oauth_type.dart';
-import 'package:meal/common/dio/dio.dart';
-import 'package:meal/user/model/login_user_model.dart';
-import 'package:meal/user/model/social_login_response.dart';
-import 'package:meal/user/model/token_response.dart';
+import 'package:flutter_boilerplate/common/const/data.dart';
+import 'package:flutter_boilerplate/common/const/oauth_type.dart';
+import 'package:flutter_boilerplate/common/dio/dio.dart';
+import 'package:flutter_boilerplate/user/model/login_user_model.dart';
+import 'package:flutter_boilerplate/user/model/social_login_response.dart';
+import 'package:flutter_boilerplate/user/model/token_response.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -17,10 +17,7 @@ class AuthRepository {
   final String baseUrl;
   final Dio dio;
 
-  AuthRepository({
-    required this.baseUrl,
-    required this.dio,
-  });
+  AuthRepository({required this.baseUrl, required this.dio});
 
   Future<LoginUserModel> login(OauthType type) async {
     final socialLoginResponse = await _loginWithGoogle(type);
@@ -29,11 +26,7 @@ class AuthRepository {
       '$baseUrl/users/login',
       queryParameters: {"type": "social"},
       data: socialLoginResponse.toJson(),
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ),
+      options: Options(headers: {'Content-Type': 'application/json'}),
     );
 
     return LoginUserModel.fromJson(response.data);
@@ -42,11 +35,7 @@ class AuthRepository {
   Future<TokenResponse> reissue() async {
     final resp = await dio.post(
       '$baseUrl/reissue',
-      options: Options(
-        headers: {
-          'refreshToken': 'true',
-        },
-      ),
+      options: Options(headers: {'refreshToken': 'true'}),
     );
 
     return TokenResponse.fromJson(resp.data);
@@ -54,16 +43,18 @@ class AuthRepository {
 
   Future<SocialLoginResponse> _loginWithGoogle(OauthType type) async {
     GoogleSignIn googleSignIn = GoogleSignIn(
-      clientId: "499518900282-orncbv9lpq4gdbambs5ldbgh4duvgvek.apps.googleusercontent.com"
+      clientId:
+          "499518900282-orncbv9lpq4gdbambs5ldbgh4duvgvek.apps.googleusercontent.com",
     );
     var googleSignInAccount = await googleSignIn.signIn();
     var authentication = await googleSignInAccount?.authentication;
 
     return SocialLoginResponse(
-        socialId: googleSignInAccount!.id,
-        username: googleSignInAccount.displayName!,
-        picture: googleSignInAccount.photoUrl!,
-        socialType: type,
-        token: authentication!.idToken!);
+      socialId: googleSignInAccount!.id,
+      username: googleSignInAccount.displayName!,
+      picture: googleSignInAccount.photoUrl!,
+      socialType: type,
+      token: authentication!.idToken!,
+    );
   }
 }

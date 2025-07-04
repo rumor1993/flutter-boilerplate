@@ -1,9 +1,9 @@
-import 'package:meal/common/view/root_tab.dart';
-import 'package:meal/common/view/splash_screen.dart';
-import 'package:meal/user/model/user_model.dart';
-import 'package:meal/user/provider/user_me_provider.dart';
-import 'package:meal/user/view/login_screen.dart';
-import 'package:meal/user/view/profile_screen.dart';
+import 'package:flutter_boilerplate/common/view/root_tab.dart';
+import 'package:flutter_boilerplate/common/view/splash_screen.dart';
+import 'package:flutter_boilerplate/user/model/user_model.dart';
+import 'package:flutter_boilerplate/user/provider/user_me_provider.dart';
+import 'package:flutter_boilerplate/user/view/login_screen.dart';
+import 'package:flutter_boilerplate/user/view/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Flutter Boilerplate Setup Script
-₩
+
 # Function to show usage
 show_usage() {
     echo "Usage: $0 [OPTIONS]"
@@ -28,14 +28,18 @@ rename_project() {
 
     echo "🔄 Renaming project to: $new_name"
 
+    # 현재 프로젝트명 추출
+    current_name=$(grep "^name:" pubspec.yaml | cut -d' ' -f2)
+    echo "📋 Current project name: $current_name"
+
     # Update pubspec.yaml
     echo "📝 Updating pubspec.yaml..."
     sed -i.bak "s/^name: .*/name: $new_name/" pubspec.yaml
 
-    # Update Dart import statements
+    # Update Dart import statements - 동적으로 현재 이름 사용
     echo "📝 Updating import statements in Dart files..."
-    find lib -name "*.dart" -exec sed -i.bak "s/package:flutter_boilerplate/package:$new_name/g" {} \;
-    find test -name "*.dart" -exec sed -i.bak "s/package:flutter_boilerplate/package:$new_name/g" {} \;
+    find lib -name "*.dart" -exec sed -i.bak "s/package:$current_name/package:$new_name/g" {} \;
+    find test -name "*.dart" -exec sed -i.bak "s/package:$current_name/package:$new_name/g" {} \;
 
     # Update Android files
     echo "📱 Updating Android configuration..."

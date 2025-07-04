@@ -1,5 +1,5 @@
-import 'package:meal/common/const/colors.dart';
-import 'package:meal/common/layout/default_layout.dart';
+import 'package:flutter_boilerplate/common/const/colors.dart';
+import 'package:flutter_boilerplate/common/layout/default_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -17,13 +17,9 @@ class SplashScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FlutterLogo(
-              size: MediaQuery.of(context).size.width / 3,
-            ),
+            FlutterLogo(size: MediaQuery.of(context).size.width / 3),
             const SizedBox(height: 16.0),
-            CircularProgressIndicator(
-              color: Colors.white,
-            ),
+            CircularProgressIndicator(color: Colors.white),
           ],
         ),
       ),

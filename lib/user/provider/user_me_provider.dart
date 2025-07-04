@@ -1,24 +1,25 @@
-import 'package:meal/common/const/data.dart';
-import 'package:meal/common/const/oauth_type.dart';
-import 'package:meal/common/secoure_storage/secoure_storage.dart';
-import 'package:meal/user/model/user_model.dart';
-import 'package:meal/user/repository/auth_repository.dart';
-import 'package:meal/user/repository/user_me_repository.dart';
+import 'package:flutter_boilerplate/common/const/data.dart';
+import 'package:flutter_boilerplate/common/const/oauth_type.dart';
+import 'package:flutter_boilerplate/common/secoure_storage/secoure_storage.dart';
+import 'package:flutter_boilerplate/user/model/user_model.dart';
+import 'package:flutter_boilerplate/user/repository/auth_repository.dart';
+import 'package:flutter_boilerplate/user/repository/user_me_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-final userMeProvider = StateNotifierProvider<UserMeStateNotifier, AsyncValue<UserModel?>>((ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  final userMeRepository = ref.watch(userMeRepositoryProvider);
-  final storage = ref.watch(secureStorageProvider);
+final userMeProvider =
+    StateNotifierProvider<UserMeStateNotifier, AsyncValue<UserModel?>>((ref) {
+      final authRepository = ref.watch(authRepositoryProvider);
+      final userMeRepository = ref.watch(userMeRepositoryProvider);
+      final storage = ref.watch(secureStorageProvider);
 
-  return UserMeStateNotifier(
-    authRepository: authRepository,
-    repository: userMeRepository,
-    storage: storage,
-  );
-});
+      return UserMeStateNotifier(
+        authRepository: authRepository,
+        repository: userMeRepository,
+        storage: storage,
+      );
+    });
 
 class UserMeStateNotifier extends StateNotifier<AsyncValue<UserModel?>> {
   final AuthRepository authRepository;
@@ -61,7 +62,6 @@ class UserMeStateNotifier extends StateNotifier<AsyncValue<UserModel?>> {
 
       final userResp = await repository.getMe();
       state = AsyncValue.data(userResp);
-
     } catch (e, stackTrace) {
       state = AsyncValue.error(e, stackTrace);
     }
@@ -74,6 +74,6 @@ class UserMeStateNotifier extends StateNotifier<AsyncValue<UserModel?>> {
       storage.delete(key: ACCESS_TOKEN_KEY),
     ]);
 
-    state = AsyncValue.data(null);  // 로그아웃 후 상태를 null로 설정
+    state = AsyncValue.data(null); // 로그아웃 후 상태를 null로 설정
   }
 }

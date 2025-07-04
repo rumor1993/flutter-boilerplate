@@ -1,4 +1,4 @@
-import 'package:meal/common/const/oauth_type.dart';
+import 'package:flutter_boilerplate/common/const/oauth_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'social_login_response.freezed.dart';
@@ -14,7 +14,6 @@ class SocialLoginResponse with _$SocialLoginResponse {
     required String token,
   }) = _SocialLoginResponse;
 
-  factory SocialLoginResponse.fromJson(Map<String, dynamic> json)
-  => _$SocialLoginResponseFromJson(json);
+  factory SocialLoginResponse.fromJson(Map<String, dynamic> json) =>
+      _$SocialLoginResponseFromJson(json);
 }
-

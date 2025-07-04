@@ -1,16 +1,11 @@
 import 'dart:developer' as developer;
-import 'package:meal/common/config/app_config.dart';
+import 'package:flutter_boilerplate/common/config/app_config.dart';
 
-enum LogLevel {
-  debug,
-  info,
-  warning,
-  error,
-}
+enum LogLevel { debug, info, warning, error }
 
 class Logger {
   static const String _name = 'FlutterBoilerplate';
-  
+
   static LogLevel get _currentLevel {
     switch (AppConfig.logLevel.toLowerCase()) {
       case 'error':
@@ -24,7 +19,7 @@ class Logger {
         return LogLevel.debug;
     }
   }
-  
+
   static bool _shouldLog(LogLevel level) {
     if (!AppConfig.debugMode) return false;
     return level.index >= _currentLevel.index;
@@ -74,12 +69,14 @@ class Logger {
     }
   }
 
-  static void network(String method, String url, {Object? data, Object? response}) {
+  static void network(
+    String method,
+    String url, {
+    Object? data,
+    Object? response,
+  }) {
     if (_shouldLog(LogLevel.debug)) {
-      developer.log(
-        '[NETWORK] $method $url',
-        name: _name,
-      );
+      developer.log('[NETWORK] $method $url', name: _name);
       if (data != null) {
         developer.log('[REQUEST] $data', name: _name);
       }
