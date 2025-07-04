@@ -28,9 +28,20 @@ rename_project() {
 
     echo "🔄 Renaming project to: $new_name"
 
-    # 현재 프로젝트명 추출
-    current_name=$(grep "^name:" pubspec.yaml | cut -d' ' -f2)
-    echo "📋 Current project name: $current_name"
+    # pubspec.yaml 파일 존재 확인
+    if [ ! -f "pubspec.yaml" ]; then
+        echo "❌ pubspec.yaml not found. Please run this script from the Flutter project root."
+        exit 1
+    fi
+
+    # 현재 프로젝트명 추출 (공백 제거)
+    current_name=$(grep "^name:" pubspec.yaml | cut -d':' -f2 | tr -d ' ')
+    echo "📋 Current project name: '$current_name'"
+
+    if [ -z "$current_name" ]; then
+        echo "❌ Could not extract current project name from pubspec.yaml"
+        exit 1
+    fi
 
     # Update pubspec.yaml
     echo "📝 Updating pubspec.yaml..."
@@ -38,8 +49,25 @@ rename_project() {
 
     # Update Dart import statements - 동적으로 현재 이름 사용
     echo "📝 Updating import statements in Dart files..."
-    find lib -name "*.dart" -exec sed -i.bak "s/package:$current_name/package:$new_name/g" {} \;
-    find test -name "*.dart" -exec sed -i.bak "s/package:$current_name/package:$new_name/g" {} \;
+    echo "🔍 Looking for imports with 'package:$current_name'"
+
+    # 가장 간단하고 확실한 방법 - find와 -exec 직접 사용
+    if [ -d "lib" ]; then
+        echo "  📁 Updating lib/ directory..."
+        find lib -name "*.dart" -type f -exec sed -i.bak "s/package:$current_name/package:$new_name/g" {} \;
+        echo "  ✅ lib/ directory updated"
+    fi
+
+    if [ -d "test" ]; then
+        echo "  📁 Updating test/ directory..."
+        find test -name "*.dart" -type f -exec sed -i.bak "s/package:$current_name/package:$new_name/g" {} \;
+        echo "  ✅ test/ directory updated"
+    fi
+
+    # 변경 결과 확인
+    echo "🔍 Checking results..."
+    changed_files=$(find lib test -name "*.dart" -type f -exec grep -l "package:$new_name" {} \; 2>/dev/null | wc -l)
+    echo "  📊 Updated $changed_files files with new package name"
 
     # Update Android files
     echo "📱 Updating Android configuration..."
