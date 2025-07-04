@@ -1,24 +1,27 @@
 import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 class PhotoState {
   final dynamic basePhoto; // Can be File or XFile for web compatibility
   final List<dynamic> comparisonPhotos; // Can be List<File> or List<XFile>
+  final List<dynamic> trashPhotos; // Photos moved to trash
 
   PhotoState({
     this.basePhoto,
     this.comparisonPhotos = const [],
+    this.trashPhotos = const [],
   });
 
   PhotoState copyWith({
     dynamic basePhoto,
     List<dynamic>? comparisonPhotos,
+    List<dynamic>? trashPhotos,
   }) {
     return PhotoState(
       basePhoto: basePhoto ?? this.basePhoto,
       comparisonPhotos: comparisonPhotos ?? this.comparisonPhotos,
+      trashPhotos: trashPhotos ?? this.trashPhotos,
     );
   }
 }
@@ -86,6 +89,40 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
     }
   }
 
+  void moveComparisonPhotoToTrash(int index) {
+    final currentPhotos = List<File>.from(state.comparisonPhotos);
+    final currentTrash = List<File>.from(state.trashPhotos);
+    
+    if (index >= 0 && index < currentPhotos.length) {
+      final photoToMove = currentPhotos.removeAt(index);
+      currentTrash.add(photoToMove);
+      
+      state = state.copyWith(
+        comparisonPhotos: currentPhotos,
+        trashPhotos: currentTrash,
+      );
+    }
+  }
+
+  void restorePhotoFromTrash(int trashIndex) {
+    final currentPhotos = List<File>.from(state.comparisonPhotos);
+    final currentTrash = List<File>.from(state.trashPhotos);
+    
+    if (trashIndex >= 0 && trashIndex < currentTrash.length) {
+      final photoToRestore = currentTrash.removeAt(trashIndex);
+      currentPhotos.add(photoToRestore);
+      
+      state = state.copyWith(
+        comparisonPhotos: currentPhotos,
+        trashPhotos: currentTrash,
+      );
+    }
+  }
+
+  void clearTrash() {
+    state = state.copyWith(trashPhotos: []);
+  }
+
   void clearBasePhoto() {
     state = state.copyWith(basePhoto: null);
   }
@@ -97,6 +134,27 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
   void clearAllPhotos() {
     state = PhotoState();
   }
+
+  void changeBasePhoto(int comparisonIndex) {
+    final currentComparisonPhotos = List<File>.from(state.comparisonPhotos);
+    
+    if (comparisonIndex >= 0 && comparisonIndex < currentComparisonPhotos.length) {
+      final newBasePhoto = currentComparisonPhotos[comparisonIndex];
+      currentComparisonPhotos.removeAt(comparisonIndex);
+      
+      // Add old base photo to comparison photos if it exists
+      if (state.basePhoto != null) {
+        currentComparisonPhotos.add(state.basePhoto as File);
+      }
+      
+      state = state.copyWith(
+        basePhoto: newBasePhoto,
+        comparisonPhotos: currentComparisonPhotos,
+      );
+    }
+  }
+
+  int get trashCount => state.trashPhotos.length;
 }
 
 final photoProvider = StateNotifierProvider<PhotoNotifier, PhotoState>((ref) {
