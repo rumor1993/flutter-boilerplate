@@ -1,9 +1,9 @@
-import 'package:flutter_boilerplate/common/const/data.dart';
-import 'package:flutter_boilerplate/common/config/app_config.dart';
-import 'package:flutter_boilerplate/common/utils/logger.dart';
+import 'package:photo_app/common/const/data.dart';
+import 'package:photo_app/common/config/app_config.dart';
+import 'package:photo_app/common/utils/logger.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_boilerplate/common/secoure_storage/secoure_storage.dart';
+import 'package:photo_app/common/secoure_storage/secoure_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final dioProvider = Provider<Dio>((ref) {

@@ -1,5 +1,5 @@
 import 'dart:developer' as developer;
-import 'package:flutter_boilerplate/common/config/app_config.dart';
+import 'package:photo_app/common/config/app_config.dart';
 
 enum LogLevel { debug, info, warning, error }
 

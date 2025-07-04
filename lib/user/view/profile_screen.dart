@@ -1,4 +1,4 @@
-import 'package:flutter_boilerplate/user/provider/user_me_provider.dart';
+import 'package:photo_app/user/provider/user_me_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

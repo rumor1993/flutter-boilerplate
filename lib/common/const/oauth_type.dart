@@ -1,3 +1,1 @@
-enum OauthType {
-  APPLE, KAKAO, GOOGLE
-}
+enum OauthType { APPLE, KAKAO, GOOGLE }

@@ -1,4 +1,4 @@
-import 'package:flutter_boilerplate/common/provider/go_router.dart';
+import 'package:photo_app/common/provider/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -15,29 +15,41 @@ class _App extends ConsumerWidget {
 
     return MaterialApp.router(
       theme: ThemeData(
-        cardTheme: const CardTheme(color: Colors.white),
-        brightness: Brightness.light,
+        brightness: Brightness.dark,
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: const Color(0xFFF8F8F8), // 연한 회색 배경
+        scaffoldBackgroundColor: Colors.black,
+        cardTheme: const CardTheme(
+          color: Color(0xFF1A1A1A),
+          shadowColor: Colors.black54,
+          elevation: 4,
+        ),
         appBarTheme: const AppBarTheme(
-          backgroundColor: Colors.white,
-          foregroundColor: Colors.black,
+          backgroundColor: Colors.black,
+          foregroundColor: Colors.white,
           elevation: 0,
           titleTextStyle: TextStyle(
-            fontSize: 16.0,
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
           ),
-          toolbarHeight: 80,
-          surfaceTintColor: Colors.transparent, // iOS 느낌
+          iconTheme: IconThemeData(color: Colors.white),
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Colors.white,
-          selectedItemColor: Colors.blue,
+          backgroundColor: Colors.black,
+          selectedItemColor: Colors.white,
           unselectedItemColor: Colors.grey,
           selectedLabelStyle: TextStyle(fontSize: 12),
           unselectedLabelStyle: TextStyle(fontSize: 12),
           elevation: 8,
+        ),
+        textTheme: const TextTheme(
+          bodyLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Colors.white),
+          titleLarge: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+          titleMedium: TextStyle(color: Colors.white),
         ),
       ),
       debugShowCheckedModeBanner: false,

@@ -1,5 +1,5 @@
-import 'package:flutter_boilerplate/common/const/colors.dart';
-import 'package:flutter_boilerplate/common/layout/default_layout.dart';
+import 'package:photo_app/common/const/colors.dart';
+import 'package:photo_app/common/layout/default_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

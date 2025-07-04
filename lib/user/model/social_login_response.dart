@@ -1,4 +1,4 @@
-import 'package:flutter_boilerplate/common/const/oauth_type.dart';
+import 'package:photo_app/common/const/oauth_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'social_login_response.freezed.dart';

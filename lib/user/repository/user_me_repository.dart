@@ -1,6 +1,6 @@
-import 'package:flutter_boilerplate/common/const/data.dart';
-import 'package:flutter_boilerplate/common/dio/dio.dart';
-import 'package:flutter_boilerplate/user/model/user_model.dart';
+import 'package:photo_app/common/const/data.dart';
+import 'package:photo_app/common/dio/dio.dart';
+import 'package:photo_app/user/model/user_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';

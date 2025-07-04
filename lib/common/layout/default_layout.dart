@@ -27,10 +27,10 @@ class DefaultLayout extends StatelessWidget {
     );
   }
 
-  AppBar? renderAppBar(){
-    if(title == null){
+  AppBar? renderAppBar() {
+    if (title == null) {
       return null;
-    }else{
+    } else {
       return AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -48,10 +48,7 @@ class DefaultLayout extends StatelessWidget {
             SizedBox(height: 4.0),
             Text(
               '소방구조대 구조물 지지대 계산 도구',
-              style: TextStyle(
-                fontSize: 14.0,
-                color: Colors.grey.shade500,
-              ),
+              style: TextStyle(fontSize: 14.0, color: Colors.grey.shade500),
               textAlign: TextAlign.center,
             ),
           ],

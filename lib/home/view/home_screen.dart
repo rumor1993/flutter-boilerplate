@@ -7,87 +7,200 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Welcome to Flutter Boilerplate!',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
+      backgroundColor: Colors.black,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Header Section
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(width: 40), // Spacer for centering
+                  const Expanded(
+                    child: Text(
+                      'Sort Your Photos',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.settings, color: Colors.white),
+                    onPressed: () {},
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'This is a boilerplate Flutter app with:',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 12),
-            _FeatureCard(
-              icon: Icons.login,
-              title: 'Authentication',
-              description: 'User login/logout with secure storage',
-            ),
-            const SizedBox(height: 8),
-            _FeatureCard(
-              icon: Icons.navigation,
-              title: 'Navigation',
-              description: 'GoRouter for declarative routing',
-            ),
-            const SizedBox(height: 8),
-            _FeatureCard(
-              icon: Icons.memory,
-              title: 'State Management',
-              description: 'Riverpod for reactive state management',
-            ),
-            const SizedBox(height: 8),
-            _FeatureCard(
-              icon: Icons.api,
-              title: 'API Integration',
-              description: 'Dio for HTTP requests and API calls',
-            ),
-            const SizedBox(height: 8),
-            _FeatureCard(
-              icon: Icons.design_services,
-              title: 'Modern UI',
-              description: 'Material Design 3 components',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+              const SizedBox(height: 16),
 
-class _FeatureCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String description;
+              // Subtitle
+              const Text(
+                'Effortlessly organize your photo library\nwith smart sorting.',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 40),
 
-  const _FeatureCard({
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
+              // Photo Preview Section
+              Row(
+                children: [
+                  // Single photo card
+                  Expanded(
+                    child: Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1A1A1A),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                              colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
+                            ),
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.landscape,
+                              size: 60,
+                              color: Colors.white70,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
 
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: Theme.of(context).colorScheme.primary,
+                  // Split view card
+                  Expanded(
+                    child: Container(
+                      height: 200,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1A1A1A),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.3),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color(0xFFE2A54A),
+                                      Color(0xFFBD8D35),
+                                    ],
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.beach_access,
+                                    size: 40,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(width: 1, color: Colors.black26),
+                            Expanded(
+                              child: Container(
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [
+                                      Color(0xFF4AE2A5),
+                                      Color(0xFF35BD8A),
+                                    ],
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Icon(
+                                    Icons.wb_sunny,
+                                    size: 40,
+                                    color: Colors.white70,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
+
+              // Action Button
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: () {},
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1A1A1A),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 4,
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.photo_library, size: 20),
+                      SizedBox(width: 8),
+                      Text(
+                        'Select Base Photo',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 32),
+
+              // Stats Section
+              const Text(
+                'Photos organized: 0',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+                textAlign: TextAlign.center,
+              ),
+
+              const Spacer(),
+            ],
+          ),
         ),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(description),
       ),
     );
   }

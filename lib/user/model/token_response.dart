@@ -10,7 +10,6 @@ class TokenResponse with _$TokenResponse {
     required String refreshToken,
   }) = _TokenResponse;
 
-  factory TokenResponse.fromJson(Map<String, dynamic> json)
-  => _$TokenResponseFromJson(json);
+  factory TokenResponse.fromJson(Map<String, dynamic> json) =>
+      _$TokenResponseFromJson(json);
 }
-

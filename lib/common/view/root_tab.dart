@@ -1,7 +1,8 @@
-import 'package:flutter_boilerplate/common/const/colors.dart';
-import 'package:flutter_boilerplate/common/layout/default_layout.dart';
-import 'package:flutter_boilerplate/common/view/placeholder_screen.dart';
-import 'package:flutter_boilerplate/home/view/home_screen.dart';
+import 'package:photo_app/common/const/colors.dart';
+import 'package:photo_app/common/layout/default_layout.dart';
+import 'package:photo_app/home/view/home_screen.dart';
+import 'package:photo_app/photos/view/photos_screen.dart';
+import 'package:photo_app/profile/view/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class RootTab extends StatefulWidget {
@@ -51,21 +52,17 @@ class _RootTabState extends State<RootTab> with SingleTickerProviderStateMixin {
         currentIndex: index,
         items: [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.explore), label: 'Explore'),
           BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
+            icon: Icon(Icons.photo_library),
+            label: 'Photos',
           ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
       child: TabBarView(
         physics: NeverScrollableScrollPhysics(),
         controller: controller,
-        children: [
-          HomeScreen(),
-          PlaceholderScreen(title: 'Tab 2'),
-          PlaceholderScreen(title: 'Tab 3'),
-        ],
+        children: [HomeScreen(), PhotosScreen(), ProfileScreen()],
       ),
     );
   }

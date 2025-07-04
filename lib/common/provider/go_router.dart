@@ -1,5 +1,5 @@
-import 'package:flutter_boilerplate/common/view/root_tab.dart';
-import 'package:flutter_boilerplate/user/provider/auth_provider.dart';
+import 'package:photo_app/common/view/root_tab.dart';
+import 'package:photo_app/user/provider/auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

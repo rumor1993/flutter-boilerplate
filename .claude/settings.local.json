@@ -4,7 +4,12 @@
       "Bash(flutter analyze:*)",
       "Bash(flutter test:*)",
       "Bash(chmod:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(flutter run:*)",
+      "Bash(flutter:*)",
+      "Bash(pkill:*)",
+      "Bash(true)",
+      "Bash(dart format:*)"
     ],
     "deny": []
   }

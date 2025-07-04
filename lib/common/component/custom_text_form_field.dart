@@ -1,4 +1,4 @@
-import 'package:flutter_boilerplate/common/const/colors.dart';
+import 'package:photo_app/common/const/colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {

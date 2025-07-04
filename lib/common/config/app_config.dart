@@ -4,7 +4,7 @@ class AppConfig {
     'API_BASE_URL',
     defaultValue: 'https://api.example.com',
   );
-  
+
   static const int apiTimeout = int.fromEnvironment(
     'API_TIMEOUT',
     defaultValue: 30000,
@@ -15,12 +15,12 @@ class AppConfig {
     'GOOGLE_CLIENT_ID_IOS',
     defaultValue: '',
   );
-  
+
   static const String googleClientIdAndroid = String.fromEnvironment(
     'GOOGLE_CLIENT_ID_ANDROID',
     defaultValue: '',
   );
-  
+
   static const String googleClientIdWeb = String.fromEnvironment(
     'GOOGLE_CLIENT_ID_WEB',
     defaultValue: '',
@@ -31,7 +31,7 @@ class AppConfig {
     'APP_NAME',
     defaultValue: 'Flutter Boilerplate',
   );
-  
+
   static const String appVersion = String.fromEnvironment(
     'APP_VERSION',
     defaultValue: '1.0.0',
@@ -42,7 +42,7 @@ class AppConfig {
     'DEBUG_MODE',
     defaultValue: true,
   );
-  
+
   static const String logLevel = String.fromEnvironment(
     'LOG_LEVEL',
     defaultValue: 'debug',
@@ -59,7 +59,7 @@ class AppConfig {
     'FIREBASE_PROJECT_ID',
     defaultValue: '',
   );
-  
+
   static const String firebaseApiKey = String.fromEnvironment(
     'FIREBASE_API_KEY',
     defaultValue: '',
@@ -73,18 +73,18 @@ class AppConfig {
 
   // Helper methods
   static bool get isProduction => !debugMode;
-  
+
   static bool get isDevelopment => debugMode;
-  
-  static bool get hasGoogleSignIn => 
-      googleClientIdIOS.isNotEmpty || 
-      googleClientIdAndroid.isNotEmpty || 
+
+  static bool get hasGoogleSignIn =>
+      googleClientIdIOS.isNotEmpty ||
+      googleClientIdAndroid.isNotEmpty ||
       googleClientIdWeb.isNotEmpty;
-      
+
   static bool get hasDatabase => databaseUrl.isNotEmpty;
-  
-  static bool get hasFirebase => 
+
+  static bool get hasFirebase =>
       firebaseProjectId.isNotEmpty && firebaseApiKey.isNotEmpty;
-      
+
   static bool get hasSentry => sentryDsn.isNotEmpty;
 }

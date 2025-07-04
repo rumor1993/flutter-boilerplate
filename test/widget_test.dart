@@ -15,11 +15,7 @@ void main() {
     await tester.pumpWidget(
       ProviderScope(
         child: MaterialApp(
-          home: Scaffold(
-            body: Center(
-              child: Text('Flutter Boilerplate Test'),
-            ),
-          ),
+          home: Scaffold(body: Center(child: Text('Flutter Boilerplate Test'))),
         ),
       ),
     );

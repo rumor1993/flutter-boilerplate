@@ -28,11 +28,7 @@ class UpdatePendingScreen extends StatelessWidget {
                 color: Colors.blue.shade50,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Icons.update,
-                size: 60,
-                color: Colors.blue.shade400,
-              ),
+              child: Icon(Icons.update, size: 60, color: Colors.blue.shade400),
             ),
 
             SizedBox(height: 40),
@@ -84,10 +80,7 @@ class UpdatePendingScreen extends StatelessWidget {
     return Container(
       width: 8,
       height: 8,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 }

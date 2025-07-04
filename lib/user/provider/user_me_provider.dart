@@ -1,9 +1,9 @@
-import 'package:flutter_boilerplate/common/const/data.dart';
-import 'package:flutter_boilerplate/common/const/oauth_type.dart';
-import 'package:flutter_boilerplate/common/secoure_storage/secoure_storage.dart';
-import 'package:flutter_boilerplate/user/model/user_model.dart';
-import 'package:flutter_boilerplate/user/repository/auth_repository.dart';
-import 'package:flutter_boilerplate/user/repository/user_me_repository.dart';
+import 'package:photo_app/common/const/data.dart';
+import 'package:photo_app/common/const/oauth_type.dart';
+import 'package:photo_app/common/secoure_storage/secoure_storage.dart';
+import 'package:photo_app/user/model/user_model.dart';
+import 'package:photo_app/user/repository/auth_repository.dart';
+import 'package:photo_app/user/repository/user_me_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
