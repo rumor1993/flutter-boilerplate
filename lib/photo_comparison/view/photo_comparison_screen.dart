@@ -49,24 +49,86 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
     super.dispose();
   }
 
-  void _handleSwipeDelete(int index) {
+
+  void _showTrashManagement(BuildContext context) {
     final photoState = ref.read(photoProvider);
     
-    if (index == 0 && photoState.basePhoto != null) {
-      // 베이스 이미지는 그냥 제거
-      ref.read(photoProvider.notifier).clearBasePhoto();
-    } else {
-      // 비교 이미지는 휴지통으로 이동
-      final comparisonIndex = index - (photoState.basePhoto != null ? 1 : 0);
-      ref.read(photoProvider.notifier).moveComparisonPhotoToTrash(comparisonIndex);
+    if (photoState.trashPhotos.isEmpty) {
+      _showDeleteAllConfirmation(context);
+      return;
     }
-    
-    // Update current index if needed
-    if (index <= _currentIndex && _currentIndex > 0) {
-      setState(() {
-        _currentIndex = _currentIndex - 1;
-      });
-    }
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey[900],
+        title: const Text(
+          'Trash Management',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '${photoState.trashPhotos.length} photos in trash',
+              style: const TextStyle(color: Colors.white70),
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: TextButton(
+                    onPressed: () {
+                      ref.read(photoProvider.notifier).restoreAllFromTrash();
+                      Navigator.pop(context);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('All photos restored'),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    },
+                    child: const Text('Restore All'),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: TextButton(
+                    onPressed: () async {
+                      final navigator = Navigator.of(context);
+                      final messenger = ScaffoldMessenger.of(context);
+                      navigator.pop();
+                      await ref.read(photoProvider.notifier).deleteTrashPhotosPermanently();
+                      messenger.showSnackBar(
+                        const SnackBar(
+                          content: Text('Trash permanently deleted'),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    },
+                    style: TextButton.styleFrom(foregroundColor: Colors.red),
+                    child: const Text('Delete Forever'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              _showDeleteAllConfirmation(context);
+            },
+            child: const Text('Delete All Photos'),
+          ),
+        ],
+      ),
+    );
   }
 
   void _showDeleteAllConfirmation(BuildContext context) {
@@ -175,7 +237,7 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                   currentIndex: _currentIndex,
                   onBack: () => Navigator.pop(context),
                   onChangeBase: () => _showChangeCurrentToBaseConfirmation(context),
-                  onDeleteAll: () => _showDeleteAllConfirmation(context),
+                  onDeleteAll: () => _showTrashManagement(context),
                 ),
 
                 // Main Photo Display
@@ -184,7 +246,6 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                   currentIndex: _currentIndex,
                   showBasePhoto: _showBasePhoto,
                   onPageChanged: _onPageChanged,
-                  onSwipeDelete: _handleSwipeDelete,
                   onShowBasePhotoChanged: (show) {
                     setState(() {
                       _showBasePhoto = show;

@@ -49,12 +49,41 @@ class PhotoComparisonHeader extends ConsumerWidget {
                     onPressed: onChangeBase,
                     tooltip: 'Change Base Photo',
                   ),
-                IconButton(
-                  icon: const Icon(
-                    Icons.delete,
-                    color: Colors.white,
-                  ),
-                  onPressed: onDeleteAll,
+                Stack(
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                      onPressed: onDeleteAll,
+                    ),
+                    if (photoState.trashPhotos.isNotEmpty)
+                      Positioned(
+                        right: 8,
+                        top: 8,
+                        child: Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: const BoxDecoration(
+                            color: Colors.red,
+                            shape: BoxShape.circle,
+                          ),
+                          constraints: const BoxConstraints(
+                            minWidth: 16,
+                            minHeight: 16,
+                          ),
+                          child: Text(
+                            '${photoState.trashPhotos.length}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
+                  ],
                 ),
               ],
             ),

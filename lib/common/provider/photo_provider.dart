@@ -119,8 +119,56 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
     }
   }
 
+  void restoreAllFromTrash() {
+    final currentPhotos = List<File>.from(state.comparisonPhotos);
+    final trashPhotos = List<File>.from(state.trashPhotos);
+    
+    currentPhotos.addAll(trashPhotos);
+    
+    state = state.copyWith(
+      comparisonPhotos: currentPhotos,
+      trashPhotos: [],
+    );
+  }
+
   void clearTrash() {
     state = state.copyWith(trashPhotos: []);
+  }
+
+  Future<void> deleteTrashPhotosPermanently() async {
+    try {
+      final trashPhotos = List<File>.from(state.trashPhotos);
+      
+      for (final photo in trashPhotos) {
+        if (await photo.exists()) {
+          await photo.delete();
+        }
+      }
+      
+      // Clear trash after successful deletion
+      state = state.copyWith(trashPhotos: []);
+    } catch (e) {
+      print('Error deleting trash photos permanently: $e');
+    }
+  }
+
+  Future<void> deleteSpecificTrashPhoto(int trashIndex) async {
+    try {
+      final currentTrash = List<File>.from(state.trashPhotos);
+      
+      if (trashIndex >= 0 && trashIndex < currentTrash.length) {
+        final photoToDelete = currentTrash[trashIndex];
+        
+        if (await photoToDelete.exists()) {
+          await photoToDelete.delete();
+        }
+        
+        currentTrash.removeAt(trashIndex);
+        state = state.copyWith(trashPhotos: currentTrash);
+      }
+    } catch (e) {
+      print('Error deleting specific trash photo: $e');
+    }
   }
 
   void clearBasePhoto() {

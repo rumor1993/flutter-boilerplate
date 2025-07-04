@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +8,6 @@ class MainPhotoDisplay extends ConsumerStatefulWidget {
   final int currentIndex;
   final bool showBasePhoto;
   final Function(int) onPageChanged;
-  final Function(int) onSwipeDelete;
   final Function(bool) onShowBasePhotoChanged;
 
   const MainPhotoDisplay({
@@ -18,7 +16,6 @@ class MainPhotoDisplay extends ConsumerStatefulWidget {
     required this.currentIndex,
     required this.showBasePhoto,
     required this.onPageChanged,
-    required this.onSwipeDelete,
     required this.onShowBasePhotoChanged,
   });
 
@@ -26,56 +23,7 @@ class MainPhotoDisplay extends ConsumerStatefulWidget {
   ConsumerState<MainPhotoDisplay> createState() => _MainPhotoDisplayState();
 }
 
-class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay>
-    with TickerProviderStateMixin {
-  late AnimationController _swipeAnimationController;
-  late Animation<Offset> _swipeAnimation;
-  bool _isSwipeInProgress = false;
-  int? _swipeIndex;
-  Timer? _basePhotoTimer;
-
-  @override
-  void initState() {
-    super.initState();
-    _swipeAnimationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-    _swipeAnimation = Tween<Offset>(
-      begin: Offset.zero,
-      end: const Offset(0, -1),
-    ).animate(CurvedAnimation(
-      parent: _swipeAnimationController,
-      curve: Curves.easeInOut,
-    ));
-  }
-
-  @override
-  void dispose() {
-    _swipeAnimationController.dispose();
-    _basePhotoTimer?.cancel();
-    super.dispose();
-  }
-
-  void _handleSwipeDelete(int index) async {
-    setState(() {
-      _isSwipeInProgress = true;
-      _swipeIndex = index;
-    });
-    
-    // 스와이프 삭제 중에는 베이스 이미지 오버레이 숨김
-    widget.onShowBasePhotoChanged(false);
-
-    await _swipeAnimationController.forward();
-    widget.onSwipeDelete(index);
-
-    setState(() {
-      _isSwipeInProgress = false;
-      _swipeIndex = null;
-    });
-    _swipeAnimationController.reset();
-  }
-
+class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
   @override
   Widget build(BuildContext context) {
     final photoState = ref.watch(photoProvider);
@@ -170,11 +118,10 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay>
           },
         ),
 
-        // Base photo overlay (스와이프 삭제 중이 아닐 때만 표시)
+        // Base photo overlay
         if (widget.showBasePhoto &&
             photoState.basePhoto != null &&
-            widget.currentIndex > 0 &&
-            !_isSwipeInProgress)
+            widget.currentIndex > 0)
           _buildBasePhotoOverlay(photoState),
 
         // Page indicator
@@ -189,58 +136,36 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay>
       child: GestureDetector(
         onPanDown: (details) {
           if (photoState.basePhoto != null && index > 0) {
-            // 500ms 딜레이 후에 베이스 이미지 표시
-            _basePhotoTimer = Timer(const Duration(milliseconds: 500), () {
-              widget.onShowBasePhotoChanged(true);
-            });
+            widget.onShowBasePhotoChanged(true);
           }
         },
         onPanEnd: (details) {
-          if (details.velocity.pixelsPerSecond.dy < -500) {
-            _handleSwipeDelete(index);
-          } else {
-            widget.onShowBasePhotoChanged(false);
-          }
+          widget.onShowBasePhotoChanged(false);
         },
         onPanCancel: () {
           widget.onShowBasePhotoChanged(false);
         },
-        child: AnimatedBuilder(
-          animation: _swipeAnimation,
-          builder: (context, child) {
-            return Transform.translate(
-              offset: _isSwipeInProgress && _swipeIndex == index
-                  ? _swipeAnimation.value * 300
-                  : Offset.zero,
-              child: Opacity(
-                opacity: _isSwipeInProgress && _swipeIndex == index
-                    ? 1.0 - _swipeAnimationController.value
-                    : 1.0,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.file(
-                      photo,
-                      fit: BoxFit.contain,
-                      width: double.infinity,
-                      height: double.infinity,
-                    ),
-                  ),
-                ),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 4),
               ),
-            );
-          },
+            ],
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: Image.file(
+              photo,
+              fit: BoxFit.contain,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+          ),
         ),
       ),
     );

@@ -182,7 +182,7 @@ class PhotoSelectionGrid extends ConsumerWidget {
                         left: 4,
                         child: GestureDetector(
                           onTap: () {
-                            ref.read(photoProvider.notifier).removeComparisonPhoto(comparisonIndex);
+                            ref.read(photoProvider.notifier).moveComparisonPhotoToTrash(comparisonIndex);
                             // Also remove from selection if it was selected
                             final selectedPhotos = ref.read(selectedPhotosProvider);
                             if (selectedPhotos.contains(comparisonIndex)) {
