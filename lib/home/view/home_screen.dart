@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:photo_app/photo_comparison/view/photo_comparison_screen.dart';
+import 'package:photo_app/common/provider/photo_provider.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final photoState = ref.watch(photoProvider);
+    
     return Scaffold(
       backgroundColor: Colors.black,
       body: SafeArea(
@@ -66,22 +70,42 @@ class HomeScreen extends ConsumerWidget {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Container(
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                              colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
-                            ),
-                          ),
-                          child: const Center(
-                            child: Icon(
-                              Icons.landscape,
-                              size: 60,
-                              color: Colors.white70,
-                            ),
-                          ),
-                        ),
+                        child: photoState.basePhoto != null
+                            ? Image.file(
+                                photoState.basePhoto!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: double.infinity,
+                              )
+                            : Container(
+                                decoration: const BoxDecoration(
+                                  gradient: LinearGradient(
+                                    begin: Alignment.topLeft,
+                                    end: Alignment.bottomRight,
+                                    colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
+                                  ),
+                                ),
+                                child: const Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.add_photo_alternate,
+                                        size: 40,
+                                        color: Colors.white70,
+                                      ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        'Base Photo',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.white70,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
                       ),
                     ),
                   ),
@@ -163,7 +187,20 @@ class HomeScreen extends ConsumerWidget {
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (photoState.basePhoto == null) {
+                      // Select base photo first
+                      await ref.read(photoProvider.notifier).selectBasePhoto();
+                    } else {
+                      // Navigate to comparison screen if base photo is already selected
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const PhotoComparisonScreen(),
+                        ),
+                      );
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF1A1A1A),
                     foregroundColor: Colors.white,
@@ -172,14 +209,14 @@ class HomeScreen extends ConsumerWidget {
                     ),
                     elevation: 4,
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.photo_library, size: 20),
-                      SizedBox(width: 8),
+                      const Icon(Icons.photo_library, size: 20),
+                      const SizedBox(width: 8),
                       Text(
-                        'Select Base Photo',
-                        style: TextStyle(
+                        photoState.basePhoto == null ? 'Select Base Photo' : 'Choose Photos to Compare',
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
