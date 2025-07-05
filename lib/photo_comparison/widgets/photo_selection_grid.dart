@@ -7,11 +7,15 @@ import 'package:photo_app/photo_comparison/view/photo_comparison_screen.dart';
 class PhotoSelectionGrid extends ConsumerWidget {
   final PageController pageController;
   final VoidCallback onChangeBase;
+  final int currentIndex;
+  final Function(int) onIndexChanged;
 
   const PhotoSelectionGrid({
     super.key,
     required this.pageController,
     required this.onChangeBase,
+    required this.currentIndex,
+    required this.onIndexChanged,
   });
 
   @override
@@ -33,15 +37,31 @@ class PhotoSelectionGrid extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Padding(
-              padding: EdgeInsets.fromLTRB(20.0, 16.0, 20.0, 8.0),
-              child: Text(
-                'Choose Photos to Compare',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
-                ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 16.0, 20.0, 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Choose Photos to Compare',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
+                  ),
+                  SizedBox(
+                    width: 80, // Fixed width to prevent layout shift (36 + 8 + 36)
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        _buildRestoreButton(context, ref),
+                        const SizedBox(width: 8),
+                        _buildCurrentPhotoDeleteButton(ref),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 8),
@@ -57,6 +77,139 @@ class PhotoSelectionGrid extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+
+  Widget _buildRestoreButton(BuildContext context, WidgetRef ref) {
+    final photoState = ref.watch(photoProvider);
+    
+    if (photoState.trashPhotos.isEmpty) {
+      return const SizedBox(width: 36, height: 36); // Reserve space even when hidden
+    }
+    
+    return GestureDetector(
+      onTap: () {
+        _restoreLastPhoto(ref);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.green.withValues(alpha: 0.2),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Stack(
+          children: [
+            const Icon(
+              Icons.restore,
+              color: Colors.green,
+              size: 20,
+            ),
+            Positioned(
+              right: -2,
+              top: -2,
+              child: Container(
+                padding: const EdgeInsets.all(2),
+                decoration: const BoxDecoration(
+                  color: Colors.green,
+                  shape: BoxShape.circle,
+                ),
+                constraints: const BoxConstraints(
+                  minWidth: 14,
+                  minHeight: 14,
+                ),
+                child: Text(
+                  '${photoState.trashPhotos.length}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 8,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCurrentPhotoDeleteButton(WidgetRef ref) {
+    final photoState = ref.watch(photoProvider);
+    
+    // Check if current photo is a comparison photo (not base photo)
+    final isBasePhoto = currentIndex == 0 && photoState.basePhoto != null;
+    
+    if (isBasePhoto || photoState.comparisonPhotos.isEmpty) {
+      return const SizedBox(width: 36, height: 36); // Reserve space even when hidden
+    }
+    
+    return GestureDetector(
+      onTap: () {
+        _deleteCurrentPhoto(ref);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.red.withValues(alpha: 0.2),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Icon(
+          Icons.delete_outline,
+          color: Colors.red,
+          size: 20,
+        ),
+      ),
+    );
+  }
+
+  void _restoreLastPhoto(WidgetRef ref) {
+    final photoState = ref.read(photoProvider);
+    
+    if (photoState.trashPhotos.isNotEmpty) {
+      // Restore the last photo (most recently deleted)
+      final lastIndex = photoState.trashPhotos.length - 1;
+      ref.read(photoProvider.notifier).restorePhotoFromTrash(lastIndex);
+    }
+  }
+
+  void _deleteCurrentPhoto(WidgetRef ref) {
+    final photoState = ref.read(photoProvider);
+    final isBasePhoto = currentIndex == 0 && photoState.basePhoto != null;
+    
+    if (isBasePhoto) return;
+    
+    final comparisonIndex = currentIndex - (photoState.basePhoto != null ? 1 : 0);
+    
+    if (comparisonIndex >= 0 && comparisonIndex < photoState.comparisonPhotos.length) {
+      // Move to trash
+      ref.read(photoProvider.notifier).moveComparisonPhotoToTrash(comparisonIndex);
+      
+      // Calculate new total photos after deletion
+      final newComparisonCount = photoState.comparisonPhotos.length - 1;
+      final newTotalPhotos = (photoState.basePhoto != null ? 1 : 0) + newComparisonCount;
+      
+      // Adjust page index after deletion
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (pageController.hasClients && newTotalPhotos > 0) {
+          int newIndex = currentIndex;
+          
+          // If we deleted the last photo, move to the previous one
+          if (currentIndex >= newTotalPhotos) {
+            newIndex = newTotalPhotos - 1;
+          }
+          
+          // Update parent's currentIndex
+          onIndexChanged(newIndex);
+          
+          pageController.animateToPage(
+            newIndex,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+          );
+        }
+      });
+    }
   }
 
   Widget _buildEmptyState() {
@@ -86,7 +239,7 @@ class PhotoSelectionGrid extends ConsumerWidget {
         final comparisonIndex = isBasePhoto
             ? -1
             : index - (photoState.basePhoto != null ? 1 : 0);
-        final isSelected = isBasePhoto ? true : selectedPhotos.contains(comparisonIndex);
+        final isSelected = isBasePhoto ? (currentIndex == 0) : (selectedPhotos.contains(comparisonIndex) || currentIndex == index);
 
         return _buildPhotoItem(
           allPhotos[index],
@@ -94,6 +247,7 @@ class PhotoSelectionGrid extends ConsumerWidget {
           isBasePhoto,
           comparisonIndex,
           isSelected,
+          selectedPhotos,
           ref,
         );
       },
@@ -106,6 +260,7 @@ class PhotoSelectionGrid extends ConsumerWidget {
     bool isBasePhoto,
     int comparisonIndex,
     bool isSelected,
+    List<int> selectedPhotos,
     WidgetRef ref,
   ) {
     return GestureDetector(
@@ -129,7 +284,7 @@ class PhotoSelectionGrid extends ConsumerWidget {
         child: Column(
           children: [
             Container(
-              height: 60,
+              height: 90,
               width: 90,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
@@ -157,7 +312,8 @@ class PhotoSelectionGrid extends ConsumerWidget {
                       width: double.infinity,
                       height: double.infinity,
                     ),
-                    if (isSelected)
+                    // Check mark for base photo (always shown) and selected comparison photos
+                    if ((isBasePhoto) || (!isBasePhoto && selectedPhotos.contains(comparisonIndex)))
                       Positioned(
                         top: 4,
                         right: 4,
@@ -172,35 +328,6 @@ class PhotoSelectionGrid extends ConsumerWidget {
                             Icons.check,
                             size: 10,
                             color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    // Remove button (비교 이미지만)
-                    if (!isBasePhoto)
-                      Positioned(
-                        top: 4,
-                        left: 4,
-                        child: GestureDetector(
-                          onTap: () {
-                            ref.read(photoProvider.notifier).moveComparisonPhotoToTrash(comparisonIndex);
-                            // Also remove from selection if it was selected
-                            final selectedPhotos = ref.read(selectedPhotosProvider);
-                            if (selectedPhotos.contains(comparisonIndex)) {
-                              ref.read(selectedPhotosProvider.notifier).toggleSelection(comparisonIndex);
-                            }
-                          },
-                          child: Container(
-                            width: 16,
-                            height: 16,
-                            decoration: const BoxDecoration(
-                              color: Colors.red,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.close,
-                              size: 10,
-                              color: Colors.white,
-                            ),
                           ),
                         ),
                       ),

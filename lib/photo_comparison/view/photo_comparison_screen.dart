@@ -54,65 +54,42 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
     final photoState = ref.read(photoProvider);
     
     if (photoState.trashPhotos.isEmpty) {
-      _showDeleteAllConfirmation(context);
+      // Show empty trash message
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: Colors.grey[900],
+          title: const Text(
+            'Trash',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: const Text(
+            'Trash is empty',
+            style: TextStyle(color: Colors.white70),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
       return;
     }
 
+    // Show confirmation dialog for deleting from device
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.grey[900],
         title: const Text(
-          'Trash Management',
+          'Delete from Device',
           style: TextStyle(color: Colors.white),
         ),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              '${photoState.trashPhotos.length} photos in trash',
-              style: const TextStyle(color: Colors.white70),
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: TextButton(
-                    onPressed: () {
-                      ref.read(photoProvider.notifier).restoreAllFromTrash();
-                      Navigator.pop(context);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('All photos restored'),
-                          backgroundColor: Colors.green,
-                        ),
-                      );
-                    },
-                    child: const Text('Restore All'),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: TextButton(
-                    onPressed: () async {
-                      final navigator = Navigator.of(context);
-                      final messenger = ScaffoldMessenger.of(context);
-                      navigator.pop();
-                      await ref.read(photoProvider.notifier).deleteTrashPhotosPermanently();
-                      messenger.showSnackBar(
-                        const SnackBar(
-                          content: Text('Trash permanently deleted'),
-                          backgroundColor: Colors.red,
-                        ),
-                      );
-                    },
-                    style: TextButton.styleFrom(foregroundColor: Colors.red),
-                    child: const Text('Delete Forever'),
-                  ),
-                ),
-              ],
-            ),
-          ],
+        content: Text(
+          'Do you want to permanently delete ${photoState.trashPhotos.length} photo(s) from your device album?',
+          style: const TextStyle(color: Colors.white70),
         ),
         actions: [
           TextButton(
@@ -120,16 +97,26 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-              _showDeleteAllConfirmation(context);
+            onPressed: () async {
+              final navigator = Navigator.of(context);
+              final messenger = ScaffoldMessenger.of(context);
+              navigator.pop();
+              await ref.read(photoProvider.notifier).deleteTrashPhotosPermanently();
+              messenger.showSnackBar(
+                const SnackBar(
+                  content: Text('Photos permanently deleted from device'),
+                  backgroundColor: Colors.red,
+                ),
+              );
             },
-            child: const Text('Delete All Photos'),
+            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            child: const Text('Delete'),
           ),
         ],
       ),
     );
   }
+
 
   void _showDeleteAllConfirmation(BuildContext context) {
     showDialog(
@@ -257,6 +244,12 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                 PhotoSelectionGrid(
                   pageController: _pageController,
                   onChangeBase: () => _showChangeCurrentToBaseConfirmation(context),
+                  currentIndex: _currentIndex,
+                  onIndexChanged: (newIndex) {
+                    setState(() {
+                      _currentIndex = newIndex;
+                    });
+                  },
                 ),
 
                 // Bottom Action Button

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:photo_manager/photo_manager.dart';
 
 class PhotoState {
   final dynamic basePhoto; // Can be File or XFile for web compatibility
@@ -139,16 +140,64 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
     try {
       final trashPhotos = List<File>.from(state.trashPhotos);
       
+      // Request permission to access photos
+      final PermissionState ps = await PhotoManager.requestPermissionExtend();
+      if (ps != PermissionState.authorized) {
+        print('Permission denied for photo access');
+        return;
+      }
+      
       for (final photo in trashPhotos) {
-        if (await photo.exists()) {
-          await photo.delete();
+        try {
+          // Try to delete from device gallery using photo_manager
+          final AssetEntity? asset = await _findAssetByPath(photo.path);
+          if (asset != null) {
+            final List<String> result = await PhotoManager.editor.deleteWithIds([asset.id]);
+            if (result.isNotEmpty) {
+              print('Successfully deleted ${photo.path} from gallery');
+            }
+          }
+          
+          // Also delete the file if it still exists
+          if (await photo.exists()) {
+            await photo.delete();
+          }
+        } catch (e) {
+          print('Error deleting photo ${photo.path}: $e');
+          // Continue with next photo even if one fails
         }
       }
       
-      // Clear trash after successful deletion
+      // Clear trash after deletion attempts
       state = state.copyWith(trashPhotos: []);
     } catch (e) {
       print('Error deleting trash photos permanently: $e');
+    }
+  }
+
+  Future<AssetEntity?> _findAssetByPath(String path) async {
+    try {
+      final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
+        type: RequestType.image,
+      );
+      
+      for (final album in albums) {
+        final List<AssetEntity> assets = await album.getAssetListRange(
+          start: 0,
+          end: await album.assetCountAsync,
+        );
+        
+        for (final asset in assets) {
+          final File? file = await asset.file;
+          if (file != null && file.path == path) {
+            return asset;
+          }
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Error finding asset by path: $e');
+      return null;
     }
   }
 
@@ -159,6 +208,20 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
       if (trashIndex >= 0 && trashIndex < currentTrash.length) {
         final photoToDelete = currentTrash[trashIndex];
         
+        // Request permission to access photos
+        final PermissionState ps = await PhotoManager.requestPermissionExtend();
+        if (ps == PermissionState.authorized) {
+          // Try to delete from device gallery using photo_manager
+          final AssetEntity? asset = await _findAssetByPath(photoToDelete.path);
+          if (asset != null) {
+            final List<String> result = await PhotoManager.editor.deleteWithIds([asset.id]);
+            if (result.isNotEmpty) {
+              print('Successfully deleted ${photoToDelete.path} from gallery');
+            }
+          }
+        }
+        
+        // Also delete the file if it still exists
         if (await photoToDelete.exists()) {
           await photoToDelete.delete();
         }
@@ -181,6 +244,21 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
 
   void clearAllPhotos() {
     state = PhotoState();
+  }
+
+  void moveAllPhotosToTrash() {
+    final currentTrash = List<File>.from(state.trashPhotos);
+    
+    // Add base photo to trash if it exists
+    if (state.basePhoto != null) {
+      currentTrash.add(state.basePhoto as File);
+    }
+    
+    // Add all comparison photos to trash
+    currentTrash.addAll(state.comparisonPhotos.cast<File>());
+    
+    // Clear all photos and update trash
+    state = PhotoState(trashPhotos: currentTrash);
   }
 
   void changeBasePhoto(int comparisonIndex) {

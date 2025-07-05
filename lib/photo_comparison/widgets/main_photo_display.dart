@@ -24,6 +24,7 @@ class MainPhotoDisplay extends ConsumerStatefulWidget {
 }
 
 class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
+
   @override
   Widget build(BuildContext context) {
     final photoState = ref.watch(photoProvider);
@@ -131,6 +132,7 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
   }
 
   Widget _buildPhotoItem(File photo, int index, PhotoState photoState) {
+    
     return Container(
       margin: const EdgeInsets.all(16),
       child: GestureDetector(
@@ -145,27 +147,31 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
         onPanCancel: () {
           widget.onShowBasePhotoChanged(false);
         },
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
+        child: Stack(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.file(
-              photo,
-              fit: BoxFit.contain,
-              width: double.infinity,
-              height: double.infinity,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.file(
+                  photo,
+                  fit: BoxFit.contain,
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

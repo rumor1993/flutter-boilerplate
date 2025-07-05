@@ -191,6 +191,17 @@ class HomeScreen extends ConsumerWidget {
                     if (photoState.basePhoto == null) {
                       // Select base photo first
                       await ref.read(photoProvider.notifier).selectBasePhoto();
+                      
+                      // Check if photo was selected, then navigate to comparison screen
+                      final updatedState = ref.read(photoProvider);
+                      if (updatedState.basePhoto != null) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PhotoComparisonScreen(),
+                          ),
+                        );
+                      }
                     } else {
                       // Navigate to comparison screen if base photo is already selected
                       Navigator.push(
@@ -224,14 +235,6 @@ class HomeScreen extends ConsumerWidget {
                     ],
                   ),
                 ),
-              ),
-              const SizedBox(height: 32),
-
-              // Stats Section
-              const Text(
-                'Photos organized: 0',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-                textAlign: TextAlign.center,
               ),
 
               const Spacer(),
