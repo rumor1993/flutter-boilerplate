@@ -50,6 +50,49 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
   }
 
 
+  void _showBackConfirmation(BuildContext context) {
+    final photoState = ref.read(photoProvider);
+    final hasPhotos = photoState.basePhoto != null || 
+                     photoState.comparisonPhotos.isNotEmpty || 
+                     photoState.trashPhotos.isNotEmpty;
+    
+    if (!hasPhotos) {
+      // No photos to lose, just go back
+      Navigator.pop(context);
+      return;
+    }
+    
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.grey[900],
+        title: const Text(
+          'Go Back to Home',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: const Text(
+          'Going back will clear your base photo and reset your session. Are you sure?',
+          style: TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+              ref.read(photoProvider.notifier).clearAllPhotos();
+              Navigator.pop(context); // Go back to home
+            },
+            style: TextButton.styleFrom(foregroundColor: Colors.orange),
+            child: const Text('Go Back'),
+          ),
+        ],
+      ),
+    );
+  }
+
   void _showTrashManagement(BuildContext context) {
     final photoState = ref.read(photoProvider);
     
@@ -102,6 +145,11 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
               final messenger = ScaffoldMessenger.of(context);
               navigator.pop();
               await ref.read(photoProvider.notifier).deleteTrashPhotosPermanently();
+              
+              // Clear all photos and return to home after deleting from device
+              ref.read(photoProvider.notifier).clearAllPhotos();
+              navigator.pop(); // Go back to home screen
+              
               messenger.showSnackBar(
                 const SnackBar(
                   content: Text('Photos permanently deleted from device'),
@@ -212,9 +260,16 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) {
+          _showBackConfirmation(context);
+        }
+      },
+      child: Stack(
+        children: [
+          Scaffold(
           backgroundColor: Colors.black,
           body: SafeArea(
             child: Column(
@@ -222,7 +277,7 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                 // Header Section
                 PhotoComparisonHeader(
                   currentIndex: _currentIndex,
-                  onBack: () => Navigator.pop(context),
+                  onBack: () => _showBackConfirmation(context),
                   onChangeBase: () => _showChangeCurrentToBaseConfirmation(context),
                   onDeleteAll: () => _showTrashManagement(context),
                 ),
@@ -270,6 +325,7 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
             },
           ),
       ],
+      ),
     );
   }
 }
