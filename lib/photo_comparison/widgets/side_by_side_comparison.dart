@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_app/common/provider/photo_provider.dart';
@@ -18,11 +17,11 @@ class SideBySideComparison extends ConsumerWidget {
     final photoState = ref.watch(photoProvider);
 
     // Create a combined list with base photo first, then comparison photos
-    List<File> allPhotos = [];
+    List<PhotoInfo> allPhotos = [];
     if (photoState.basePhoto != null) {
-      allPhotos.add(photoState.basePhoto as File);
+      allPhotos.add(photoState.basePhoto!);
     }
-    allPhotos.addAll(photoState.comparisonPhotos.cast<File>());
+    allPhotos.addAll(photoState.comparisonPhotos);
 
     if (photoState.basePhoto == null || 
         currentIndex <= 0 || 
@@ -72,10 +71,10 @@ class SideBySideComparison extends ConsumerWidget {
                             Expanded(
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  photoState.basePhoto as File,
+                                child: photoState.basePhoto!.buildImage(
                                   fit: BoxFit.contain,
                                   width: double.infinity,
+                                  useThumbnail: false,  // Use full quality for side-by-side comparison
                                 ),
                               ),
                             ),
@@ -102,10 +101,10 @@ class SideBySideComparison extends ConsumerWidget {
                             Expanded(
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
-                                child: Image.file(
-                                  allPhotos[currentIndex],
+                                child: allPhotos[currentIndex].buildImage(
                                   fit: BoxFit.contain,
                                   width: double.infinity,
+                                  useThumbnail: false,  // Use full quality for side-by-side comparison
                                 ),
                               ),
                             ),

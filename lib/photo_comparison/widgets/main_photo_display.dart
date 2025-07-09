@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -31,11 +30,11 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
     final photoState = ref.watch(photoProvider);
 
     // Create a combined list with base photo first, then comparison photos
-    List<File> allPhotos = [];
+    List<PhotoInfo> allPhotos = [];
     if (photoState.basePhoto != null) {
-      allPhotos.add(photoState.basePhoto as File);
+      allPhotos.add(photoState.basePhoto!);
     }
-    allPhotos.addAll(photoState.comparisonPhotos.cast<File>());
+    allPhotos.addAll(photoState.comparisonPhotos);
 
     return Expanded(
       flex: 5,
@@ -106,7 +105,7 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
     );
   }
 
-  Widget _buildPhotoView(List<File> allPhotos, PhotoState photoState) {
+  Widget _buildPhotoView(List<PhotoInfo> allPhotos, PhotoState photoState) {
     return Stack(
       children: [
         // Main PageView
@@ -115,8 +114,8 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
           onPageChanged: widget.onPageChanged,
           itemCount: allPhotos.length,
           itemBuilder: (context, index) {
-            final photo = allPhotos[index];
-            return _buildPhotoItem(photo, index, photoState);
+            final photoInfo = allPhotos[index];
+            return _buildPhotoItem(photoInfo, index, photoState);
           },
         ),
 
@@ -132,7 +131,7 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
     );
   }
 
-  Widget _buildPhotoItem(File photo, int index, PhotoState photoState) {
+  Widget _buildPhotoItem(PhotoInfo photoInfo, int index, PhotoState photoState) {
     
     return Container(
       margin: const EdgeInsets.all(16),
@@ -150,11 +149,11 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
         },
         child: Stack(
           children: [
-            Image.file(
-              photo,
+            photoInfo.buildImage(
               fit: BoxFit.cover,
               width: double.infinity,
               height: double.infinity,
+              useThumbnail: false,  // Use full quality for main display
             ),
           ],
         ),
@@ -165,16 +164,16 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
   Widget _buildBasePhotoOverlay(PhotoState photoState) {
     return Container(
       margin: const EdgeInsets.all(16),
-      child: Image.file(
-        photoState.basePhoto as File,
+      child: photoState.basePhoto!.buildImage(
         fit: BoxFit.cover,
         width: double.infinity,
         height: double.infinity,
+        useThumbnail: false,  // Use full quality for comparison overlay
       ),
     );
   }
 
-  Widget _buildPageIndicator(List<File> allPhotos, PhotoState photoState) {
+  Widget _buildPageIndicator(List<PhotoInfo> allPhotos, PhotoState photoState) {
     return Positioned(
       bottom: 30,
       left: 0,

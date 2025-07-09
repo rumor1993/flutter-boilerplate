@@ -260,6 +260,11 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Set context for photo provider
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(photoProvider.notifier).setContext(context);
+    });
+    
     return PopScope(
       canPop: false,
       onPopInvoked: (didPop) {

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_app/common/provider/photo_provider.dart';
 
@@ -171,15 +172,18 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
                       },
                       itemCount: photoState.comparisonPhotos.length,
                       itemBuilder: (context, index) {
-                        final photo = photoState.comparisonPhotos[index] as File;
+                        final photoInfo = photoState.comparisonPhotos[index];
                         return Container(
                           margin: const EdgeInsets.all(16),
                           child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                _isFullScreen = true;
-                                _fullScreenImage = photo;
-                              });
+                            onTap: () async {
+                              final file = await photoInfo.file;
+                              if (file != null) {
+                                setState(() {
+                                  _isFullScreen = true;
+                                  _fullScreenImage = file;
+                                });
+                              }
                             },
                             onPanUpdate: (details) {
                               // Check if swiping up
@@ -189,11 +193,12 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
                             },
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: Image.file(
-                                photo,
+                              child: photoInfo.buildImage(
                                 fit: BoxFit.contain,
                                 width: double.infinity,
                                 height: double.infinity,
+                                useThumbnail: true,
+                                thumbnailSize: const ThumbnailSize(800, 800),
                               ),
                             ),
                           ),

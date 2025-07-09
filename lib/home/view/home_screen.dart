@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_app/photo_comparison/view/photo_comparison_screen.dart';
 import 'package:photo_app/common/provider/photo_provider.dart';
 
@@ -9,6 +10,11 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final photoState = ref.watch(photoProvider);
+    
+    // Set context for photo provider
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(photoProvider.notifier).setContext(context);
+    });
     
     return Scaffold(
       backgroundColor: Colors.black,
@@ -71,11 +77,12 @@ class HomeScreen extends ConsumerWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
                         child: photoState.basePhoto != null
-                            ? Image.file(
-                                photoState.basePhoto!,
+                            ? photoState.basePhoto!.buildImage(
                                 fit: BoxFit.cover,
                                 width: double.infinity,
                                 height: double.infinity,
+                                useThumbnail: true,
+                                thumbnailSize: const ThumbnailSize(400, 400),
                               )
                             : Container(
                                 decoration: const BoxDecoration(

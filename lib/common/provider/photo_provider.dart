@@ -1,12 +1,110 @@
 import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:photo_app/common/view/photo_gallery_picker.dart';
+
+class PhotoInfo {
+  final AssetEntity asset;
+  final File? _cachedFile;
+  final Uint8List? _cachedThumbnail;
+  final String? albumId;  // Store which album this photo is from
+  final int? indexInAlbum;  // Store position in album
+
+  PhotoInfo({
+    required this.asset, 
+    File? cachedFile,
+    Uint8List? cachedThumbnail,
+    this.albumId,
+    this.indexInAlbum,
+  }) : _cachedFile = cachedFile, _cachedThumbnail = cachedThumbnail;
+
+  String get id => asset.id;
+
+  Future<File?> get file async {
+    return _cachedFile ?? await asset.file;
+  }
+
+  File? get syncFile => _cachedFile;
+
+  // Get thumbnail data (faster than full file)
+  Future<Uint8List?> getThumbnail({
+    ThumbnailSize size = const ThumbnailSize(200, 200),
+    int quality = 70,
+  }) async {
+    return _cachedThumbnail ?? await asset.thumbnailDataWithSize(size, quality: quality);
+  }
+
+  // For UI components that need immediate file access
+  Widget buildImage({
+    required BoxFit fit, 
+    double? width, 
+    double? height,
+    bool useThumbnail = false,
+    ThumbnailSize thumbnailSize = const ThumbnailSize(200, 200),
+    int thumbnailQuality = 70,
+  }) {
+    if (!useThumbnail && _cachedFile != null) {
+      return Image.file(_cachedFile!, fit: fit, width: width, height: height);
+    }
+
+    if (useThumbnail && _cachedThumbnail != null) {
+      return Image.memory(_cachedThumbnail!, fit: fit, width: width, height: height);
+    }
+
+    if (useThumbnail) {
+      return FutureBuilder<Uint8List?>(
+        future: getThumbnail(size: thumbnailSize, quality: thumbnailQuality),
+        builder: (context, snapshot) {
+          if (snapshot.hasData && snapshot.data != null) {
+            return Image.memory(
+              snapshot.data!,
+              fit: fit,
+              width: width,
+              height: height,
+            );
+          }
+          return Container(
+            width: width,
+            height: height,
+            color: Colors.grey[800],
+            child: const Center(
+              child: CircularProgressIndicator(strokeWidth: 2),
+            ),
+          );
+        },
+      );
+    }
+
+    return FutureBuilder<File?>(
+      future: asset.file,
+      builder: (context, snapshot) {
+        if (snapshot.hasData && snapshot.data != null) {
+          return Image.file(
+            snapshot.data!,
+            fit: fit,
+            width: width,
+            height: height,
+          );
+        }
+        return Container(
+          width: width,
+          height: height,
+          color: Colors.grey[800],
+          child: const Center(
+            child: CircularProgressIndicator(strokeWidth: 2),
+          ),
+        );
+      },
+    );
+  }
+}
 
 class PhotoState {
-  final dynamic basePhoto; // Can be File or XFile for web compatibility
-  final List<dynamic> comparisonPhotos; // Can be List<File> or List<XFile>
-  final List<dynamic> trashPhotos; // Photos moved to trash
+  final PhotoInfo? basePhoto;
+  final List<PhotoInfo> comparisonPhotos;
+  final List<PhotoInfo> trashPhotos;
 
   PhotoState({
     this.basePhoto,
@@ -15,9 +113,9 @@ class PhotoState {
   });
 
   PhotoState copyWith({
-    dynamic basePhoto,
-    List<dynamic>? comparisonPhotos,
-    List<dynamic>? trashPhotos,
+    PhotoInfo? basePhoto,
+    List<PhotoInfo>? comparisonPhotos,
+    List<PhotoInfo>? trashPhotos,
   }) {
     return PhotoState(
       basePhoto: basePhoto ?? this.basePhoto,
@@ -30,17 +128,52 @@ class PhotoState {
 class PhotoNotifier extends StateNotifier<PhotoState> {
   PhotoNotifier() : super(PhotoState());
 
-  final ImagePicker _picker = ImagePicker();
+  BuildContext? _context;
+
+  void setContext(BuildContext context) {
+    _context = context;
+  }
 
   Future<void> selectBasePhoto() async {
+    if (_context == null) return;
+
     try {
-      final XFile? image = await _picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 85,
+      final PermissionState permission =
+          await PhotoManager.requestPermissionExtend();
+      if (!permission.isAuth) {
+        print('Photo permission denied');
+        return;
+      }
+
+      final result = await Navigator.push<Map<String, dynamic>>(
+        _context!,
+        MaterialPageRoute(
+          builder:
+              (context) => PhotoGalleryPicker(
+                allowMultiple: false,
+                title: 'Select Base Photo',
+                onSelectionChanged: (assets) {},
+              ),
+        ),
       );
-      
-      if (image != null) {
-        state = state.copyWith(basePhoto: File(image.path));
+
+      if (result != null && result['assets'] != null && result['assets'].isNotEmpty) {
+        final List<AssetEntity> assets = result['assets'];
+        final String? albumId = result['albumId'];
+        final asset = assets.first;
+        final file = await asset.file;
+        final thumbnail = await asset.thumbnailDataWithSize(
+          const ThumbnailSize(200, 200),
+          quality: 70,
+        );
+        state = state.copyWith(
+          basePhoto: PhotoInfo(
+            asset: asset, 
+            cachedFile: file,
+            cachedThumbnail: thumbnail,
+            albumId: albumId,
+          ),
+        );
       }
     } catch (e) {
       print('Error selecting base photo: $e');
@@ -48,15 +181,46 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
   }
 
   Future<void> addComparisonPhoto() async {
+    if (_context == null) return;
+
     try {
-      final XFile? image = await _picker.pickImage(
-        source: ImageSource.gallery,
-        imageQuality: 85,
+      final PermissionState permission =
+          await PhotoManager.requestPermissionExtend();
+      if (!permission.isAuth) {
+        print('Photo permission denied');
+        return;
+      }
+
+      final result = await Navigator.push<Map<String, dynamic>>(
+        _context!,
+        MaterialPageRoute(
+          builder:
+              (context) => PhotoGalleryPicker(
+                allowMultiple: false,
+                title: 'Add Comparison Photo',
+                onSelectionChanged: (assets) {},
+                startAfterAssetId: state.basePhoto?.id,
+                preferredAlbumId: state.basePhoto?.albumId,
+              ),
+        ),
       );
-      
-      if (image != null) {
-        final currentPhotos = List<File>.from(state.comparisonPhotos);
-        currentPhotos.add(File(image.path));
+
+      if (result != null && result['assets'] != null && result['assets'].isNotEmpty) {
+        final List<AssetEntity> assets = result['assets'];
+        final String? albumId = result['albumId'];
+        final asset = assets.first;
+        final file = await asset.file;
+        final thumbnail = await asset.thumbnailDataWithSize(
+          const ThumbnailSize(200, 200),
+          quality: 70,
+        );
+        final currentPhotos = List<PhotoInfo>.from(state.comparisonPhotos);
+        currentPhotos.add(PhotoInfo(
+          asset: asset, 
+          cachedFile: file,
+          cachedThumbnail: thumbnail,
+          albumId: albumId,
+        ));
         state = state.copyWith(comparisonPhotos: currentPhotos);
       }
     } catch (e) {
@@ -65,15 +229,46 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
   }
 
   Future<void> addMultipleComparisonPhotos() async {
+    if (_context == null) return;
+
     try {
-      final List<XFile> images = await _picker.pickMultiImage(
-        imageQuality: 85,
+      final PermissionState permission =
+          await PhotoManager.requestPermissionExtend();
+      if (!permission.isAuth) {
+        print('Photo permission denied');
+        return;
+      }
+
+      final result = await Navigator.push<Map<String, dynamic>>(
+        _context!,
+        MaterialPageRoute(
+          builder:
+              (context) => PhotoGalleryPicker(
+                allowMultiple: true,
+                title: 'Add Multiple Photos',
+                onSelectionChanged: (assets) {},
+                startAfterAssetId: state.basePhoto?.id,
+                preferredAlbumId: state.basePhoto?.albumId,
+              ),
+        ),
       );
-      
-      if (images.isNotEmpty) {
-        final currentPhotos = List<File>.from(state.comparisonPhotos);
-        for (final image in images) {
-          currentPhotos.add(File(image.path));
+
+      if (result != null && result['assets'] != null && result['assets'].isNotEmpty) {
+        final List<AssetEntity> assets = result['assets'];
+        final String? albumId = result['albumId'];
+        final currentPhotos = List<PhotoInfo>.from(state.comparisonPhotos);
+        for (final asset in assets) {
+          final file = await asset.file;
+          final thumbnail = await asset.thumbnailDataWithSize(
+            const ThumbnailSize(200, 200),
+            quality: 70,
+          );
+          currentPhotos.add(PhotoInfo(
+            asset: asset, 
+            cachedFile: file,
+            cachedThumbnail: thumbnail,
+            albumId: albumId,
+          ));
         }
         state = state.copyWith(comparisonPhotos: currentPhotos);
       }
@@ -83,7 +278,7 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
   }
 
   void removeComparisonPhoto(int index) {
-    final currentPhotos = List<File>.from(state.comparisonPhotos);
+    final currentPhotos = List<PhotoInfo>.from(state.comparisonPhotos);
     if (index >= 0 && index < currentPhotos.length) {
       currentPhotos.removeAt(index);
       state = state.copyWith(comparisonPhotos: currentPhotos);
@@ -91,13 +286,13 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
   }
 
   void moveComparisonPhotoToTrash(int index) {
-    final currentPhotos = List<File>.from(state.comparisonPhotos);
-    final currentTrash = List<File>.from(state.trashPhotos);
-    
+    final currentPhotos = List<PhotoInfo>.from(state.comparisonPhotos);
+    final currentTrash = List<PhotoInfo>.from(state.trashPhotos);
+
     if (index >= 0 && index < currentPhotos.length) {
       final photoToMove = currentPhotos.removeAt(index);
       currentTrash.add(photoToMove);
-      
+
       state = state.copyWith(
         comparisonPhotos: currentPhotos,
         trashPhotos: currentTrash,
@@ -106,13 +301,13 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
   }
 
   void restorePhotoFromTrash(int trashIndex) {
-    final currentPhotos = List<File>.from(state.comparisonPhotos);
-    final currentTrash = List<File>.from(state.trashPhotos);
-    
+    final currentPhotos = List<PhotoInfo>.from(state.comparisonPhotos);
+    final currentTrash = List<PhotoInfo>.from(state.trashPhotos);
+
     if (trashIndex >= 0 && trashIndex < currentTrash.length) {
       final photoToRestore = currentTrash.removeAt(trashIndex);
       currentPhotos.add(photoToRestore);
-      
+
       state = state.copyWith(
         comparisonPhotos: currentPhotos,
         trashPhotos: currentTrash,
@@ -121,15 +316,12 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
   }
 
   void restoreAllFromTrash() {
-    final currentPhotos = List<File>.from(state.comparisonPhotos);
-    final trashPhotos = List<File>.from(state.trashPhotos);
-    
+    final currentPhotos = List<PhotoInfo>.from(state.comparisonPhotos);
+    final trashPhotos = List<PhotoInfo>.from(state.trashPhotos);
+
     currentPhotos.addAll(trashPhotos);
-    
-    state = state.copyWith(
-      comparisonPhotos: currentPhotos,
-      trashPhotos: [],
-    );
+
+    state = state.copyWith(comparisonPhotos: currentPhotos, trashPhotos: []);
   }
 
   void clearTrash() {
@@ -138,36 +330,44 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
 
   Future<void> deleteTrashPhotosPermanently() async {
     try {
-      final trashPhotos = List<File>.from(state.trashPhotos);
-      
+      final trashPhotos = List<PhotoInfo>.from(state.trashPhotos);
+
+      if (trashPhotos.isEmpty) return;
+
       // Request permission to access photos
       final PermissionState ps = await PhotoManager.requestPermissionExtend();
       if (ps != PermissionState.authorized) {
         print('Permission denied for photo access');
         return;
       }
-      
-      for (final photo in trashPhotos) {
-        try {
-          // Try to delete from device gallery using photo_manager
-          final AssetEntity? asset = await _findAssetByPath(photo.path);
-          if (asset != null) {
-            final List<String> result = await PhotoManager.editor.deleteWithIds([asset.id]);
-            if (result.isNotEmpty) {
-              print('Successfully deleted ${photo.path} from gallery');
-            }
-          }
-          
-          // Also delete the file if it still exists
-          if (await photo.exists()) {
-            await photo.delete();
-          }
-        } catch (e) {
-          print('Error deleting photo ${photo.path}: $e');
-          // Continue with next photo even if one fails
+
+      // Collect all asset IDs for batch deletion
+      final List<String> assetIds = trashPhotos.map((photo) => photo.id).toList();
+
+      try {
+        // Delete all photos in one batch - this will show only one system alert
+        final List<String> result = await PhotoManager.editor.deleteWithIds(assetIds);
+        
+        if (result.isNotEmpty) {
+          print('Successfully deleted ${result.length} photos from gallery');
         }
+
+        // Also delete cached files
+        for (final photoInfo in trashPhotos) {
+          try {
+            final file = await photoInfo.file;
+            if (file != null && await file.exists()) {
+              await file.delete();
+            }
+          } catch (e) {
+            print('Error deleting cached file ${photoInfo.id}: $e');
+            // Continue with next file even if one fails
+          }
+        }
+      } catch (e) {
+        print('Error during batch deletion: $e');
       }
-      
+
       // Clear trash after deletion attempts
       state = state.copyWith(trashPhotos: []);
     } catch (e) {
@@ -175,62 +375,101 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
     }
   }
 
-  Future<AssetEntity?> _findAssetByPath(String path) async {
-    try {
-      final List<AssetPathEntity> albums = await PhotoManager.getAssetPathList(
-        type: RequestType.image,
-      );
-      
-      for (final album in albums) {
-        final List<AssetEntity> assets = await album.getAssetListRange(
-          start: 0,
-          end: await album.assetCountAsync,
-        );
-        
-        for (final asset in assets) {
-          final File? file = await asset.file;
-          if (file != null && file.path == path) {
-            return asset;
-          }
-        }
-      }
-      return null;
-    } catch (e) {
-      print('Error finding asset by path: $e');
-      return null;
-    }
-  }
-
   Future<void> deleteSpecificTrashPhoto(int trashIndex) async {
     try {
-      final currentTrash = List<File>.from(state.trashPhotos);
-      
+      final currentTrash = List<PhotoInfo>.from(state.trashPhotos);
+
       if (trashIndex >= 0 && trashIndex < currentTrash.length) {
         final photoToDelete = currentTrash[trashIndex];
-        
+
         // Request permission to access photos
         final PermissionState ps = await PhotoManager.requestPermissionExtend();
         if (ps == PermissionState.authorized) {
-          // Try to delete from device gallery using photo_manager
-          final AssetEntity? asset = await _findAssetByPath(photoToDelete.path);
-          if (asset != null) {
-            final List<String> result = await PhotoManager.editor.deleteWithIds([asset.id]);
-            if (result.isNotEmpty) {
-              print('Successfully deleted ${photoToDelete.path} from gallery');
-            }
+          // Use AssetEntity ID directly for deletion
+          final List<String> result = await PhotoManager.editor.deleteWithIds([
+            photoToDelete.id,
+          ]);
+          if (result.isNotEmpty) {
+            print('Successfully deleted ${photoToDelete.id} from gallery');
           }
         }
-        
-        // Also delete the file if it still exists
-        if (await photoToDelete.exists()) {
-          await photoToDelete.delete();
+
+        // Also delete the cached file if it still exists
+        final file = await photoToDelete.file;
+        if (file != null && await file.exists()) {
+          await file.delete();
         }
-        
+
         currentTrash.removeAt(trashIndex);
         state = state.copyWith(trashPhotos: currentTrash);
       }
     } catch (e) {
       print('Error deleting specific trash photo: $e');
+    }
+  }
+
+  // Delete multiple selected trash photos at once
+  Future<void> deleteSelectedTrashPhotos(List<int> selectedIndices) async {
+    try {
+      final currentTrash = List<PhotoInfo>.from(state.trashPhotos);
+      
+      if (selectedIndices.isEmpty) return;
+      
+      // Validate indices and get photos to delete
+      final photosToDelete = <PhotoInfo>[];
+      for (final index in selectedIndices) {
+        if (index >= 0 && index < currentTrash.length) {
+          photosToDelete.add(currentTrash[index]);
+        }
+      }
+      
+      if (photosToDelete.isEmpty) return;
+
+      // Request permission to access photos
+      final PermissionState ps = await PhotoManager.requestPermissionExtend();
+      if (ps != PermissionState.authorized) {
+        print('Permission denied for photo access');
+        return;
+      }
+
+      // Collect asset IDs for batch deletion
+      final List<String> assetIds = photosToDelete.map((photo) => photo.id).toList();
+
+      try {
+        // Delete all selected photos in one batch - this will show only one system alert
+        final List<String> result = await PhotoManager.editor.deleteWithIds(assetIds);
+        
+        if (result.isNotEmpty) {
+          print('Successfully deleted ${result.length} selected photos from gallery');
+        }
+
+        // Also delete cached files
+        for (final photoInfo in photosToDelete) {
+          try {
+            final file = await photoInfo.file;
+            if (file != null && await file.exists()) {
+              await file.delete();
+            }
+          } catch (e) {
+            print('Error deleting cached file ${photoInfo.id}: $e');
+            // Continue with next file even if one fails
+          }
+        }
+      } catch (e) {
+        print('Error during batch deletion: $e');
+      }
+
+      // Remove deleted photos from trash (sort indices in descending order to avoid index shifting)
+      selectedIndices.sort((a, b) => b.compareTo(a));
+      for (final index in selectedIndices) {
+        if (index >= 0 && index < currentTrash.length) {
+          currentTrash.removeAt(index);
+        }
+      }
+      
+      state = state.copyWith(trashPhotos: currentTrash);
+    } catch (e) {
+      print('Error deleting selected trash photos: $e');
     }
   }
 
@@ -247,32 +486,35 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
   }
 
   void moveAllPhotosToTrash() {
-    final currentTrash = List<File>.from(state.trashPhotos);
-    
+    final currentTrash = List<PhotoInfo>.from(state.trashPhotos);
+
     // Add base photo to trash if it exists
     if (state.basePhoto != null) {
-      currentTrash.add(state.basePhoto as File);
+      currentTrash.add(state.basePhoto!);
     }
-    
+
     // Add all comparison photos to trash
-    currentTrash.addAll(state.comparisonPhotos.cast<File>());
-    
+    currentTrash.addAll(state.comparisonPhotos);
+
     // Clear all photos and update trash
     state = PhotoState(trashPhotos: currentTrash);
   }
 
   void changeBasePhoto(int comparisonIndex) {
-    final currentComparisonPhotos = List<File>.from(state.comparisonPhotos);
-    
-    if (comparisonIndex >= 0 && comparisonIndex < currentComparisonPhotos.length) {
+    final currentComparisonPhotos = List<PhotoInfo>.from(
+      state.comparisonPhotos,
+    );
+
+    if (comparisonIndex >= 0 &&
+        comparisonIndex < currentComparisonPhotos.length) {
       final newBasePhoto = currentComparisonPhotos[comparisonIndex];
       currentComparisonPhotos.removeAt(comparisonIndex);
-      
+
       // Add old base photo to comparison photos if it exists
       if (state.basePhoto != null) {
-        currentComparisonPhotos.add(state.basePhoto as File);
+        currentComparisonPhotos.add(state.basePhoto!);
       }
-      
+
       state = state.copyWith(
         basePhoto: newBasePhoto,
         comparisonPhotos: currentComparisonPhotos,
