@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
@@ -11,6 +10,7 @@ class PhotoGalleryPicker extends StatefulWidget {
   final String title;
   final String? startAfterAssetId;  // Start showing photos after this asset
   final String? preferredAlbumId;   // Preferred album to start from
+  final String? disabledAssetId;    // Asset ID to disable (usually base photo)
 
   const PhotoGalleryPicker({
     super.key,
@@ -21,6 +21,7 @@ class PhotoGalleryPicker extends StatefulWidget {
     this.title = 'Select Photos',
     this.startAfterAssetId,
     this.preferredAlbumId,
+    this.disabledAssetId,
   });
 
   @override
@@ -33,11 +34,13 @@ class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
   List<AssetEntity> _selectedAssets = [];
   AssetPathEntity? _selectedAlbum;
   bool _isLoading = true;
+  bool _isLoadingMore = false;  // Track loading more assets
   int _currentPage = 0;
   bool _hasMore = true;
   final int _pageSize = 50;
   int _startAfterIndex = 0;  // Index to start loading from
   bool _foundStartPosition = false;
+  final Set<String> _loadedAssetIds = {};  // Track loaded assets to prevent duplicates
 
   @override
   void initState() {
@@ -152,11 +155,20 @@ class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
         filteredAssets = assets.skip(actualStartIndex).toList();
       }
       
+      // Filter out duplicates using asset ID
+      final List<AssetEntity> uniqueAssets = [];
+      for (final asset in filteredAssets) {
+        if (!_loadedAssetIds.contains(asset.id)) {
+          _loadedAssetIds.add(asset.id);
+          uniqueAssets.add(asset);
+        }
+      }
+      
       setState(() {
         if (_currentPage == 0) {
-          _assets = filteredAssets;
+          _assets = uniqueAssets;
         } else {
-          _assets.addAll(filteredAssets);
+          _assets.addAll(uniqueAssets);
         }
         _hasMore = assets.length == _pageSize;
         _currentPage++;
@@ -167,12 +179,25 @@ class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
   }
 
   Future<void> _loadMoreAssets() async {
-    if (_hasMore && !_isLoading) {
+    if (_hasMore && !_isLoading && !_isLoadingMore) {
+      setState(() {
+        _isLoadingMore = true;
+      });
+      
       await _loadAssets();
+      
+      setState(() {
+        _isLoadingMore = false;
+      });
     }
   }
 
   void _selectAsset(AssetEntity asset) {
+    // Don't allow selection if this asset is disabled
+    if (widget.disabledAssetId != null && asset.id == widget.disabledAssetId) {
+      return;
+    }
+    
     setState(() {
       if (widget.allowMultiple) {
         if (_selectedAssets.contains(asset)) {
@@ -192,6 +217,7 @@ class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
     setState(() {
       _selectedAlbum = album;
       _assets.clear();
+      _loadedAssetIds.clear();  // Clear loaded asset IDs
       _currentPage = 0;
       _hasMore = true;
       _isLoading = true;
@@ -298,96 +324,199 @@ class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
                             }
                             return false;
                           },
-                          child: GridView.builder(
-                            padding: const EdgeInsets.all(4),
-                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              crossAxisSpacing: 4,
-                              mainAxisSpacing: 4,
-                            ),
-                            itemCount: _assets.length,
-                            itemBuilder: (context, index) {
-                              final asset = _assets[index];
-                              final isSelected = _selectedAssets.contains(asset);
-                              
-                              return GestureDetector(
-                                onTap: () => _selectAsset(asset),
-                                child: Stack(
-                                  children: [
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: isSelected
-                                            ? Border.all(color: Colors.blue, width: 3)
-                                            : null,
-                                      ),
-                                      child: FutureBuilder<Uint8List?>(
-                                        future: asset.thumbnailDataWithSize(
-                                          const ThumbnailSize(200, 200),
-                                          quality: 70,
-                                        ),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.hasData && snapshot.data != null) {
-                                            return Image.memory(
-                                              snapshot.data!,
-                                              fit: BoxFit.cover,
-                                            );
-                                          }
-                                          return Container(
-                                            color: Colors.grey[800],
-                                            child: const Center(
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2,
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                    if (isSelected)
-                                      Positioned(
-                                        top: 4,
-                                        right: 4,
-                                        child: Container(
-                                          width: 24,
-                                          height: 24,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.blue,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: const Icon(
-                                            Icons.check,
-                                            color: Colors.white,
-                                            size: 16,
-                                          ),
-                                        ),
-                                      ),
-                                    if (widget.allowMultiple && isSelected)
-                                      Positioned(
-                                        top: 4,
-                                        right: 4,
-                                        child: Container(
-                                          width: 24,
-                                          height: 24,
-                                          decoration: const BoxDecoration(
-                                            color: Colors.blue,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              '${_selectedAssets.indexOf(asset) + 1}',
-                                              style: const TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
+                          child: Stack(
+                            children: [
+                              GridView.builder(
+                                padding: const EdgeInsets.all(4),
+                                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  crossAxisSpacing: 4,
+                                  mainAxisSpacing: 4,
                                 ),
-                              );
-                            },
+                                itemCount: _assets.length + (_isLoadingMore ? 3 : 0),  // Add loading placeholders
+                                itemBuilder: (context, index) {
+                                  // Show loading placeholders at the end
+                                  if (index >= _assets.length) {
+                                    return Container(
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[800],
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: const Center(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                  
+                                  final asset = _assets[index];
+                                  final isSelected = _selectedAssets.contains(asset);
+                                  final isDisabled = widget.disabledAssetId != null && asset.id == widget.disabledAssetId;
+                                  
+                                  return GestureDetector(
+                                    onTap: () => _selectAsset(asset),
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            border: isSelected
+                                                ? Border.all(color: Colors.blue, width: 3)
+                                                : isDisabled
+                                                    ? Border.all(color: Colors.red, width: 2)
+                                                    : null,
+                                          ),
+                                          child: Stack(
+                                            children: [
+                                              FutureBuilder<Uint8List?>(
+                                                future: asset.thumbnailDataWithSize(
+                                                  const ThumbnailSize(200, 200),
+                                                  quality: 70,
+                                                ),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot.hasData && snapshot.data != null) {
+                                                    return ColorFiltered(
+                                                      colorFilter: isDisabled
+                                                          ? ColorFilter.mode(
+                                                              Colors.grey,
+                                                              BlendMode.saturation,
+                                                            )
+                                                          : const ColorFilter.mode(
+                                                              Colors.transparent,
+                                                              BlendMode.multiply,
+                                                            ),
+                                                      child: Image.memory(
+                                                        snapshot.data!,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    );
+                                                  }
+                                                  return Container(
+                                                    color: Colors.grey[800],
+                                                    child: const Center(
+                                                      child: CircularProgressIndicator(
+                                                        strokeWidth: 2,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                              if (isDisabled)
+                                                Container(
+                                                  color: Colors.black.withValues(alpha: 0.5),
+                                                  child: const Center(
+                                                    child: Icon(
+                                                      Icons.block,
+                                                      color: Colors.red,
+                                                      size: 32,
+                                                    ),
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+                                        if (isSelected && !isDisabled)
+                                          Positioned(
+                                            top: 4,
+                                            right: 4,
+                                            child: Container(
+                                              width: 24,
+                                              height: 24,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.blue,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: const Icon(
+                                                Icons.check,
+                                                color: Colors.white,
+                                                size: 16,
+                                              ),
+                                            ),
+                                          ),
+                                        if (widget.allowMultiple && isSelected && !isDisabled)
+                                          Positioned(
+                                            top: 4,
+                                            right: 4,
+                                            child: Container(
+                                              width: 24,
+                                              height: 24,
+                                              decoration: const BoxDecoration(
+                                                color: Colors.blue,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  '${_selectedAssets.indexOf(asset) + 1}',
+                                                  style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 12,
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        if (isDisabled)
+                                          Positioned(
+                                            top: 4,
+                                            left: 4,
+                                            child: Container(
+                                              padding: const EdgeInsets.all(4),
+                                              decoration: BoxDecoration(
+                                                color: Colors.red.withValues(alpha: 0.9),
+                                                borderRadius: BorderRadius.circular(4),
+                                              ),
+                                              child: const Text(
+                                                'BASE',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 8,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                              
+                              // Loading more indicator at bottom
+                              if (_isLoadingMore)
+                                Positioned(
+                                  bottom: 20,
+                                  left: 0,
+                                  right: 0,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                                    margin: const EdgeInsets.symmetric(horizontal: 50),
+                                    decoration: BoxDecoration(
+                                      color: Colors.black.withValues(alpha: 0.8),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: const Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 16,
+                                          height: 16,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Text(
+                                          'Loading more...',
+                                          style: TextStyle(color: Colors.white, fontSize: 12),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         ),
                 ),

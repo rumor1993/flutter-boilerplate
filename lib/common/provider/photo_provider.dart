@@ -201,6 +201,7 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
                 onSelectionChanged: (assets) {},
                 startAfterAssetId: state.basePhoto?.id,
                 preferredAlbumId: state.basePhoto?.albumId,
+                disabledAssetId: state.basePhoto?.id,  // Disable base photo from selection
               ),
         ),
       );
@@ -249,6 +250,7 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
                 onSelectionChanged: (assets) {},
                 startAfterAssetId: state.basePhoto?.id,
                 preferredAlbumId: state.basePhoto?.albumId,
+                disabledAssetId: state.basePhoto?.id,  // Disable base photo from selection
               ),
         ),
       );
