@@ -350,10 +350,13 @@ class TutorialService {
       paddingFocus: 10,
       opacityShadow: 0.8,
       imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+
       onClickTarget: (target) {
+        print("onClickTarget");
         onFinish?.call();
       },
       onClickOverlay: (target) {
+        print("onClickOverlay");
         onFinish?.call();
       },
       onFinish: () {

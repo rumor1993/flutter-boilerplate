@@ -1,8 +1,11 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:photo_app/common/provider/photo_provider.dart';
+import 'package:photo_app/photo_comparison/view/photo_comparison_screen.dart';
 
-class PhotoGalleryPicker extends StatefulWidget {
+class PhotoGalleryPicker extends ConsumerStatefulWidget {
   final bool allowMultiple;
   final List<AssetEntity>? initialSelected;
   final Function(List<AssetEntity>) onSelectionChanged;
@@ -21,10 +24,10 @@ class PhotoGalleryPicker extends StatefulWidget {
   });
 
   @override
-  State<PhotoGalleryPicker> createState() => _PhotoGalleryPickerState();
+  ConsumerState<PhotoGalleryPicker> createState() => _PhotoGalleryPickerState();
 }
 
-class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
+class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
   List<AssetPathEntity> _albums = [];
   List<AssetEntity> _assets = [];
   List<AssetEntity> _selectedAssets = [];
@@ -279,12 +282,19 @@ class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
       // Small delay to show loading state
       await Future.delayed(const Duration(milliseconds: 300));
 
-      // Return the result
-      if (mounted) {
-        Navigator.pop(context, {
-          'assets': _selectedAssets,
-          'albumId': _selectedAlbum?.id,
-        });
+      if (mounted && _selectedAssets.isNotEmpty) {
+        // Process the selected photos using PhotoProvider
+        await _processSelectedPhotos();
+        
+        // Navigate directly to PhotoComparisonScreen
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const PhotoComparisonScreen(),
+            ),
+          );
+        }
       }
     } catch (e) {
       setState(() {
@@ -299,6 +309,45 @@ class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
           ),
         );
       }
+    }
+  }
+
+  Future<void> _processSelectedPhotos() async {
+    try {
+      // Process all assets with caching
+      List<PhotoInfo> allPhotos = [];
+      
+      for (int i = 0; i < _selectedAssets.length; i++) {
+        final asset = _selectedAssets[i];
+        final file = await asset.file;
+        final thumbnail = await asset.thumbnailDataWithSize(
+          const ThumbnailSize(200, 200),
+          quality: 70,
+        );
+        
+        allPhotos.add(PhotoInfo(
+          asset: asset,
+          cachedFile: file,
+          cachedThumbnail: thumbnail,
+          albumId: _selectedAlbum?.id,
+          indexInAlbum: i,
+        ));
+      }
+
+      // First photo becomes base photo
+      final basePhoto = allPhotos.first;
+      
+      // Remaining photos become comparison photos
+      final comparisonPhotos = allPhotos.length > 1 ? allPhotos.sublist(1) : <PhotoInfo>[];
+
+      // Update the PhotoProvider state
+      ref.read(photoProvider.notifier).updatePhotos(
+        basePhoto: basePhoto,
+        comparisonPhotos: comparisonPhotos,
+      );
+    } catch (e) {
+      print('Error processing selected photos: $e');
+      rethrow;
     }
   }
 

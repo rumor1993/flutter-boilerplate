@@ -343,7 +343,9 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
         return;
       }
 
-      final result = await Navigator.push<Map<String, dynamic>>(
+      // Simply navigate to PhotoGalleryPicker
+      // PhotoGalleryPicker will handle the processing and navigation to PhotoComparisonScreen
+      await Navigator.push(
         _context!,
         MaterialPageRoute(
           builder: (context) => PhotoGalleryPicker(
@@ -353,51 +355,20 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
           ),
         ),
       );
-
-      if (result != null && result['assets'] != null && result['assets'].isNotEmpty) {
-        // Start processing state
-        state = state.copyWith(isProcessingMultiplePhotos: true);
-        
-        final List<AssetEntity> assets = result['assets'];
-        final String? albumId = result['albumId'];
-        
-        // Process all assets with caching
-        List<PhotoInfo> allPhotos = [];
-        
-        for (int i = 0; i < assets.length; i++) {
-          final asset = assets[i];
-          final file = await asset.file;
-          final thumbnail = await asset.thumbnailDataWithSize(
-            const ThumbnailSize(200, 200),
-            quality: 70,
-          );
-          
-          allPhotos.add(PhotoInfo(
-            asset: asset,
-            cachedFile: file,
-            cachedThumbnail: thumbnail,
-            albumId: albumId,
-            indexInAlbum: i,
-          ));
-        }
-
-        // First photo becomes base photo
-        final basePhoto = allPhotos.first;
-        
-        // Remaining photos become comparison photos
-        final comparisonPhotos = allPhotos.length > 1 ? allPhotos.sublist(1) : <PhotoInfo>[];
-
-        state = state.copyWith(
-          basePhoto: basePhoto,
-          comparisonPhotos: comparisonPhotos,
-          isProcessingMultiplePhotos: false,
-        );
-      }
     } catch (e) {
       print('Error selecting multiple photos from home: $e');
-      // End processing state on error
-      state = state.copyWith(isProcessingMultiplePhotos: false);
     }
+  }
+
+  void updatePhotos({
+    required PhotoInfo basePhoto,
+    required List<PhotoInfo> comparisonPhotos,
+  }) {
+    state = state.copyWith(
+      basePhoto: basePhoto,
+      comparisonPhotos: comparisonPhotos,
+      isProcessingMultiplePhotos: false,
+    );
   }
 
   void removeComparisonPhoto(int index) {

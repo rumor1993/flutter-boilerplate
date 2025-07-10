@@ -16,6 +16,7 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   final GlobalKey _basePhotoKey = GlobalKey();
   final GlobalKey _actionButtonKey = GlobalKey();
+  bool _isNavigating = false;
   
   @override
   void initState() {
@@ -49,43 +50,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Photos Preview",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Your selected photos will appear here. The first photo will be your base reference image.",
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      TargetFocus(
-        identify: "actionButton",
-        keyTarget: _actionButtonKey,
-        alignSkip: Alignment.topRight,
-        contents: [
-          TargetContent(
-            align: ContentAlign.top,
-            builder: (context, controller) {
-              return Container(
-                padding: const EdgeInsets.all(20),
-                child: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
                       "Get Started",
                       style: TextStyle(
                         color: Colors.white,
@@ -95,12 +59,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      "Tap here to select multiple photos. You can select up to 30 photos at once! The first photo will become your base reference.",
+                      "Tap here to select multiple photos. You can select up to 30 photos at once! The first photo will become your base reference..",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Colors.white70,
                         fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        height: 1.4,
                       ),
                     ),
                   ],
@@ -135,12 +97,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     
     return Scaffold(
       backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+      body: Stack(
+        children: [
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
               // Header Section
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -220,29 +184,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     key: _basePhotoKey,
                     child: GestureDetector(
                       onTap: () async {
+                        if (_isNavigating) return;
+                        
                         if (photoState.basePhoto == null) {
-                          // Select multiple photos from home
+                          // Select multiple photos from home - PhotoGalleryPicker will handle navigation
                           await ref.read(photoProvider.notifier).selectMultiplePhotosFromHome();
-                          
-                          // Check if photos were selected, then navigate to comparison screen
-                          final updatedState = ref.read(photoProvider);
-                          if (updatedState.basePhoto != null && mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const PhotoComparisonScreen(),
-                              ),
-                            );
-                          }
                         } else {
                           // Navigate to comparison screen if base photo is already selected
                           if (mounted) {
-                            Navigator.push(
+                            setState(() {
+                              _isNavigating = true;
+                            });
+                            
+                            await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => const PhotoComparisonScreen(),
                               ),
                             );
+                            
+                            if (mounted) {
+                              setState(() {
+                                _isNavigating = false;
+                              });
+                            }
                           }
                         }
                       },
@@ -382,29 +347,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 height: 56,
                 child: ElevatedButton(
                   onPressed: () async {
+                    if (_isNavigating) return;
+                    
                     if (photoState.basePhoto == null) {
-                      // Select multiple photos from home
+                      // Select multiple photos from home - PhotoGalleryPicker will handle navigation
                       await ref.read(photoProvider.notifier).selectMultiplePhotosFromHome();
-                      
-                      // Check if photos were selected, then navigate to comparison screen
-                      final updatedState = ref.read(photoProvider);
-                      if (updatedState.basePhoto != null && mounted) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const PhotoComparisonScreen(),
-                          ),
-                        );
-                      }
                     } else {
                       // Navigate to comparison screen if base photo is already selected
                       if (mounted) {
-                        Navigator.push(
+                        setState(() {
+                          _isNavigating = true;
+                        });
+                        
+                        await Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => const PhotoComparisonScreen(),
                           ),
                         );
+                        
+                        if (mounted) {
+                          setState(() {
+                            _isNavigating = false;
+                          });
+                        }
                       }
                     }
                   },
@@ -433,10 +399,36 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
 
-              const Spacer(),
-            ],
+                  const Spacer(),
+                ],
+              ),
+            ),
           ),
-        ),
+          // Loading overlay
+          if (_isNavigating)
+            Container(
+              color: Colors.black.withValues(alpha: 0.7),
+              child: const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'Loading...',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
