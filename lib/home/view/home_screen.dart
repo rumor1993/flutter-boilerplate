@@ -140,65 +140,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Header Section
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  const SizedBox(width: 40), // Spacer for centering
-                  const Expanded(
-                    child: Text(
-                      'Sort Your Photos',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  PopupMenuButton<String>(
-                    icon: const Icon(Icons.settings, color: Colors.white),
-                    color: Colors.grey[800],
-                    onSelected: (String value) {
-                      switch (value) {
-                        case 'tutorial':
-                          _showTutorial();
-                          break;
-                        case 'reset':
-                          TutorialService.resetAllTutorials().then((_) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('Tutorials reset. Restart app to see them again.'),
-                                backgroundColor: Colors.green,
-                              ),
-                            );
-                          });
-                          break;
-                      }
-                    },
-                    itemBuilder: (BuildContext context) => [
-                      const PopupMenuItem<String>(
-                        value: 'tutorial',
-                        child: Row(
-                          children: [
-                            Icon(Icons.help_outline, color: Colors.white),
-                            SizedBox(width: 8),
-                            Text('Show Tutorial', style: TextStyle(color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                      const PopupMenuItem<String>(
-                        value: 'reset',
-                        child: Row(
-                          children: [
-                            Icon(Icons.refresh, color: Colors.white),
-                            SizedBox(width: 8),
-                            Text('Reset Tutorials', style: TextStyle(color: Colors.white)),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+              const Text(
+                'Sort Your Photos',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
 
