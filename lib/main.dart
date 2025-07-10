@@ -1,6 +1,8 @@
 import 'package:photo_app/common/provider/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 void main() {
   runApp(ProviderScope(child: _App()));
@@ -14,6 +16,16 @@ class _App extends ConsumerWidget {
     final router = ref.watch(routerProvider);
 
     return MaterialApp.router(
+      localizationsDelegates: const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('en', ''),
+        Locale('ko', ''),
+      ],
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,

@@ -7,6 +7,80 @@ class TutorialService {
   static const String _keyFirstTime = 'first_time_app';
   static const String _keyPhotoTutorial = 'photo_tutorial_shown';
 
+  // Helper function to create tutorial content with next button
+  static Widget _buildTutorialContent({
+    required String title,
+    required String description,
+    required VoidCallback onNext,
+    bool isLastStep = false,
+  }) {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            description,
+            style: const TextStyle(
+              color: Colors.white70,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 20),
+          Center(
+            child: GestureDetector(
+              onTap: onNext,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                decoration: BoxDecoration(
+                  color: Colors.blue.withValues(alpha: 0.8),
+                  borderRadius: BorderRadius.circular(25),
+                  border: Border.all(color: Colors.white, width: 2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.3),
+                      blurRadius: 8,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      isLastStep ? "Got it!" : "Next",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(
+                      isLastStep ? Icons.check : Icons.arrow_forward,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   static Future<bool> isFirstTimeUser([String? key]) async {
     final prefs = await SharedPreferences.getInstance();
     final prefKey = key != null ? '${_keyFirstTime}_$key' : _keyFirstTime;
@@ -180,30 +254,13 @@ class TutorialService {
           TargetContent(
             align: ContentAlign.bottom,
             builder: (context, controller) {
-              return Container(
-                padding: const EdgeInsets.all(20),
-                child: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Switch Albums",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Tap here to switch between different photo albums on your device.",
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
+              return _buildTutorialContent(
+                title: "Switch Albums",
+                description: "Tap here to switch between different photo albums on your device.",
+                onNext: () {
+                  print("Album selector tutorial - next tapped");
+                  controller.next();
+                },
               );
             },
           ),
@@ -221,30 +278,13 @@ class TutorialService {
           TargetContent(
             align: ContentAlign.bottom,
             builder: (context, controller) {
-              return Container(
-                padding: const EdgeInsets.all(20),
-                child: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Selection Counter",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Keep track of how many photos you've selected. You can select up to 30 photos at once.",
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
+              return _buildTutorialContent(
+                title: "Selection Counter",
+                description: "Keep track of how many photos you've selected. You can select up to 30 photos at once.",
+                onNext: () {
+                  print("Selection count tutorial - next tapped");
+                  controller.next();
+                },
               );
             },
           ),
@@ -262,30 +302,13 @@ class TutorialService {
           TargetContent(
             align: ContentAlign.top,
             builder: (context, controller) {
-              return Container(
-                padding: const EdgeInsets.all(20),
-                child: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Select Photos",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "Tap photos to select them. Photos with a red border and 'BASE' label cannot be selected as they're your base photo.",
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
+              return _buildTutorialContent(
+                title: "Select Photos",
+                description: "Tap photos to select them. Photos with a red border and 'BASE' label cannot be selected as they're your base photo.",
+                onNext: () {
+                  print("Photo grid tutorial - next tapped");
+                  controller.next();
+                },
               );
             },
           ),
@@ -303,30 +326,14 @@ class TutorialService {
           TargetContent(
             align: ContentAlign.bottom,
             builder: (context, controller) {
-              return Container(
-                padding: const EdgeInsets.all(20),
-                child: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Confirm Selection",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 10),
-                    Text(
-                      "When you're done selecting photos, tap this button to add them to your comparison collection.",
-                      style: TextStyle(
-                        color: Colors.white70,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
+              return _buildTutorialContent(
+                title: "Confirm Selection",
+                description: "When you're done selecting photos, tap this button to add them to your comparison collection.",
+                onNext: () {
+                  print("Done button tutorial - next tapped");
+                  controller.next();
+                },
+                isLastStep: true,
               );
             },
           ),
@@ -343,30 +350,42 @@ class TutorialService {
     VoidCallback? onFinish,
     VoidCallback? onSkip,
   }) {
-    TutorialCoachMark(
+    late TutorialCoachMark tutorial;
+    
+    tutorial = TutorialCoachMark(
       targets: targets,
       colorShadow: Colors.black.withValues(alpha: 0.8),
       textSkip: "SKIP",
       paddingFocus: 10,
       opacityShadow: 0.8,
       imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+      hideSkip: false,
+      useSafeArea: false,
+      pulseEnable: false,
 
       onClickTarget: (target) {
-        print("onClickTarget");
-        onFinish?.call();
+        print("onClickTarget - should trigger original action");
+        // Let the target handle its own action naturally
       },
       onClickOverlay: (target) {
-        print("onClickOverlay");
-        onFinish?.call();
+        print("onClickOverlay called - moving to next!");
+        tutorial.next();
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("onClickTargetWithTapPosition: ${tapDetails.globalPosition}");
       },
       onFinish: () {
+        print("Tutorial finished");
         onFinish?.call();
       },
       onSkip: () {
+        print("Tutorial skipped");
         onSkip?.call();
         return true;
       },
-    ).show(context: context);
+    );
+    
+    tutorial.show(context: context);
   }
 
   static Future<void> resetAllTutorials() async {

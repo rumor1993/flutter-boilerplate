@@ -12,7 +12,8 @@
       "Bash(dart format:*)",
       "Bash(dart analyze:*)",
       "Bash(dart:*)",
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "Bash(mkdir:*)"
     ],
     "deny": []
   }

@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_app/common/provider/photo_provider.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 class MainPhotoDisplay extends ConsumerStatefulWidget {
   final PageController pageController;
@@ -164,11 +165,43 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
   Widget _buildBasePhotoOverlay(PhotoState photoState) {
     return Container(
       margin: const EdgeInsets.all(16),
-      child: photoState.basePhoto!.buildImage(
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
-        useThumbnail: false,  // Use full quality for comparison overlay
+      child: Stack(
+        children: [
+          photoState.basePhoto!.buildImage(
+            fit: BoxFit.cover,
+            width: double.infinity,
+            height: double.infinity,
+            useThumbnail: false,  // Use full quality for comparison overlay
+          ),
+          // Base indicator in top-right corner
+          Positioned(
+            top: 16,
+            right: 16,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.blue.withValues(alpha: 0.9),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.3),
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Text(
+                AppLocalizations.of(context)!.base,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.0,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
