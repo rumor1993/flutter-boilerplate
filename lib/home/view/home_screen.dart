@@ -3,12 +3,127 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_app/photo_comparison/view/photo_comparison_screen.dart';
 import 'package:photo_app/common/provider/photo_provider.dart';
+import 'package:photo_app/common/service/tutorial_service.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  final GlobalKey _basePhotoKey = GlobalKey();
+  final GlobalKey _actionButtonKey = GlobalKey();
+  
+  @override
+  void initState() {
+    super.initState();
+    _checkAndShowTutorial();
+  }
+  
+  Future<void> _checkAndShowTutorial() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (await TutorialService.isFirstTimeUser()) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        _showTutorial();
+      }
+    });
+  }
+  
+  void _showTutorial() {
+    final targets = [
+      TargetFocus(
+        identify: "basePhoto",
+        keyTarget: _basePhotoKey,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Container(
+                padding: const EdgeInsets.all(20),
+                child: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Base Photo Preview",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "Your selected base photo will appear here. This is your reference image for comparison.",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: "actionButton",
+        keyTarget: _actionButtonKey,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) {
+              return Container(
+                padding: const EdgeInsets.all(20),
+                child: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Get Started",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "Tap here to select your base photo and start comparing photos. You can select up to 30 photos at once!",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    ];
+    
+    TutorialService.showTutorial(
+      context: context,
+      targets: targets,
+      onFinish: () {
+        TutorialService.setFirstTimeComplete();
+      },
+      onSkip: () {
+        TutorialService.setFirstTimeComplete();
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final photoState = ref.watch(photoProvider);
     
     // Set context for photo provider
@@ -40,9 +155,48 @@ class HomeScreen extends ConsumerWidget {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  IconButton(
+                  PopupMenuButton<String>(
                     icon: const Icon(Icons.settings, color: Colors.white),
-                    onPressed: () {},
+                    color: Colors.grey[800],
+                    onSelected: (String value) {
+                      switch (value) {
+                        case 'tutorial':
+                          _showTutorial();
+                          break;
+                        case 'reset':
+                          TutorialService.resetAllTutorials().then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Tutorials reset. Restart app to see them again.'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          });
+                          break;
+                      }
+                    },
+                    itemBuilder: (BuildContext context) => [
+                      const PopupMenuItem<String>(
+                        value: 'tutorial',
+                        child: Row(
+                          children: [
+                            Icon(Icons.help_outline, color: Colors.white),
+                            SizedBox(width: 8),
+                            Text('Show Tutorial', style: TextStyle(color: Colors.white)),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'reset',
+                        child: Row(
+                          children: [
+                            Icon(Icons.refresh, color: Colors.white),
+                            SizedBox(width: 8),
+                            Text('Reset Tutorials', style: TextStyle(color: Colors.white)),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -61,6 +215,7 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   // Single photo card
                   Expanded(
+                    key: _basePhotoKey,
                     child: Container(
                       height: 200,
                       decoration: BoxDecoration(
@@ -191,6 +346,7 @@ class HomeScreen extends ConsumerWidget {
 
               // Action Button
               SizedBox(
+                key: _actionButtonKey,
                 width: double.infinity,
                 height: 56,
                 child: ElevatedButton(
