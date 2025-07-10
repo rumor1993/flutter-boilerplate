@@ -7,14 +7,16 @@ class TutorialService {
   static const String _keyFirstTime = 'first_time_app';
   static const String _keyPhotoTutorial = 'photo_tutorial_shown';
 
-  static Future<bool> isFirstTimeUser() async {
+  static Future<bool> isFirstTimeUser([String? key]) async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(_keyFirstTime) ?? true;
+    final prefKey = key != null ? '${_keyFirstTime}_$key' : _keyFirstTime;
+    return prefs.getBool(prefKey) ?? true;
   }
 
-  static Future<void> setFirstTimeComplete() async {
+  static Future<void> setFirstTimeComplete([String? key]) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_keyFirstTime, false);
+    final prefKey = key != null ? '${_keyFirstTime}_$key' : _keyFirstTime;
+    await prefs.setBool(prefKey, false);
   }
 
   static Future<bool> shouldShowPhotoTutorial() async {
@@ -343,17 +345,23 @@ class TutorialService {
   }) {
     TutorialCoachMark(
       targets: targets,
-      colorShadow: Colors.black.withOpacity(0.8),
+      colorShadow: Colors.black.withValues(alpha: 0.8),
       textSkip: "SKIP",
       paddingFocus: 10,
       opacityShadow: 0.8,
       imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
+      onClickTarget: (target) {
+        onFinish?.call();
+      },
+      onClickOverlay: (target) {
+        onFinish?.call();
+      },
       onFinish: () {
         onFinish?.call();
       },
       onSkip: () {
         onSkip?.call();
-        return true; // 명시적으로 bool 값 반환
+        return true;
       },
     ).show(context: context);
   }

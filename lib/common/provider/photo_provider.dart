@@ -332,6 +332,74 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
     }
   }
 
+  Future<void> selectMultiplePhotosFromHome() async {
+    if (_context == null) return;
+
+    try {
+      final PermissionState permission =
+          await PhotoManager.requestPermissionExtend();
+      if (!permission.isAuth) {
+        print('Photo permission denied');
+        return;
+      }
+
+      final result = await Navigator.push<Map<String, dynamic>>(
+        _context!,
+        MaterialPageRoute(
+          builder: (context) => PhotoGalleryPicker(
+            allowMultiple: true,
+            title: 'Select Photos (First will be Base)',
+            onSelectionChanged: (assets) {},
+          ),
+        ),
+      );
+
+      if (result != null && result['assets'] != null && result['assets'].isNotEmpty) {
+        // Start processing state
+        state = state.copyWith(isProcessingMultiplePhotos: true);
+        
+        final List<AssetEntity> assets = result['assets'];
+        final String? albumId = result['albumId'];
+        
+        // Process all assets with caching
+        List<PhotoInfo> allPhotos = [];
+        
+        for (int i = 0; i < assets.length; i++) {
+          final asset = assets[i];
+          final file = await asset.file;
+          final thumbnail = await asset.thumbnailDataWithSize(
+            const ThumbnailSize(200, 200),
+            quality: 70,
+          );
+          
+          allPhotos.add(PhotoInfo(
+            asset: asset,
+            cachedFile: file,
+            cachedThumbnail: thumbnail,
+            albumId: albumId,
+            indexInAlbum: i,
+          ));
+        }
+
+        // First photo becomes base photo
+        final basePhoto = allPhotos.first;
+        
+        // Remaining photos become comparison photos
+        final comparisonPhotos = allPhotos.length > 1 ? allPhotos.sublist(1) : <PhotoInfo>[];
+
+        state = state.copyWith(
+          basePhoto: basePhoto,
+          comparisonPhotos: comparisonPhotos,
+          isProcessingMultiplePhotos: false,
+        );
+      }
+    } catch (e) {
+      print('Error selecting multiple photos from home: $e');
+      // End processing state on error
+      state = state.copyWith(isProcessingMultiplePhotos: false);
+    }
+  }
+
   void removeComparisonPhoto(int index) {
     final currentPhotos = List<PhotoInfo>.from(state.comparisonPhotos);
     if (index >= 0 && index < currentPhotos.length) {

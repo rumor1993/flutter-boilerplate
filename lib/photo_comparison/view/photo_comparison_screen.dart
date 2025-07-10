@@ -7,6 +7,8 @@ import 'package:photo_app/photo_comparison/widgets/main_photo_display.dart';
 import 'package:photo_app/photo_comparison/widgets/photo_selection_grid.dart';
 import 'package:photo_app/photo_comparison/widgets/bottom_action_button.dart';
 import 'package:photo_app/photo_comparison/widgets/side_by_side_comparison.dart';
+import 'package:photo_app/common/service/tutorial_service.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 final selectedPhotosProvider =
     StateNotifierProvider<SelectedPhotosNotifier, List<int>>((ref) {
@@ -42,11 +44,136 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
   int _currentIndex = 0;
   bool _showBasePhoto = false;
   bool _showSideBySideComparison = false;
+  final GlobalKey _mainPhotoKey = GlobalKey();
+  final GlobalKey _gridKey = GlobalKey();
+  final GlobalKey _bottomActionKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAndShowTutorial();
+  }
 
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  Future<void> _checkAndShowTutorial() async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (await TutorialService.isFirstTimeUser('photo_comparison')) {
+        await Future.delayed(const Duration(milliseconds: 500));
+        _showTutorial();
+      }
+    });
+  }
+
+  void _showTutorial() {
+    final targets = [
+      TargetFocus(
+        identify: "mainPhoto",
+        keyTarget: _mainPhotoKey,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.bottom,
+            builder: (context, controller) {
+              return Container(
+                padding: const EdgeInsets.all(20),
+                child: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Main Photo View",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      "Swipe left/right to compare photos. Tap to show base photo overlay for better comparison.",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+      TargetFocus(
+        identify: "bottomAction",
+        keyTarget: _bottomActionKey,
+        alignSkip: Alignment.topRight,
+        contents: [
+          TargetContent(
+            align: ContentAlign.top,
+            builder: (context, controller) {
+              return Container(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Transform.translate(
+                      offset: const Offset(0, -120),
+                      child: Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.black.withValues(alpha: 0.8),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Action Buttons",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            Text(
+                              "Swipe to navigate photos. Use 'Set as Base' or 'Delete' buttons to organize the currently viewed photo.",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                height: 1.4,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    ];
+    
+    TutorialService.showTutorial(
+      context: context,
+      targets: targets,
+      onFinish: () {
+        TutorialService.setFirstTimeComplete('photo_comparison');
+      },
+      onSkip: () {
+        TutorialService.setFirstTimeComplete('photo_comparison');
+      },
+    );
   }
 
 
@@ -165,41 +292,6 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
     );
   }
 
-
-  void _showDeleteAllConfirmation(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[900],
-        title: const Text(
-          'Delete All Photos',
-          style: TextStyle(color: Colors.white),
-        ),
-        content: const Text(
-          'Are you sure you want to delete all photos?',
-          style: TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          TextButton(
-            onPressed: () {
-              final photoNotifier = ref.read(photoProvider.notifier);
-              photoNotifier.clearAllPhotos();
-              Navigator.pop(context);
-            },
-            child: const Text(
-              'Delete All',
-              style: TextStyle(color: Colors.red),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showChangeCurrentToBaseConfirmation(BuildContext context) {
     if (_currentIndex <= 0) return;
 
@@ -267,7 +359,7 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
     
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           _showBackConfirmation(context);
         }
@@ -285,35 +377,53 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                   onBack: () => _showBackConfirmation(context),
                   onChangeBase: () => _showChangeCurrentToBaseConfirmation(context),
                   onDeleteAll: () => _showTrashManagement(context),
+                  onShowTutorial: () => _showTutorial(),
                 ),
 
                 // Main Photo Display
-                MainPhotoDisplay(
-                  pageController: _pageController,
-                  currentIndex: _currentIndex,
-                  showBasePhoto: _showBasePhoto,
-                  onPageChanged: _onPageChanged,
-                  onShowBasePhotoChanged: (show) {
-                    setState(() {
-                      _showBasePhoto = show;
-                    });
-                  },
+                Container(
+                  key: _mainPhotoKey,
+                  child: MainPhotoDisplay(
+                    pageController: _pageController,
+                    currentIndex: _currentIndex,
+                    showBasePhoto: _showBasePhoto,
+                    onPageChanged: _onPageChanged,
+                    onShowBasePhotoChanged: (show) {
+                      setState(() {
+                        _showBasePhoto = show;
+                      });
+                    },
+                  ),
                 ),
 
                 // Photo Selection Grid
-                PhotoSelectionGrid(
-                  pageController: _pageController,
-                  onChangeBase: () => _showChangeCurrentToBaseConfirmation(context),
-                  currentIndex: _currentIndex,
-                  onIndexChanged: (newIndex) {
-                    setState(() {
-                      _currentIndex = newIndex;
-                    });
-                  },
+                Container(
+                  key: _gridKey,
+                  child: PhotoSelectionGrid(
+                    pageController: _pageController,
+                    onChangeBase: () => _showChangeCurrentToBaseConfirmation(context),
+                    currentIndex: _currentIndex,
+                    onIndexChanged: (newIndex) {
+                      setState(() {
+                        _currentIndex = newIndex;
+                      });
+                    },
+                  ),
                 ),
 
                 // Bottom Action Button
-                const BottomActionButton(),
+                Container(
+                  key: _bottomActionKey,
+                  child: BottomActionButton(
+                    currentIndex: _currentIndex,
+                    pageController: _pageController,
+                    onIndexChanged: (newIndex) {
+                      setState(() {
+                        _currentIndex = newIndex;
+                      });
+                    },
+                  ),
+                ),
               ],
             ),
           ),

@@ -7,6 +7,7 @@ class PhotoComparisonHeader extends ConsumerWidget {
   final VoidCallback onBack;
   final VoidCallback onChangeBase;
   final VoidCallback onDeleteAll;
+  final VoidCallback? onShowTutorial;
 
   const PhotoComparisonHeader({
     super.key,
@@ -14,6 +15,7 @@ class PhotoComparisonHeader extends ConsumerWidget {
     required this.onBack,
     required this.onChangeBase,
     required this.onDeleteAll,
+    this.onShowTutorial,
   });
 
   @override
@@ -39,15 +41,15 @@ class PhotoComparisonHeader extends ConsumerWidget {
             ),
             Row(
               children: [
-                // 베이스 이미지 변경 버튼
-                if (photoState.basePhoto != null && currentIndex > 0)
+                // 튜토리얼 버튼
+                if (onShowTutorial != null)
                   IconButton(
                     icon: const Icon(
-                      Icons.swap_horiz,
-                      color: Colors.blue,
+                      Icons.help_outline,
+                      color: Colors.white,
                     ),
-                    onPressed: onChangeBase,
-                    tooltip: 'Change Base Photo',
+                    onPressed: onShowTutorial,
+                    tooltip: 'Show Tutorial',
                   ),
                 Stack(
                   children: [

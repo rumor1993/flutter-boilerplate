@@ -49,7 +49,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Base Photo Preview",
+                      "Photos Preview",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -58,7 +58,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      "Your selected base photo will appear here. This is your reference image for comparison.",
+                      "Your selected photos will appear here. The first photo will be your base reference image.",
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 16,
@@ -95,10 +95,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      "Tap here to select your base photo and start comparing photos. You can select up to 30 photos at once!",
+                      "Tap here to select multiple photos. You can select up to 30 photos at once! The first photo will become your base reference.",
                       style: TextStyle(
-                        color: Colors.white70,
+                        color: Colors.white,
                         fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 1.4,
                       ),
                     ),
                   ],
@@ -140,20 +142,71 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // Header Section
-              const Text(
-                'Photo Duplicate Finder',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const SizedBox(width: 40),
+                  const Expanded(
+                    child: Text(
+                      'Photo Duplicate Finder',
+                      style: TextStyle(
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_vert, color: Colors.white),
+                    color: Colors.grey[800],
+                    onSelected: (String value) {
+                      switch (value) {
+                        case 'tutorial':
+                          _showTutorial();
+                          break;
+                        case 'reset':
+                          TutorialService.resetAllTutorials().then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('All tutorials reset. They will show again when you navigate to each screen.'),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          });
+                          break;
+                      }
+                    },
+                    itemBuilder: (BuildContext context) => [
+                      const PopupMenuItem<String>(
+                        value: 'tutorial',
+                        child: Row(
+                          children: [
+                            Icon(Icons.help_outline, color: Colors.white),
+                            SizedBox(width: 8),
+                            Text('Show Tutorial', style: TextStyle(color: Colors.white)),
+                          ],
+                        ),
+                      ),
+                      const PopupMenuItem<String>(
+                        value: 'reset',
+                        child: Row(
+                          children: [
+                            Icon(Icons.refresh, color: Colors.white),
+                            SizedBox(width: 8),
+                            Text('Reset All Tutorials', style: TextStyle(color: Colors.white)),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
 
               // Subtitle
               const Text(
-                'Keep only your best photos with smart detection.',
+                'Select multiple photos to compare and organize.',
                 style: TextStyle(fontSize: 16, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
@@ -168,12 +221,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     child: GestureDetector(
                       onTap: () async {
                         if (photoState.basePhoto == null) {
-                          // Select base photo first
-                          await ref.read(photoProvider.notifier).selectBasePhoto();
+                          // Select multiple photos from home
+                          await ref.read(photoProvider.notifier).selectMultiplePhotosFromHome();
                           
-                          // Check if photo was selected, then navigate to comparison screen
+                          // Check if photos were selected, then navigate to comparison screen
                           final updatedState = ref.read(photoProvider);
-                          if (updatedState.basePhoto != null) {
+                          if (updatedState.basePhoto != null && mounted) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -183,12 +236,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           }
                         } else {
                           // Navigate to comparison screen if base photo is already selected
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const PhotoComparisonScreen(),
-                            ),
-                          );
+                          if (mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PhotoComparisonScreen(),
+                              ),
+                            );
+                          }
                         }
                       },
                       child: Container(
@@ -233,7 +288,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         ),
                                         SizedBox(height: 8),
                                         Text(
-                                          'Base Photo',
+                                          'Photos Preview',
                                           style: TextStyle(
                                             fontSize: 12,
                                             color: Colors.white70,
@@ -328,12 +383,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (photoState.basePhoto == null) {
-                      // Select base photo first
-                      await ref.read(photoProvider.notifier).selectBasePhoto();
+                      // Select multiple photos from home
+                      await ref.read(photoProvider.notifier).selectMultiplePhotosFromHome();
                       
-                      // Check if photo was selected, then navigate to comparison screen
+                      // Check if photos were selected, then navigate to comparison screen
                       final updatedState = ref.read(photoProvider);
-                      if (updatedState.basePhoto != null) {
+                      if (updatedState.basePhoto != null && mounted) {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -343,12 +398,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       }
                     } else {
                       // Navigate to comparison screen if base photo is already selected
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const PhotoComparisonScreen(),
-                        ),
-                      );
+                      if (mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const PhotoComparisonScreen(),
+                          ),
+                        );
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -365,7 +422,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       const Icon(Icons.photo_library, size: 20),
                       const SizedBox(width: 8),
                       Text(
-                        photoState.basePhoto == null ? 'Select Base Photo' : 'Choose Photos to Compare',
+                        photoState.basePhoto == null ? 'Select Photos' : 'Start Comparing',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
