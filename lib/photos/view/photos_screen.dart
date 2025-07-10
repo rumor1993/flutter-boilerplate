@@ -345,6 +345,48 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
                 ),
               ),
             ),
+          
+          // Multiple photo processing overlay
+          if (photoState.isProcessingMultiplePhotos)
+            Container(
+              color: Colors.black.withValues(alpha: 0.8),
+              child: const Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(
+                      strokeWidth: 4,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                    ),
+                    SizedBox(height: 20),
+                    Text(
+                      'Processing multiple photos...',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      'Loading selected photos and thumbnails',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 14,
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Text(
+                      'This may take a few moments...',
+                      style: TextStyle(
+                        color: Colors.white60,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
         ],
       ),
     );

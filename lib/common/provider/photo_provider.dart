@@ -143,22 +143,26 @@ class PhotoState {
   final PhotoInfo? basePhoto;
   final List<PhotoInfo> comparisonPhotos;
   final List<PhotoInfo> trashPhotos;
+  final bool isProcessingMultiplePhotos;
 
   PhotoState({
     this.basePhoto,
     this.comparisonPhotos = const [],
     this.trashPhotos = const [],
+    this.isProcessingMultiplePhotos = false,
   });
 
   PhotoState copyWith({
     PhotoInfo? basePhoto,
     List<PhotoInfo>? comparisonPhotos,
     List<PhotoInfo>? trashPhotos,
+    bool? isProcessingMultiplePhotos,
   }) {
     return PhotoState(
       basePhoto: basePhoto ?? this.basePhoto,
       comparisonPhotos: comparisonPhotos ?? this.comparisonPhotos,
       trashPhotos: trashPhotos ?? this.trashPhotos,
+      isProcessingMultiplePhotos: isProcessingMultiplePhotos ?? this.isProcessingMultiplePhotos,
     );
   }
 }
@@ -291,6 +295,9 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
       );
 
       if (result != null && result['assets'] != null && result['assets'].isNotEmpty) {
+        // Start processing state
+        state = state.copyWith(isProcessingMultiplePhotos: true);
+        
         final List<AssetEntity> assets = result['assets'];
         final String? albumId = result['albumId'];
         final currentPhotos = List<PhotoInfo>.from(state.comparisonPhotos);
@@ -312,10 +319,16 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
           }
         }
         
-        state = state.copyWith(comparisonPhotos: currentPhotos);
+        // End processing state and update photos
+        state = state.copyWith(
+          comparisonPhotos: currentPhotos,
+          isProcessingMultiplePhotos: false,
+        );
       }
     } catch (e) {
       print('Error adding multiple comparison photos: $e');
+      // End processing state on error
+      state = state.copyWith(isProcessingMultiplePhotos: false);
     }
   }
 

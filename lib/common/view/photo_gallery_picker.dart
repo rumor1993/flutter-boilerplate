@@ -37,6 +37,7 @@ class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
   int? _basePhotoIndex; // Index of the base photo in the album
   final ScrollController _scrollController = ScrollController();
   bool _initialScrollDone = false;
+  bool _isProcessing = false; // Add processing state
   
   // Cache thumbnails to prevent flickering
   final Map<String, Uint8List?> _thumbnailCache = {};
@@ -269,6 +270,38 @@ class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
     widget.onSelectionChanged(_selectedAssets);
   }
 
+  Future<void> _handleDonePressed() async {
+    setState(() {
+      _isProcessing = true;
+    });
+
+    try {
+      // Small delay to show loading state
+      await Future.delayed(const Duration(milliseconds: 300));
+
+      // Return the result
+      if (mounted) {
+        Navigator.pop(context, {
+          'assets': _selectedAssets,
+          'albumId': _selectedAlbum?.id,
+        });
+      }
+    } catch (e) {
+      setState(() {
+        _isProcessing = false;
+      });
+      // Handle error
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error processing photos: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
   void _changeAlbum(AssetPathEntity album) {
     setState(() {
       _selectedAlbum = album;
@@ -309,18 +342,22 @@ class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
         actions: [
           if (_selectedAssets.isNotEmpty)
             TextButton(
-              onPressed: () {
-                Navigator.pop(context, {
-                  'assets': _selectedAssets,
-                  'albumId': _selectedAlbum?.id,
-                });
-              },
-              child: Text(
-                widget.allowMultiple 
-                  ? 'Done (${_selectedAssets.length}/30)'
-                  : 'Done${_selectedAssets.isNotEmpty ? ' (${_selectedAssets.length})' : ''}',
-                style: const TextStyle(color: Colors.blue),
-              ),
+              onPressed: _isProcessing ? null : _handleDonePressed,
+              child: _isProcessing
+                ? const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                    ),
+                  )
+                : Text(
+                    widget.allowMultiple 
+                      ? 'Done (${_selectedAssets.length}/30)'
+                      : 'Done${_selectedAssets.isNotEmpty ? ' (${_selectedAssets.length})' : ''}',
+                    style: const TextStyle(color: Colors.blue),
+                  ),
             ),
         ],
       ),
@@ -502,6 +539,34 @@ class _PhotoGalleryPickerState extends State<PhotoGalleryPicker> {
                                           style: TextStyle(color: Colors.white, fontSize: 12),
                                         ),
                                       ],
+                                    ),
+                                  ),
+                                ),
+                                
+                              // Processing overlay
+                              if (_isProcessing)
+                                Positioned.fill(
+                                  child: Container(
+                                    color: Colors.black.withValues(alpha: 0.5),
+                                    child: const Center(
+                                      child: Column(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          CircularProgressIndicator(
+                                            strokeWidth: 4,
+                                            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                          ),
+                                          SizedBox(height: 16),
+                                          Text(
+                                            'Preparing photos...',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -729,3 +794,4 @@ class _PhotoGridItemState extends State<PhotoGridItem> {
     );
   }
 }
+
