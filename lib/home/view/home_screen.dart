@@ -141,7 +141,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             children: [
               // Header Section
               const Text(
-                'Sort Your Photos',
+                'Photo Duplicate Finder',
                 style: TextStyle(
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -153,7 +153,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
               // Subtitle
               const Text(
-                'Effortlessly organize your photo library\nwith smart sorting.',
+                'Keep only your best photos with smart detection.',
                 style: TextStyle(fontSize: 16, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
@@ -165,58 +165,85 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   // Single photo card
                   Expanded(
                     key: _basePhotoKey,
-                    child: Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF1A1A1A),
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.3),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12),
-                        child: photoState.basePhoto != null
-                            ? photoState.basePhoto!.buildImage(
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: double.infinity,
-                                useThumbnail: true,
-                                thumbnailSize: const ThumbnailSize(400, 400),
-                              )
-                            : Container(
-                                decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topLeft,
-                                    end: Alignment.bottomRight,
-                                    colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
+                    child: GestureDetector(
+                      onTap: () async {
+                        if (photoState.basePhoto == null) {
+                          // Select base photo first
+                          await ref.read(photoProvider.notifier).selectBasePhoto();
+                          
+                          // Check if photo was selected, then navigate to comparison screen
+                          final updatedState = ref.read(photoProvider);
+                          if (updatedState.basePhoto != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const PhotoComparisonScreen(),
+                              ),
+                            );
+                          }
+                        } else {
+                          // Navigate to comparison screen if base photo is already selected
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PhotoComparisonScreen(),
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF1A1A1A),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.3),
+                              blurRadius: 8,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(12),
+                          child: photoState.basePhoto != null
+                              ? photoState.basePhoto!.buildImage(
+                                  fit: BoxFit.cover,
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  useThumbnail: true,
+                                  thumbnailSize: const ThumbnailSize(400, 400),
+                                )
+                              : Container(
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topLeft,
+                                      end: Alignment.bottomRight,
+                                      colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
+                                    ),
                                   ),
-                                ),
-                                child: const Center(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(
-                                        Icons.add_photo_alternate,
-                                        size: 40,
-                                        color: Colors.white70,
-                                      ),
-                                      SizedBox(height: 8),
-                                      Text(
-                                        'Base Photo',
-                                        style: TextStyle(
-                                          fontSize: 12,
+                                  child: const Center(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.add_photo_alternate,
+                                          size: 40,
                                           color: Colors.white70,
                                         ),
-                                      ),
-                                    ],
+                                        SizedBox(height: 8),
+                                        Text(
+                                          'Base Photo',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            color: Colors.white70,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
+                        ),
                       ),
                     ),
                   ),
