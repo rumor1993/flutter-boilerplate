@@ -1,0 +1,7 @@
+{
+  "@@locale": "en",
+  "base": "BASE",
+  "@base": {
+    "description": "Label for base photo in photo comparison"
+  }
+}
