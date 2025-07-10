@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_app/common/provider/photo_provider.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 class SideBySideComparison extends ConsumerWidget {
   final int currentIndex;
@@ -39,9 +40,9 @@ class SideBySideComparison extends ConsumerWidget {
               // Header
               Container(
                 padding: const EdgeInsets.all(16),
-                child: const Text(
-                  'Photo Comparison',
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context)!.photoComparison,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -59,9 +60,9 @@ class SideBySideComparison extends ConsumerWidget {
                         margin: const EdgeInsets.all(8),
                         child: Column(
                           children: [
-                            const Text(
-                              'Base Photo',
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context)!.basePhoto,
+                              style: const TextStyle(
                                 color: Colors.blue,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -89,9 +90,9 @@ class SideBySideComparison extends ConsumerWidget {
                         margin: const EdgeInsets.all(8),
                         child: Column(
                           children: [
-                            const Text(
-                              'Comparison Photo',
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context)!.comparisonPhoto,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
@@ -119,9 +120,9 @@ class SideBySideComparison extends ConsumerWidget {
               // Instruction
               Container(
                 padding: const EdgeInsets.all(16),
-                child: const Text(
-                  'Tap anywhere to close',
-                  style: TextStyle(color: Colors.grey, fontSize: 14),
+                child: Text(
+                  AppLocalizations.of(context)!.tapAnywhereToClose,
+                  style: const TextStyle(color: Colors.grey, fontSize: 14),
                 ),
               ),
             ],

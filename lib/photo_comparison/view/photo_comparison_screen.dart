@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_app/common/provider/photo_provider.dart';
@@ -9,6 +8,7 @@ import 'package:photo_app/photo_comparison/widgets/bottom_action_button.dart';
 import 'package:photo_app/photo_comparison/widgets/side_by_side_comparison.dart';
 import 'package:photo_app/common/service/tutorial_service.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 final selectedPhotosProvider =
     StateNotifierProvider<SelectedPhotosNotifier, List<int>>((ref) {
@@ -95,18 +95,18 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Trash Management",
-                            style: TextStyle(
+                          Text(
+                            AppLocalizations.of(context)!.trashManagement,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                           const SizedBox(height: 10),
-                          const Text(
-                            "Tap the trash can to permanently delete photos from your device. The red badge shows how many photos are in trash.",
-                            style: TextStyle(
+                          Text(
+                            AppLocalizations.of(context)!.trashManagementDescription,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
@@ -134,19 +134,19 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                                     ),
                                   ],
                                 ),
-                                child: const Row(
+                                child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      "Next",
-                                      style: TextStyle(
+                                      AppLocalizations.of(context)!.next,
+                                      style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
                                       ),
                                     ),
-                                    SizedBox(width: 6),
-                                    Icon(
+                                    const SizedBox(width: 6),
+                                    const Icon(
                                       Icons.arrow_forward_rounded,
                                       color: Colors.white,
                                       size: 16,
@@ -180,18 +180,18 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Main Photo View",
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.mainPhotoView,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      "Swipe left/right to compare photos. Tap to show base photo overlay for better comparison.",
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.mainPhotoViewDescription,
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 16,
                       ),
@@ -217,19 +217,19 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                               ),
                             ],
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                "Next",
-                                style: TextStyle(
+                                AppLocalizations.of(context)!.next,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
-                              SizedBox(width: 6),
-                              Icon(
+                              const SizedBox(width: 6),
+                              const Icon(
                                 Icons.arrow_forward_rounded,
                                 color: Colors.white,
                                 size: 16,
@@ -271,18 +271,18 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Action Buttons",
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context)!.actionButtons,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 10),
-                            const Text(
-                              "Swipe to navigate photos. Use 'Set as Base' or 'Delete' buttons to organize the currently viewed photo.",
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context)!.actionButtonsDescription,
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
@@ -310,19 +310,19 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                                       ),
                                     ],
                                   ),
-                                  child: const Row(
+                                  child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Text(
-                                        "Got it!",
-                                        style: TextStyle(
+                                        AppLocalizations.of(context)!.gotIt,
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontSize: 14,
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                      SizedBox(width: 6),
-                                      Icon(
+                                      const SizedBox(width: 6),
+                                      const Icon(
                                         Icons.check_rounded,
                                         color: Colors.white,
                                         size: 16,
@@ -374,18 +374,18 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.grey[900],
-        title: const Text(
-          'Go Back to Home',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          AppLocalizations.of(context)!.goBackToHome,
+          style: const TextStyle(color: Colors.white),
         ),
-        content: const Text(
-          'Going back will clear your base photo and reset your session. Are you sure?',
-          style: TextStyle(color: Colors.white70),
+        content: Text(
+          AppLocalizations.of(context)!.goBackConfirmation,
+          style: const TextStyle(color: Colors.white70),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -394,7 +394,7 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
               Navigator.pop(context); // Go back to home
             },
             style: TextButton.styleFrom(foregroundColor: Colors.orange),
-            child: const Text('Go Back'),
+            child: Text(AppLocalizations.of(context)!.goBack),
           ),
         ],
       ),
@@ -410,18 +410,18 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
         context: context,
         builder: (context) => AlertDialog(
           backgroundColor: Colors.grey[900],
-          title: const Text(
-            'Trash',
-            style: TextStyle(color: Colors.white),
+          title: Text(
+            AppLocalizations.of(context)!.trash,
+            style: const TextStyle(color: Colors.white),
           ),
-          content: const Text(
-            'Trash is empty',
-            style: TextStyle(color: Colors.white70),
+          content: Text(
+            AppLocalizations.of(context)!.trashEmpty,
+            style: const TextStyle(color: Colors.white70),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('OK'),
+              child: Text(AppLocalizations.of(context)!.ok),
             ),
           ],
         ),
@@ -434,23 +434,24 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.grey[900],
-        title: const Text(
-          'Delete from Device',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          AppLocalizations.of(context)!.deleteFromDevice,
+          style: const TextStyle(color: Colors.white),
         ),
         content: Text(
-          'Do you want to permanently delete ${photoState.trashPhotos.length} photo(s) from your device album?',
+          AppLocalizations.of(context)!.deleteConfirmation(photoState.trashPhotos.length),
           style: const TextStyle(color: Colors.white70),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () async {
               final navigator = Navigator.of(context);
               final messenger = ScaffoldMessenger.of(context);
+              final photosDeletedMessage = AppLocalizations.of(context)!.photosDeleted;
               navigator.pop();
               await ref.read(photoProvider.notifier).deleteTrashPhotosPermanently();
               
@@ -459,14 +460,14 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
               navigator.pop(); // Go back to home screen
               
               messenger.showSnackBar(
-                const SnackBar(
-                  content: Text('Photos permanently deleted from device'),
+                SnackBar(
+                  content: Text(photosDeletedMessage),
                   backgroundColor: Colors.red,
                 ),
               );
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Delete'),
+            child: Text(AppLocalizations.of(context)!.delete),
           ),
         ],
       ),
@@ -482,18 +483,18 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: Colors.grey[900],
-        title: const Text(
-          'Change Base Photo',
-          style: TextStyle(color: Colors.white),
+        title: Text(
+          AppLocalizations.of(context)!.changeBasePhoto,
+          style: const TextStyle(color: Colors.white),
         ),
-        content: const Text(
-          'Do you want to set this image as the new base photo?',
-          style: TextStyle(color: Colors.white70),
+        content: Text(
+          AppLocalizations.of(context)!.changeBasePhotoConfirmation,
+          style: const TextStyle(color: Colors.white70),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () {
@@ -501,8 +502,8 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
               photoNotifier.changeBasePhoto(comparisonIndex);
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Base photo changed successfully'),
+                SnackBar(
+                  content: Text(AppLocalizations.of(context)!.basePhotoChanged),
                   backgroundColor: Colors.green,
                 ),
               );
@@ -513,9 +514,9 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
                 curve: Curves.easeInOut,
               );
             },
-            child: const Text(
-              'Change',
-              style: TextStyle(color: Colors.blue),
+            child: Text(
+              AppLocalizations.of(context)!.change,
+              style: const TextStyle(color: Colors.blue),
             ),
           ),
         ],

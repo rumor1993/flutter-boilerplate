@@ -1,9 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_app/common/provider/photo_provider.dart';
 import 'package:photo_app/photo_comparison/view/photo_comparison_screen.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 class PhotoSelectionGrid extends ConsumerStatefulWidget {
   final PageController pageController;
@@ -262,11 +262,11 @@ class _PhotoSelectionGridState extends ConsumerState<PhotoSelectionGrid> {
   }
 
   Widget _buildEmptyState() {
-    return const Center(
+    return Center(
       child: Text(
-        'Swipe through photos above or tap thumbnails to navigate.\nUse buttons below to organize the current photo.',
+        AppLocalizations.of(context)!.photoNavigationDescription,
         textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 14, color: Colors.grey),
+        style: const TextStyle(fontSize: 14, color: Colors.grey),
       ),
     );
   }
@@ -366,9 +366,9 @@ class _PhotoSelectionGridState extends ConsumerState<PhotoSelectionGrid> {
                             color: Colors.blue,
                             borderRadius: BorderRadius.circular(8),
                           ),
-                          child: const Text(
-                            'BASE',
-                            style: TextStyle(
+                          child: Text(
+                            AppLocalizations.of(context)!.base,
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 8,
                               fontWeight: FontWeight.bold,
@@ -382,7 +382,7 @@ class _PhotoSelectionGridState extends ConsumerState<PhotoSelectionGrid> {
             ),
             const SizedBox(height: 4),
             Text(
-              isBasePhoto ? 'Base' : 'Image ${comparisonIndex + 1}',
+              isBasePhoto ? AppLocalizations.of(context)!.base : AppLocalizations.of(context)!.imageNumber(comparisonIndex + 1),
               style: const TextStyle(fontSize: 10, color: Colors.white),
             ),
           ],

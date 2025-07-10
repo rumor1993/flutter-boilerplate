@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 class TutorialService {
   static const String _keyFirstTime = 'first_time_app';
@@ -9,6 +10,7 @@ class TutorialService {
 
   // Helper function to create tutorial content with next button
   static Widget _buildTutorialContent({
+    required BuildContext context,
     required String title,
     required String description,
     required VoidCallback onNext,
@@ -58,7 +60,7 @@ class TutorialService {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      isLastStep ? "Got it!" : "Next",
+                      isLastStep ? AppLocalizations.of(context)!.gotIt : AppLocalizations.of(context)!.next,
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -122,22 +124,22 @@ class TutorialService {
             builder: (context, controller) {
               return Container(
                 padding: const EdgeInsets.all(20),
-                child: const Column(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Select Base Photo",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.selectBasePhoto,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
-                      "Start by selecting a base photo that you want to compare with other photos. This will be your reference image.",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.selectBasePhotoDescription,
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 16,
                       ),
@@ -163,22 +165,22 @@ class TutorialService {
             builder: (context, controller) {
               return Container(
                 padding: const EdgeInsets.all(20),
-                child: const Column(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Add Comparison Photos",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.addComparisonPhotos,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
-                      "After selecting a base photo, use this button to add photos for comparison. You can select up to 30 photos at once!",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.addComparisonPhotosDescription,
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 16,
                       ),
@@ -204,22 +206,22 @@ class TutorialService {
             builder: (context, controller) {
               return Container(
                 padding: const EdgeInsets.all(20),
-                child: const Column(
+                child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "View and Compare Photos",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.viewAndComparePhotos,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     Text(
-                      "Swipe through your photos to compare them. Your base photo will be marked with a 'BASE' label. Swipe up on any photo to delete it.",
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.viewAndComparePhotosDescription,
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 16,
                       ),
@@ -255,8 +257,9 @@ class TutorialService {
             align: ContentAlign.bottom,
             builder: (context, controller) {
               return _buildTutorialContent(
-                title: "Switch Albums",
-                description: "Tap here to switch between different photo albums on your device.",
+                context: context,
+                title: AppLocalizations.of(context)!.switchAlbums,
+                description: AppLocalizations.of(context)!.switchAlbumsDescription,
                 onNext: () {
                   print("Album selector tutorial - next tapped");
                   controller.next();
@@ -279,8 +282,9 @@ class TutorialService {
             align: ContentAlign.bottom,
             builder: (context, controller) {
               return _buildTutorialContent(
-                title: "Selection Counter",
-                description: "Keep track of how many photos you've selected. You can select up to 30 photos at once.",
+                context: context,
+                title: AppLocalizations.of(context)!.selectionCounterTitle,
+                description: AppLocalizations.of(context)!.selectionCounterDescription,
                 onNext: () {
                   print("Selection count tutorial - next tapped");
                   controller.next();
@@ -303,8 +307,9 @@ class TutorialService {
             align: ContentAlign.top,
             builder: (context, controller) {
               return _buildTutorialContent(
-                title: "Select Photos",
-                description: "Tap photos to select them. Photos with a red border and 'BASE' label cannot be selected as they're your base photo.",
+                context: context,
+                title: AppLocalizations.of(context)!.selectPhotosTitle,
+                description: AppLocalizations.of(context)!.selectPhotosDescription,
                 onNext: () {
                   print("Photo grid tutorial - next tapped");
                   controller.next();
@@ -327,8 +332,9 @@ class TutorialService {
             align: ContentAlign.bottom,
             builder: (context, controller) {
               return _buildTutorialContent(
-                title: "Confirm Selection",
-                description: "When you're done selecting photos, tap this button to add them to your comparison collection.",
+                context: context,
+                title: AppLocalizations.of(context)!.confirmSelection,
+                description: AppLocalizations.of(context)!.confirmSelectionDescription,
                 onNext: () {
                   print("Done button tutorial - next tapped");
                   controller.next();
@@ -355,7 +361,7 @@ class TutorialService {
     tutorial = TutorialCoachMark(
       targets: targets,
       colorShadow: Colors.black.withValues(alpha: 0.8),
-      textSkip: "SKIP",
+      textSkip: AppLocalizations.of(context)!.skip,
       paddingFocus: 10,
       opacityShadow: 0.8,
       imageFilter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),

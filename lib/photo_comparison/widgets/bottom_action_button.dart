@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_app/common/provider/photo_provider.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 class BottomActionButton extends ConsumerWidget {
   final int currentIndex;
@@ -41,8 +42,8 @@ class BottomActionButton extends ConsumerWidget {
                         final photoNotifier = ref.read(photoProvider.notifier);
                         photoNotifier.changeBasePhoto(comparisonIndex);
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Base photo changed successfully'),
+                          SnackBar(
+                            content: Text(AppLocalizations.of(context)!.basePhotoChanged),
                             backgroundColor: Colors.green,
                           ),
                         );
@@ -51,8 +52,8 @@ class BottomActionButton extends ConsumerWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(isBasePhoto 
-                                ? 'This is already the base photo'
-                                : 'No comparison photos available'),
+                                ? AppLocalizations.of(context)!.alreadyBasePhoto
+                                : AppLocalizations.of(context)!.noComparisonPhotos),
                             backgroundColor: Colors.orange,
                           ),
                         );
@@ -73,7 +74,7 @@ class BottomActionButton extends ConsumerWidget {
                     const Icon(Icons.swap_horiz, size: 20),
                     const SizedBox(width: 8),
                     Text(
-                      isBasePhoto ? 'Is Base' : 'Set as Base',
+                      isBasePhoto ? AppLocalizations.of(context)!.isBase : AppLocalizations.of(context)!.setAsBase,
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
@@ -127,8 +128,8 @@ class BottomActionButton extends ConsumerWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text(isBasePhoto 
-                                ? 'Cannot delete base photo'
-                                : 'No comparison photos to delete'),
+                                ? AppLocalizations.of(context)!.cannotDeleteBase
+                                : AppLocalizations.of(context)!.noComparisonToDelete),
                             backgroundColor: Colors.orange,
                           ),
                         );
@@ -149,7 +150,7 @@ class BottomActionButton extends ConsumerWidget {
                     const Icon(Icons.delete, size: 20),
                     const SizedBox(width: 8),
                     Text(
-                      isBasePhoto ? 'Protected' : 'Delete',
+                      isBasePhoto ? AppLocalizations.of(context)!.protected : AppLocalizations.of(context)!.delete,
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,

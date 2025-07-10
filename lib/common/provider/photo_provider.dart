@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:photo_app/common/view/photo_gallery_picker.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 class PhotoInfo {
   final AssetEntity asset;
@@ -72,17 +73,17 @@ class PhotoInfo {
               color: Colors.black,
               borderRadius: BorderRadius.circular(12),
             ),
-            child: const Center(
+            child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(
+                  const CircularProgressIndicator(
                     strokeWidth: 3,
                     valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                   ),
-                  SizedBox(height: 12),
+                  const SizedBox(height: 12),
                   Text(
-                    'Loading...',
+                    AppLocalizations.of(context)!.loading,
                     style: TextStyle(
                       color: Colors.white70,
                       fontSize: 14,
@@ -114,17 +115,17 @@ class PhotoInfo {
             color: Colors.black,
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Center(
+          child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CircularProgressIndicator(
+                const CircularProgressIndicator(
                   strokeWidth: 3,
                   valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 Text(
-                  'Loading...',
+                  AppLocalizations.of(context)!.loading,
                   style: TextStyle(
                     color: Colors.white70,
                     fontSize: 14,
@@ -193,7 +194,7 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
           builder:
               (context) => PhotoGalleryPicker(
                 allowMultiple: false,
-                title: 'Select Base Photo',
+                title: AppLocalizations.of(context)!.selectBasePhoto,
                 onSelectionChanged: (assets) {},
               ),
         ),
@@ -239,7 +240,7 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
           builder:
               (context) => PhotoGalleryPicker(
                 allowMultiple: false,
-                title: 'Add Comparison Photo',
+                title: AppLocalizations.of(context)!.addComparisonPhoto,
                 onSelectionChanged: (assets) {},
                 disabledAssetId: state.basePhoto?.id,  // Disable base photo from selection
                 centerAroundAssetId: state.basePhoto?.id,  // Center around base photo
@@ -286,7 +287,7 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
         MaterialPageRoute(
           builder: (context) => PhotoGalleryPicker(
             allowMultiple: true,
-            title: 'Add Multiple Photos',
+            title: AppLocalizations.of(context)!.addMultiplePhotos,
             onSelectionChanged: (assets) {},
             disabledAssetId: state.basePhoto?.id,
             centerAroundAssetId: state.basePhoto?.id,  // Center around base photo
@@ -350,7 +351,7 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
         MaterialPageRoute(
           builder: (context) => PhotoGalleryPicker(
             allowMultiple: true,
-            title: 'Select Photos (First will be Base)',
+            title: AppLocalizations.of(context)!.selectPhotosFirstBase,
             onSelectionChanged: (assets) {},
           ),
         ),

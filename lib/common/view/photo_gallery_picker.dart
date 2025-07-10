@@ -4,6 +4,7 @@ import 'package:photo_manager/photo_manager.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:photo_app/common/provider/photo_provider.dart';
 import 'package:photo_app/photo_comparison/view/photo_comparison_screen.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 class PhotoGalleryPicker extends ConsumerStatefulWidget {
   final bool allowMultiple;
@@ -18,7 +19,7 @@ class PhotoGalleryPicker extends ConsumerStatefulWidget {
     this.allowMultiple = false,
     this.initialSelected,
     required this.onSelectionChanged,
-    this.title = 'Select Photos',
+    required this.title,
     this.disabledAssetId,
     this.centerAroundAssetId,
   });
@@ -257,8 +258,8 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
           } else {
             // Show a message or handle the limit
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Maximum 30 photos can be selected'),
+              SnackBar(
+                content: Text(AppLocalizations.of(context)!.maxPhotosSelected),
                 duration: Duration(seconds: 2),
                 backgroundColor: Colors.orange,
               ),
@@ -304,7 +305,7 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error processing photos: $e'),
+            content: Text(AppLocalizations.of(context)!.errorProcessingPhotos(e.toString())),
             backgroundColor: Colors.red,
           ),
         );
@@ -403,8 +404,8 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
                   )
                 : Text(
                     widget.allowMultiple 
-                      ? 'Done (${_selectedAssets.length}/30)'
-                      : 'Done${_selectedAssets.isNotEmpty ? ' (${_selectedAssets.length})' : ''}',
+                      ? AppLocalizations.of(context)!.doneWithCount(_selectedAssets.length)
+                      : AppLocalizations.of(context)!.doneWithSelectedCount(_selectedAssets.length),
                     style: const TextStyle(color: Colors.blue),
                   ),
             ),
@@ -413,7 +414,7 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
       body: _isLoading
           ? Container(
               color: Colors.black,
-              child: const Center(
+              child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -423,7 +424,7 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
                     ),
                     SizedBox(height: 20),
                     Text(
-                      'Loading photos...',
+                      AppLocalizations.of(context)!.loadingPhotos,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -431,7 +432,7 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
                     ),
                     SizedBox(height: 8),
                     Text(
-                      'Finding photos around your base image',
+                      AppLocalizations.of(context)!.findingPhotos,
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 14,
@@ -489,8 +490,8 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
                       children: [
                         Text(
                           widget.centerAroundAssetId != null 
-                            ? 'Photos around your base image'
-                            : 'Select photos',
+                            ? AppLocalizations.of(context)!.photosAroundBase
+                            : AppLocalizations.of(context)!.selectPhotos,
                           style: const TextStyle(color: Colors.white70, fontSize: 14),
                         ),
                         Container(
@@ -502,7 +503,7 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
-                            '${_selectedAssets.length}/30 selected',
+                            AppLocalizations.of(context)!.selectionCounter(_selectedAssets.length),
                             style: TextStyle(
                               color: _selectedAssets.length >= 30 ? Colors.red : Colors.blue, 
                               fontSize: 12,
@@ -517,9 +518,9 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
                 // Photo grid
                 Expanded(
                   child: _assets.isEmpty
-                      ? const Center(
+                      ? Center(
                           child: Text(
-                            'No photos found',
+                            AppLocalizations.of(context)!.noPhotosFound,
                             style: TextStyle(color: Colors.grey),
                           ),
                         )
@@ -570,7 +571,7 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
                                       color: Colors.black.withValues(alpha: 0.8),
                                       borderRadius: BorderRadius.circular(20),
                                     ),
-                                    child: const Row(
+                                    child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
@@ -584,7 +585,7 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
                                         ),
                                         SizedBox(width: 8),
                                         Text(
-                                          'Loading more...',
+                                          AppLocalizations.of(context)!.loadingMore,
                                           style: TextStyle(color: Colors.white, fontSize: 12),
                                         ),
                                       ],
@@ -597,7 +598,7 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
                                 Positioned.fill(
                                   child: Container(
                                     color: Colors.black.withValues(alpha: 0.5),
-                                    child: const Center(
+                                    child: Center(
                                       child: Column(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
@@ -607,7 +608,7 @@ class _PhotoGalleryPickerState extends ConsumerState<PhotoGalleryPicker> {
                                           ),
                                           SizedBox(height: 16),
                                           Text(
-                                            'Preparing photos...',
+                                            AppLocalizations.of(context)!.preparingPhotos,
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 16,
@@ -744,7 +745,7 @@ class _PhotoGridItemState extends State<PhotoGridItem> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: _isLoading
-                              ? const Center(
+                              ? Center(
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -754,7 +755,7 @@ class _PhotoGridItemState extends State<PhotoGridItem> {
                                       ),
                                       SizedBox(height: 8),
                                       Text(
-                                        'Loading...',
+                                        AppLocalizations.of(context)!.loading,
                                         style: TextStyle(
                                           color: Colors.white70,
                                           fontSize: 10,
@@ -828,8 +829,8 @@ class _PhotoGridItemState extends State<PhotoGridItem> {
                   color: Colors.red.withValues(alpha: 0.9),
                   borderRadius: BorderRadius.circular(4),
                 ),
-                child: const Text(
-                  'BASE',
+                child: Text(
+                  AppLocalizations.of(context)!.base,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 8,

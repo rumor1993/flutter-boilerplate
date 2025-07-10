@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 class CustomImageViewer extends StatelessWidget {
   const CustomImageViewer({
@@ -63,7 +64,7 @@ class CustomImageViewer extends StatelessWidget {
       child: IconButton(
         icon: Icon(Icons.close, color: Colors.white),
         onPressed: () => Navigator.of(context).pop(),
-        tooltip: '닫기',
+        tooltip: AppLocalizations.of(context)!.close,
       ),
     );
   }

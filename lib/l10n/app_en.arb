@@ -3,5 +3,365 @@
   "base": "BASE",
   "@base": {
     "description": "Label for base photo in photo comparison"
+  },
+  "appTitle": "Photo Duplicate Finder",
+  "@appTitle": {
+    "description": "Main application title"
+  },
+  "appSubtitle": "Select multiple photos to compare and organize.",
+  "@appSubtitle": {
+    "description": "App subtitle description"
+  },
+  "getStarted": "Get Started",
+  "@getStarted": {
+    "description": "Tutorial header"
+  },
+  "next": "Next",
+  "@next": {
+    "description": "Next button text"
+  },
+  "gotIt": "Got it!",
+  "@gotIt": {
+    "description": "Final tutorial button"
+  },
+  "showTutorial": "Show Tutorial",
+  "@showTutorial": {
+    "description": "Menu option to show tutorial"
+  },
+  "resetAllTutorials": "Reset All Tutorials",
+  "@resetAllTutorials": {
+    "description": "Menu option to reset tutorials"
+  },
+  "photosPreview": "Photos Preview",
+  "@photosPreview": {
+    "description": "Photos preview placeholder text"
+  },
+  "selectPhotos": "Select Photos",
+  "@selectPhotos": {
+    "description": "Button text when no photos selected"
+  },
+  "startComparing": "Start Comparing",
+  "@startComparing": {
+    "description": "Button text when photos are selected"
+  },
+  "loading": "Loading...",
+  "@loading": {
+    "description": "Loading indicator text"
+  },
+  "tutorialsResetMessage": "All tutorials reset. They will show again when you navigate to each screen.",
+  "@tutorialsResetMessage": {
+    "description": "Reset confirmation message"
+  },
+  "trashManagement": "Trash Management",
+  "@trashManagement": {
+    "description": "Tutorial title for trash management"
+  },
+  "trashManagementDescription": "Tap the trash can to permanently delete photos from your device. The red badge shows how many photos are in trash.",
+  "@trashManagementDescription": {
+    "description": "Tutorial description for trash management"
+  },
+  "mainPhotoView": "Main Photo View",
+  "@mainPhotoView": {
+    "description": "Tutorial title for main photo view"
+  },
+  "mainPhotoViewDescription": "Swipe left/right to compare photos. Tap to show base photo overlay for better comparison.",
+  "@mainPhotoViewDescription": {
+    "description": "Tutorial description for main photo view"
+  },
+  "actionButtons": "Action Buttons",
+  "@actionButtons": {
+    "description": "Tutorial title for action buttons"
+  },
+  "actionButtonsDescription": "Swipe to navigate photos. Use 'Set as Base' or 'Delete' buttons to organize the currently viewed photo.",
+  "@actionButtonsDescription": {
+    "description": "Tutorial description for action buttons"
+  },
+  "goBackToHome": "Go Back to Home",
+  "@goBackToHome": {
+    "description": "Dialog title for going back to home"
+  },
+  "goBackConfirmation": "Going back will clear your base photo and reset your session. Are you sure?",
+  "@goBackConfirmation": {
+    "description": "Dialog content for go back confirmation"
+  },
+  "cancel": "Cancel",
+  "@cancel": {
+    "description": "Cancel button text"
+  },
+  "goBack": "Go Back",
+  "@goBack": {
+    "description": "Go back button text"
+  },
+  "trash": "Trash",
+  "@trash": {
+    "description": "Trash dialog title"
+  },
+  "trashEmpty": "Trash is empty",
+  "@trashEmpty": {
+    "description": "Empty trash message"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "OK button text"
+  },
+  "deleteFromDevice": "Delete from Device",
+  "@deleteFromDevice": {
+    "description": "Delete from device dialog title"
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Delete button text"
+  },
+  "changeBasePhoto": "Change Base Photo",
+  "@changeBasePhoto": {
+    "description": "Change base photo dialog title"
+  },
+  "changeBasePhotoConfirmation": "Do you want to set this image as the new base photo?",
+  "@changeBasePhotoConfirmation": {
+    "description": "Change base photo confirmation message"
+  },
+  "change": "Change",
+  "@change": {
+    "description": "Change button text"
+  },
+  "deleteConfirmation": "Do you want to permanently delete {count} photo(s) from your device album?",
+  "@deleteConfirmation": {
+    "description": "Delete confirmation with count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "photosDeleted": "Photos permanently deleted from device",
+  "@photosDeleted": {
+    "description": "Delete success message"
+  },
+  "basePhotoChanged": "Base photo changed successfully",
+  "@basePhotoChanged": {
+    "description": "Base photo change success message"
+  },
+  "noPhoto": "No Photo",
+  "@noPhoto": {
+    "description": "No photo placeholder text"
+  },
+  "photoComparison": "Photo Comparison",
+  "@photoComparison": {
+    "description": "Photo comparison header title"
+  },
+  "basePhoto": "Base Photo",
+  "@basePhoto": {
+    "description": "Base photo label"
+  },
+  "comparisonPhoto": "Comparison Photo",
+  "@comparisonPhoto": {
+    "description": "Comparison photo label"
+  },
+  "tapAnywhereToClose": "Tap anywhere to close",
+  "@tapAnywhereToClose": {
+    "description": "Close instruction text"
+  },
+  "photoNavigation": "Photo Navigation",
+  "@photoNavigation": {
+    "description": "Photo navigation tutorial title"
+  },
+  "photoNavigationDescription": "Swipe through photos above or tap thumbnails to navigate.\\nUse buttons below to organize the current photo.",
+  "@photoNavigationDescription": {
+    "description": "Photo navigation instruction text"
+  },
+  "imageNumber": "Image {number}",
+  "@imageNumber": {
+    "description": "Dynamic image number label",
+    "placeholders": {
+      "number": {
+        "type": "int",
+        "example": "1"
+      }
+    }
+  },
+  "isBase": "Is Base",
+  "@isBase": {
+    "description": "Is base button text"
+  },
+  "setAsBase": "Set as Base",
+  "@setAsBase": {
+    "description": "Set as base button text"
+  },
+  "alreadyBasePhoto": "This is already the base photo",
+  "@alreadyBasePhoto": {
+    "description": "Already base photo error message"
+  },
+  "noComparisonPhotos": "No comparison photos available",
+  "@noComparisonPhotos": {
+    "description": "No comparison photos error message"
+  },
+  "cannotDeleteBase": "Cannot delete base photo",
+  "@cannotDeleteBase": {
+    "description": "Cannot delete base photo error message"
+  },
+  "noComparisonToDelete": "No comparison photos to delete",
+  "@noComparisonToDelete": {
+    "description": "No comparison photos to delete error message"
+  },
+  "protected": "Protected",
+  "@protected": {
+    "description": "Protected button text"
+  },
+  "loadingPhotos": "Loading photos...",
+  "@loadingPhotos": {
+    "description": "Loading photos message"
+  },
+  "findingPhotos": "Finding photos around your base image",
+  "@findingPhotos": {
+    "description": "Finding photos loading description"
+  },
+  "loadingMore": "Loading more...",
+  "@loadingMore": {
+    "description": "Load more indicator"
+  },
+  "preparingPhotos": "Preparing photos...",
+  "@preparingPhotos": {
+    "description": "Preparing photos message"
+  },
+  "photosAroundBase": "Photos around your base image",
+  "@photosAroundBase": {
+    "description": "Context message for photos around base"
+  },
+  "selectionCounter": "{selected}/30 selected",
+  "@selectionCounter": {
+    "description": "Selection counter text",
+    "placeholders": {
+      "selected": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "noPhotosFound": "No photos found",
+  "@noPhotosFound": {
+    "description": "No photos found empty state"
+  },
+  "done": "Done",
+  "@done": {
+    "description": "Done button text"
+  },
+  "doneWithCount": "Done ({count}/30)",
+  "@doneWithCount": {
+    "description": "Done button with count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "doneWithSelectedCount": "Done ({count})",
+  "@doneWithSelectedCount": {
+    "description": "Done button with selected count",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "maxPhotosSelected": "Maximum 30 photos can be selected",
+  "@maxPhotosSelected": {
+    "description": "Maximum photos selection warning"
+  },
+  "errorProcessingPhotos": "Error processing photos: {error}",
+  "@errorProcessingPhotos": {
+    "description": "Error processing photos message",
+    "placeholders": {
+      "error": {
+        "type": "String",
+        "example": "Network error"
+      }
+    }
+  },
+  "switchAlbums": "Switch Albums",
+  "@switchAlbums": {
+    "description": "Switch albums tutorial title"
+  },
+  "switchAlbumsDescription": "Tap here to switch between different photo albums on your device.",
+  "@switchAlbumsDescription": {
+    "description": "Switch albums tutorial description"
+  },
+  "selectionCounterTitle": "Selection Counter",
+  "@selectionCounterTitle": {
+    "description": "Selection counter tutorial title"
+  },
+  "selectionCounterDescription": "Keep track of how many photos you've selected. You can select up to 30 photos at once.",
+  "@selectionCounterDescription": {
+    "description": "Selection counter tutorial description"
+  },
+  "selectPhotosTitle": "Select Photos",
+  "@selectPhotosTitle": {
+    "description": "Select photos tutorial title"
+  },
+  "selectPhotosDescription": "Tap photos to select them. Photos with a red border and 'BASE' label cannot be selected as they're your base photo.",
+  "@selectPhotosDescription": {
+    "description": "Select photos tutorial description"
+  },
+  "confirmSelection": "Confirm Selection",
+  "@confirmSelection": {
+    "description": "Confirm selection tutorial title"
+  },
+  "confirmSelectionDescription": "When you're done selecting photos, tap this button to add them to your comparison collection.",
+  "@confirmSelectionDescription": {
+    "description": "Confirm selection tutorial description"
+  },
+  "selectBasePhoto": "Select Base Photo",
+  "@selectBasePhoto": {
+    "description": "Select base photo tutorial title and gallery title"
+  },
+  "selectBasePhotoDescription": "Start by selecting a base photo that you want to compare with other photos. This will be your reference image.",
+  "@selectBasePhotoDescription": {
+    "description": "Select base photo tutorial description"
+  },
+  "addComparisonPhotos": "Add Comparison Photos",
+  "@addComparisonPhotos": {
+    "description": "Add comparison photos tutorial title"
+  },
+  "addComparisonPhotosDescription": "After selecting a base photo, use this button to add photos for comparison. You can select up to 30 photos at once!",
+  "@addComparisonPhotosDescription": {
+    "description": "Add comparison photos tutorial description"
+  },
+  "viewAndComparePhotos": "View and Compare Photos",
+  "@viewAndComparePhotos": {
+    "description": "View and compare photos tutorial title"
+  },
+  "viewAndComparePhotosDescription": "Swipe through your photos to compare them. Your base photo will be marked with a 'BASE' label. Swipe up on any photo to delete it.",
+  "@viewAndComparePhotosDescription": {
+    "description": "View and compare photos tutorial description"
+  },
+  "skip": "SKIP",
+  "@skip": {
+    "description": "Skip button text"
+  },
+  "addComparisonPhoto": "Add Comparison Photo",
+  "@addComparisonPhoto": {
+    "description": "Add comparison photo gallery title"
+  },
+  "addMultiplePhotos": "Add Multiple Photos",
+  "@addMultiplePhotos": {
+    "description": "Add multiple photos gallery title"
+  },
+  "selectPhotosFirstBase": "Select Photos (First will be Base)",
+  "@selectPhotosFirstBase": {
+    "description": "Select photos with first as base gallery title"
+  },
+  "googleLogin": "GOOGLE_LOGIN",
+  "@googleLogin": {
+    "description": "Google login button text"
+  },
+  "logout": "Logout",
+  "@logout": {
+    "description": "Logout button text"
+  },
+  "close": "Close",
+  "@close": {
+    "description": "Close button text"
   }
 }

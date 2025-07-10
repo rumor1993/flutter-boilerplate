@@ -79,19 +79,19 @@ class _MainPhotoDisplayState extends ConsumerState<MainPhotoDisplay> {
                 ],
               ),
             ),
-            child: const Center(
+            child: Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.person,
                     size: 60,
                     color: Color(0xFF6B7280),
                   ),
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   Text(
-                    'No Photo',
-                    style: TextStyle(
+                    AppLocalizations.of(context)!.noPhoto,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                       color: Color(0xFF6B7280),

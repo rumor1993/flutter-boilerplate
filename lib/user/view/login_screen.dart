@@ -4,6 +4,7 @@ import 'package:photo_app/user/provider/user_me_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   static String get routeName => '/login';
@@ -29,7 +30,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               onPressed: () {
                 ref.read(userMeProvider.notifier).login(OauthType.GOOGLE);
               },
-              child: Text("GOOGLE_LOGIN"),
+              child: Text(AppLocalizations.of(context)!.googleLogin),
             ),
           ),
         ),

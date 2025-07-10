@@ -5,6 +5,7 @@ import 'package:photo_app/photo_comparison/view/photo_comparison_screen.dart';
 import 'package:photo_app/common/provider/photo_provider.dart';
 import 'package:photo_app/common/service/tutorial_service.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
+import 'package:photo_app/generated/app_localizations.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -49,18 +50,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Get Started",
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.getStarted,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Text(
-                      "Tap here to select multiple photos. You can select up to 30 photos at once! The first photo will become your base reference..",
-                      style: TextStyle(
+                    Text(
+                      AppLocalizations.of(context)!.selectPhotosDescription,
+                      style: const TextStyle(
                         color: Colors.white70,
                         fontSize: 16,
                       ),
@@ -86,19 +87,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ],
                           ),
-                          child: const Row(
+                          child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                "Next",
-                                style: TextStyle(
+                                AppLocalizations.of(context)!.next,
+                                style: const TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(width: 8),
-                              Icon(
+                              const SizedBox(width: 8),
+                              const Icon(
                                 Icons.arrow_forward,
                                 color: Colors.white,
                                 size: 18,
@@ -153,10 +154,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const SizedBox(width: 40),
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      'Photo Duplicate Finder',
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.appTitle,
+                      style: const TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -175,8 +176,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         case 'reset':
                           TutorialService.resetAllTutorials().then((_) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('All tutorials reset. They will show again when you navigate to each screen.'),
+                              SnackBar(
+                                content: Text(AppLocalizations.of(context)!.tutorialsResetMessage),
                                 backgroundColor: Colors.green,
                               ),
                             );
@@ -185,23 +186,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       }
                     },
                     itemBuilder: (BuildContext context) => [
-                      const PopupMenuItem<String>(
+                      PopupMenuItem<String>(
                         value: 'tutorial',
                         child: Row(
                           children: [
-                            Icon(Icons.help_outline, color: Colors.white),
-                            SizedBox(width: 8),
-                            Text('Show Tutorial', style: TextStyle(color: Colors.white)),
+                            const Icon(Icons.help_outline, color: Colors.white),
+                            const SizedBox(width: 8),
+                            Text(AppLocalizations.of(context)!.showTutorial, style: const TextStyle(color: Colors.white)),
                           ],
                         ),
                       ),
-                      const PopupMenuItem<String>(
+                      PopupMenuItem<String>(
                         value: 'reset',
                         child: Row(
                           children: [
-                            Icon(Icons.refresh, color: Colors.white),
-                            SizedBox(width: 8),
-                            Text('Reset All Tutorials', style: TextStyle(color: Colors.white)),
+                            const Icon(Icons.refresh, color: Colors.white),
+                            const SizedBox(width: 8),
+                            Text(AppLocalizations.of(context)!.resetAllTutorials, style: const TextStyle(color: Colors.white)),
                           ],
                         ),
                       ),
@@ -212,9 +213,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               const SizedBox(height: 16),
 
               // Subtitle
-              const Text(
-                'Select multiple photos to compare and organize.',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
+              Text(
+                AppLocalizations.of(context)!.appSubtitle,
+                style: const TextStyle(fontSize: 16, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 40),
@@ -285,19 +286,19 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       colors: [Color(0xFF4A90E2), Color(0xFF357ABD)],
                                     ),
                                   ),
-                                  child: const Center(
+                                  child: Center(
                                     child: Column(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Icon(
+                                        const Icon(
                                           Icons.add_photo_alternate,
                                           size: 40,
                                           color: Colors.white70,
                                         ),
-                                        SizedBox(height: 8),
+                                        const SizedBox(height: 8),
                                         Text(
-                                          'Photos Preview',
-                                          style: TextStyle(
+                                          AppLocalizations.of(context)!.photosPreview,
+                                          style: const TextStyle(
                                             fontSize: 12,
                                             color: Colors.white70,
                                           ),
@@ -431,7 +432,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       const Icon(Icons.photo_library, size: 20),
                       const SizedBox(width: 8),
                       Text(
-                        photoState.basePhoto == null ? 'Select Photos' : 'Start Comparing',
+                        photoState.basePhoto == null ? AppLocalizations.of(context)!.selectPhotos : AppLocalizations.of(context)!.startComparing,
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
@@ -451,17 +452,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           if (_isNavigating)
             Container(
               color: Colors.black.withValues(alpha: 0.7),
-              child: const Center(
+              child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    CircularProgressIndicator(
+                    const CircularProgressIndicator(
                       valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Text(
-                      'Loading...',
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.loading,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
