@@ -68,9 +68,28 @@ class PhotoInfo {
           return Container(
             width: width,
             height: height,
-            color: Colors.grey[800],
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.circular(12),
+            ),
             child: const Center(
-              child: CircularProgressIndicator(strokeWidth: 2),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    strokeWidth: 3,
+                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    'Loading...',
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -91,9 +110,28 @@ class PhotoInfo {
         return Container(
           width: width,
           height: height,
-          color: Colors.grey[800],
+          decoration: BoxDecoration(
+            color: Colors.black,
+            borderRadius: BorderRadius.circular(12),
+          ),
           child: const Center(
-            child: CircularProgressIndicator(strokeWidth: 2),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(
+                  strokeWidth: 3,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+                SizedBox(height: 12),
+                Text(
+                  'Loading...',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -199,9 +237,8 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
                 allowMultiple: false,
                 title: 'Add Comparison Photo',
                 onSelectionChanged: (assets) {},
-                startAfterAssetId: state.basePhoto?.id,
-                preferredAlbumId: state.basePhoto?.albumId,
                 disabledAssetId: state.basePhoto?.id,  // Disable base photo from selection
+                centerAroundAssetId: state.basePhoto?.id,  // Center around base photo
               ),
         ),
       );
@@ -243,15 +280,13 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
       final result = await Navigator.push<Map<String, dynamic>>(
         _context!,
         MaterialPageRoute(
-          builder:
-              (context) => PhotoGalleryPicker(
-                allowMultiple: true,
-                title: 'Add Multiple Photos',
-                onSelectionChanged: (assets) {},
-                startAfterAssetId: state.basePhoto?.id,
-                preferredAlbumId: state.basePhoto?.albumId,
-                disabledAssetId: state.basePhoto?.id,  // Disable base photo from selection
-              ),
+          builder: (context) => PhotoGalleryPicker(
+            allowMultiple: true,
+            title: 'Add Multiple Photos',
+            onSelectionChanged: (assets) {},
+            disabledAssetId: state.basePhoto?.id,
+            centerAroundAssetId: state.basePhoto?.id,  // Center around base photo
+          ),
         ),
       );
 
@@ -259,19 +294,24 @@ class PhotoNotifier extends StateNotifier<PhotoState> {
         final List<AssetEntity> assets = result['assets'];
         final String? albumId = result['albumId'];
         final currentPhotos = List<PhotoInfo>.from(state.comparisonPhotos);
+        
         for (final asset in assets) {
-          final file = await asset.file;
-          final thumbnail = await asset.thumbnailDataWithSize(
-            const ThumbnailSize(200, 200),
-            quality: 70,
-          );
-          currentPhotos.add(PhotoInfo(
-            asset: asset, 
-            cachedFile: file,
-            cachedThumbnail: thumbnail,
-            albumId: albumId,
-          ));
+          // Check if photo is already in comparison photos
+          if (!currentPhotos.any((photo) => photo.id == asset.id)) {
+            final file = await asset.file;
+            final thumbnail = await asset.thumbnailDataWithSize(
+              const ThumbnailSize(200, 200),
+              quality: 70,
+            );
+            currentPhotos.add(PhotoInfo(
+              asset: asset,
+              cachedFile: file,
+              cachedThumbnail: thumbnail,
+              albumId: albumId,
+            ));
+          }
         }
+        
         state = state.copyWith(comparisonPhotos: currentPhotos);
       }
     } catch (e) {

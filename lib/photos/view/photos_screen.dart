@@ -24,6 +24,20 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
     super.dispose();
   }
 
+  Future<bool> _isImageLoaded(PhotoInfo photoInfo) async {
+    try {
+      if (photoInfo.syncFile != null) {
+        return true; // Already cached
+      }
+      
+      // Check if thumbnail is available
+      final thumbnail = await photoInfo.getThumbnail();
+      return thumbnail != null;
+    } catch (e) {
+      return false;
+    }
+  }
+
   void _showDeleteConfirmation(BuildContext context, int index, PhotoNotifier photoNotifier) {
     showDialog(
       context: context,
@@ -68,11 +82,18 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
     final photoState = ref.watch(photoProvider);
     final photoNotifier = ref.read(photoProvider.notifier);
 
+    // Include all photos including base photo for display
+    final displayPhotos = <PhotoInfo>[];
+    if (photoState.basePhoto != null) {
+      displayPhotos.add(photoState.basePhoto!);
+    }
+    displayPhotos.addAll(photoState.comparisonPhotos);
+
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
         children: [
-          if (photoState.comparisonPhotos.isEmpty)
+          if (displayPhotos.isEmpty)
             const Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -106,7 +127,7 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Photos (${photoState.comparisonPhotos.length})',
+                          'Photos (${displayPhotos.length})',
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
@@ -170,37 +191,107 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
                           _currentIndex = index;
                         });
                       },
-                      itemCount: photoState.comparisonPhotos.length,
+                      itemCount: displayPhotos.length,
                       itemBuilder: (context, index) {
-                        final photoInfo = photoState.comparisonPhotos[index];
+                        final photoInfo = displayPhotos[index];
+                        final isBasePhoto = photoState.basePhoto != null && photoInfo.id == photoState.basePhoto!.id;
+                        
                         return Container(
                           margin: const EdgeInsets.all(16),
-                          child: GestureDetector(
-                            onTap: () async {
-                              final file = await photoInfo.file;
-                              if (file != null) {
-                                setState(() {
-                                  _isFullScreen = true;
-                                  _fullScreenImage = file;
-                                });
-                              }
-                            },
-                            onPanUpdate: (details) {
-                              // Check if swiping up
-                              if (details.delta.dy < -5) {
-                                _showDeleteConfirmation(context, index, photoNotifier);
-                              }
-                            },
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: photoInfo.buildImage(
-                                fit: BoxFit.contain,
-                                width: double.infinity,
-                                height: double.infinity,
-                                useThumbnail: true,
-                                thumbnailSize: const ThumbnailSize(800, 800),
+                          child: Stack(
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  final file = await photoInfo.file;
+                                  if (file != null) {
+                                    setState(() {
+                                      _isFullScreen = true;
+                                      _fullScreenImage = file;
+                                    });
+                                  }
+                                },
+                                onPanUpdate: (details) {
+                                  // Check if swiping up
+                                  if (details.delta.dy < -5) {
+                                    // Don't allow deletion of base photo
+                                    if (!isBasePhoto) {
+                                      // Find the actual index in the comparison photos list
+                                      final actualIndex = photoState.comparisonPhotos.indexOf(photoInfo);
+                                      if (actualIndex != -1) {
+                                        _showDeleteConfirmation(context, actualIndex, photoNotifier);
+                                      }
+                                    }
+                                  }
+                                },
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Stack(
+                                    children: [
+                                      photoInfo.buildImage(
+                                        fit: BoxFit.contain,
+                                        width: double.infinity,
+                                        height: double.infinity,
+                                        useThumbnail: true,
+                                        thumbnailSize: const ThumbnailSize(800, 800),
+                                      ),
+                                      // Loading overlay
+                                      FutureBuilder<bool>(
+                                        future: _isImageLoaded(photoInfo),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState == ConnectionState.waiting || 
+                                              (snapshot.hasData && !snapshot.data!)) {
+                                            return Container(
+                                              color: Colors.black.withValues(alpha: 0.7),
+                                              child: const Center(
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    CircularProgressIndicator(
+                                                      strokeWidth: 3,
+                                                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                                    ),
+                                                    SizedBox(height: 16),
+                                                    Text(
+                                                      'Loading...',
+                                                      style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontSize: 16,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          }
+                                          return const SizedBox.shrink();
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                            ),
+                              // Base photo indicator
+                              if (isBasePhoto)
+                                Positioned(
+                                  top: 16,
+                                  left: 16,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: Colors.blue,
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: const Text(
+                                      'BASE',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         );
                       },
@@ -208,13 +299,13 @@ class _PhotosScreenState extends ConsumerState<PhotosScreen> {
                   ),
                   
                   // Page indicator
-                  if (photoState.comparisonPhotos.length > 1)
+                  if (displayPhotos.length > 1)
                     Container(
                       padding: const EdgeInsets.all(16),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(
-                          photoState.comparisonPhotos.length,
+                          displayPhotos.length,
                           (index) => Container(
                             margin: const EdgeInsets.symmetric(horizontal: 4),
                             width: 8,

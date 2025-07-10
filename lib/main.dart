@@ -18,7 +18,7 @@ class _App extends ConsumerWidget {
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: Colors.black,
-        cardTheme: const CardTheme(
+        cardTheme: CardThemeData(
           color: Color(0xFF1A1A1A),
           shadowColor: Colors.black54,
           elevation: 4,
