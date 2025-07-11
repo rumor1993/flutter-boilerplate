@@ -229,7 +229,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectPhotosDescription =>
-      'Tap photos to select them. Photos with a red border and \'BASE\' label cannot be selected as they\'re your base photo.';
+      'Click the button to select photos you want to compare.';
 
   @override
   String get confirmSelection => 'Confirm Selection';

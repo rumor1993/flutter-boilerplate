@@ -497,7 +497,7 @@ abstract class AppLocalizations {
   /// Select photos tutorial description
   ///
   /// In en, this message translates to:
-  /// **'Tap photos to select them. Photos with a red border and \'BASE\' label cannot be selected as they\'re your base photo.'**
+  /// **'Click the button to select photos you want to compare.'**
   String get selectPhotosDescription;
 
   /// Confirm selection tutorial title

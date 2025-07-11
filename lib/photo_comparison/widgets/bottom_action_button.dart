@@ -74,7 +74,7 @@ class BottomActionButton extends ConsumerWidget {
                     const Icon(Icons.swap_horiz, size: 20),
                     const SizedBox(width: 8),
                     Text(
-                      isBasePhoto ? AppLocalizations.of(context)!.isBase : AppLocalizations.of(context)!.setAsBase,
+                      isBasePhoto ? AppLocalizations.of(context)!.setAsBase : AppLocalizations.of(context)!.setAsBase,
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
@@ -150,7 +150,7 @@ class BottomActionButton extends ConsumerWidget {
                     const Icon(Icons.delete, size: 20),
                     const SizedBox(width: 8),
                     Text(
-                      isBasePhoto ? AppLocalizations.of(context)!.protected : AppLocalizations.of(context)!.delete,
+                      isBasePhoto ? AppLocalizations.of(context)!.delete : AppLocalizations.of(context)!.delete,
                       style: const TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.w600,
