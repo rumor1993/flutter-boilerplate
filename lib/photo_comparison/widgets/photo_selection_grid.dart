@@ -88,9 +88,9 @@ class _PhotoSelectionGridState extends ConsumerState<PhotoSelectionGrid> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Photo Navigation',
-                    style: TextStyle(
+                  Text(
+                    AppLocalizations.of(context)!.photoNavigation,
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       color: Colors.white,

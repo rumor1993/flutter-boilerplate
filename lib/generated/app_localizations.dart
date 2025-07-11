@@ -107,7 +107,7 @@ abstract class AppLocalizations {
   /// Main application title
   ///
   /// In en, this message translates to:
-  /// **'Photo Duplicate Finder'**
+  /// **'Pixpick'**
   String get appTitle;
 
   /// App subtitle description
@@ -185,7 +185,7 @@ abstract class AppLocalizations {
   /// Tutorial description for trash management
   ///
   /// In en, this message translates to:
-  /// **'Tap the trash can to permanently delete photos from your device. The red badge shows how many photos are in trash.'**
+  /// **'Pressing this button will permanently delete all photos that have been temporarily deleted from your device.'**
   String get trashManagementDescription;
 
   /// Tutorial title for main photo view
@@ -209,7 +209,7 @@ abstract class AppLocalizations {
   /// Tutorial description for action buttons
   ///
   /// In en, this message translates to:
-  /// **'Swipe to navigate photos. Use \'Set as Base\' or \'Delete\' buttons to organize the currently viewed photo.'**
+  /// **'After comparing photos, tap the delete button at the bottom for photos you want to remove. They will be temporarily deleted.'**
   String get actionButtonsDescription;
 
   /// Dialog title for going back to home
@@ -497,7 +497,7 @@ abstract class AppLocalizations {
   /// Select photos tutorial description
   ///
   /// In en, this message translates to:
-  /// **'Click the button to select photos you want to compare.'**
+  /// **'Please select all the photos you want to compare. (Maximum 30 photos) Easily compare similar photos to organize your album effortlessly'**
   String get selectPhotosDescription;
 
   /// Confirm selection tutorial title
@@ -569,7 +569,7 @@ abstract class AppLocalizations {
   /// Select photos with first as base gallery title
   ///
   /// In en, this message translates to:
-  /// **'Select Photos (First will be Base)'**
+  /// **'Select Photos'**
   String get selectPhotosFirstBase;
 
   /// Google login button text

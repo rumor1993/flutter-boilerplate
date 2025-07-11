@@ -12,7 +12,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get base => 'BASE';
 
   @override
-  String get appTitle => 'Photo Duplicate Finder';
+  String get appTitle => 'Pixpick';
 
   @override
   String get appSubtitle => 'Select multiple photos to compare and organize.';
@@ -53,7 +53,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get trashManagementDescription =>
-      'Tap the trash can to permanently delete photos from your device. The red badge shows how many photos are in trash.';
+      'Pressing this button will permanently delete all photos that have been temporarily deleted from your device.';
 
   @override
   String get mainPhotoView => 'Main Photo View';
@@ -67,7 +67,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get actionButtonsDescription =>
-      'Swipe to navigate photos. Use \'Set as Base\' or \'Delete\' buttons to organize the currently viewed photo.';
+      'After comparing photos, tap the delete button at the bottom for photos you want to remove. They will be temporarily deleted.';
 
   @override
   String get goBackToHome => 'Go Back to Home';
@@ -229,7 +229,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selectPhotosDescription =>
-      'Click the button to select photos you want to compare.';
+      'Please select all the photos you want to compare. (Maximum 30 photos) Easily compare similar photos to organize your album effortlessly';
 
   @override
   String get confirmSelection => 'Confirm Selection';
@@ -269,7 +269,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addMultiplePhotos => 'Add Multiple Photos';
 
   @override
-  String get selectPhotosFirstBase => 'Select Photos (First will be Base)';
+  String get selectPhotosFirstBase => 'Select Photos';
 
   @override
   String get googleLogin => 'GOOGLE_LOGIN';

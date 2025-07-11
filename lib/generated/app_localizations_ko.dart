@@ -12,7 +12,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get base => '기준';
 
   @override
-  String get appTitle => '사진 중복 찾기';
+  String get appTitle => 'Pixpick';
 
   @override
   String get appSubtitle => '여러 사진을 선택하여 비교하고 정리하세요.';
@@ -49,25 +49,25 @@ class AppLocalizationsKo extends AppLocalizations {
       '모든 튜토리얼이 초기화되었습니다. 각 화면으로 이동할 때 다시 표시됩니다.';
 
   @override
-  String get trashManagement => '휴지통 관리';
+  String get trashManagement => '최종 삭제 버튼';
 
   @override
   String get trashManagementDescription =>
-      '휴지통을 탭하여 기기에서 사진을 영구적으로 삭제하세요. 빨간색 배지는 휴지통에 있는 사진 수를 표시합니다.';
+      '해당 버튼을 누르면 지금까지 임시삭제했던 사진들이 기기에서 완전히 사라지게 됩니다.';
 
   @override
-  String get mainPhotoView => '메인 사진 보기';
+  String get mainPhotoView => '사진 비교하기';
 
   @override
   String get mainPhotoViewDescription =>
-      '좌우로 스와이프하여 사진을 비교하세요. 탭하면 더 나은 비교를 위해 기준 사진 오버레이가 표시됩니다.';
+      '좌우로 스와이프하여 사진을 비교하세요. 또는 화면을 탭하면 기준 사진과 현재 선택된 사진을 더 쉽고 빠르게 비교 가능합니다.';
 
   @override
-  String get actionButtons => '액션 버튼';
+  String get actionButtons => '기능 버튼';
 
   @override
   String get actionButtonsDescription =>
-      '스와이프하여 사진을 탐색하세요. \'기준으로 설정\' 또는 \'삭제\' 버튼을 사용하여 현재 보고 있는 사진을 정리하세요.';
+      '사진들을 비교해 삭제하고 싶은 사진들은 하단 삭제 버튼을 눌러주세요. 임시 삭제 상태가 됩니다.';
 
   @override
   String get goBackToHome => '홈으로 돌아가기';
@@ -132,7 +132,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get tapAnywhereToClose => '아무 곳이나 탭하여 닫기';
 
   @override
-  String get photoNavigation => '사진 탐색';
+  String get photoNavigation => '이미지 목록';
 
   @override
   String get photoNavigationDescription =>
@@ -222,11 +222,11 @@ class AppLocalizationsKo extends AppLocalizations {
       '선택한 사진의 수를 추적하세요. 한 번에 최대 30개의 사진을 선택할 수 있습니다.';
 
   @override
-  String get selectPhotosTitle => '사진 선택';
+  String get selectPhotosTitle => '사진 선택하기';
 
   @override
   String get selectPhotosDescription =>
-      '사진을 탭하여 선택하세요. 빨간색 테두리와 \'기준\' 라벨이 있는 사진은 기준 사진이므로 선택할 수 없습니다.';
+      '비교할 사진들을 모두 선택해 주세요.(최대30장) 비슷한 사진을 쉽게 비교할 수 있어 앨범을 정리하기 쉬어요.';
 
   @override
   String get confirmSelection => '선택 확인';
@@ -266,7 +266,7 @@ class AppLocalizationsKo extends AppLocalizations {
   String get addMultiplePhotos => '여러 사진 추가';
 
   @override
-  String get selectPhotosFirstBase => '사진 선택 (첫 번째가 기준)';
+  String get selectPhotosFirstBase => '사진 선택';
 
   @override
   String get googleLogin => '구글 로그인';
