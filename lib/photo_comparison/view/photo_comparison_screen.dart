@@ -9,6 +9,7 @@ import 'package:photo_app/photo_comparison/widgets/side_by_side_comparison.dart'
 import 'package:photo_app/common/service/tutorial_service.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:photo_app/generated/app_localizations.dart';
+import 'package:photo_app/common/service/ad_service.dart';
 
 final selectedPhotosProvider =
     StateNotifierProvider<SelectedPhotosNotifier, List<int>>((ref) {
@@ -44,20 +45,25 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
   int _currentIndex = 0;
   bool _showBasePhoto = false;
   bool _showSideBySideComparison = false;
+  bool _isLoadingAd = false;
   final GlobalKey _mainPhotoKey = GlobalKey();
   final GlobalKey _gridKey = GlobalKey();
   final GlobalKey _bottomActionKey = GlobalKey();
   final GlobalKey _trashKey = GlobalKey();
+  final AdService _adService = AdService();
 
   @override
   void initState() {
     super.initState();
     _checkAndShowTutorial();
+    // 전면 광고 미리 로드
+    _adService.loadInterstitialAd();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _adService.dispose();
     super.dispose();
   }
 
@@ -448,26 +454,76 @@ class _PhotoComparisonScreenState extends ConsumerState<PhotoComparisonScreen> {
             child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
-            onPressed: () async {
+            onPressed: _isLoadingAd ? null : () async {
               final navigator = Navigator.of(context);
               final messenger = ScaffoldMessenger.of(context);
               final photosDeletedMessage = AppLocalizations.of(context)!.photosDeleted;
               navigator.pop();
-              await ref.read(photoProvider.notifier).deleteTrashPhotosPermanently();
               
-              // Clear all photos and return to home after deleting from device
-              ref.read(photoProvider.notifier).clearAllPhotos();
-              navigator.pop(); // Go back to home screen
-              
-              messenger.showSnackBar(
-                SnackBar(
-                  content: Text(photosDeletedMessage),
-                  backgroundColor: Colors.red,
-                ),
+              // 전면 광고 표시 후 삭제 진행
+              await _adService.showInterstitialAd(
+                onLoadingStart: () {
+                  setState(() {
+                    _isLoadingAd = true;
+                  });
+                  // 로딩 다이얼로그 표시
+                  showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) => AlertDialog(
+                      backgroundColor: Colors.grey[900],
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            '광고 로딩 중...',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+                onLoadingEnd: () {
+                  setState(() {
+                    _isLoadingAd = false;
+                  });
+                  // 로딩 다이얼로그 닫기
+                  if (Navigator.canPop(context)) {
+                    Navigator.pop(context);
+                  }
+                },
+                onAdClosed: () async {
+                  await ref.read(photoProvider.notifier).deleteTrashPhotosPermanently();
+                  
+                  // Clear all photos and return to home after deleting from device
+                  ref.read(photoProvider.notifier).clearAllPhotos();
+                  navigator.pop(); // Go back to home screen
+                  
+                  messenger.showSnackBar(
+                    SnackBar(
+                      content: Text(photosDeletedMessage),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                },
               );
             },
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: Text(AppLocalizations.of(context)!.delete),
+            child: _isLoadingAd 
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(Colors.red),
+                    ),
+                  )
+                : Text(AppLocalizations.of(context)!.delete),
           ),
         ],
       ),
