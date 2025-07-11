@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "29699158190",
+    "project_id": "clean-photo-app",
+    "storage_bucket": "clean-photo-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:29699158190:android:ab0f4c5db02dda6288fd3f",
+        "android_client_info": {
+          "package_name": "com.example.photo_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4fnt3VJF47GoHQ6Bps30Ql_Fm-mD-B8k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

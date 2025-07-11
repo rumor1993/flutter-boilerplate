@@ -297,7 +297,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                         ),
                                         const SizedBox(height: 8),
                                         Text(
-                                          AppLocalizations.of(context)!.photosPreview,
+                                          AppLocalizations.of(context)!.selectPhotos ,
                                           style: const TextStyle(
                                             fontSize: 12,
                                             color: Colors.white70,

@@ -13,7 +13,8 @@
       "Bash(dart analyze:*)",
       "Bash(dart:*)",
       "Bash(find:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(pod install:*)"
     ],
     "deny": []
   }
