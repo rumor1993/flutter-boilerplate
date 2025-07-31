@@ -6,6 +6,8 @@ import 'package:photo_app/common/provider/photo_provider.dart';
 import 'package:photo_app/common/service/tutorial_service.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import 'package:photo_app/generated/app_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:photo_app/common/const/ad_ids.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -18,11 +20,43 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final GlobalKey _basePhotoKey = GlobalKey();
   final GlobalKey _actionButtonKey = GlobalKey();
   bool _isNavigating = false;
+  BannerAd? _bannerAd;
+  bool _isBannerAdReady = false;
   
   @override
   void initState() {
     super.initState();
     _checkAndShowTutorial();
+    _loadBannerAd();
+  }
+  
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
+  
+  void _loadBannerAd() {
+    _bannerAd = BannerAd(
+      adUnitId: AdIds.bannerAdId,
+      size: AdSize.banner,
+      request: const AdRequest(),
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) {
+          setState(() {
+            _isBannerAdReady = true;
+          });
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          ad.dispose();
+          setState(() {
+            _isBannerAdReady = false;
+          });
+        },
+      ),
+    );
+    
+    _bannerAd?.load();
   }
   
   Future<void> _checkAndShowTutorial() async {
@@ -444,6 +478,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               ),
 
                   const Spacer(),
+                  
+                  // 배너 광고
+                  if (_isBannerAdReady && _bannerAd != null)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 20),
+                      child: Container(
+                        width: _bannerAd!.size.width.toDouble(),
+                        height: _bannerAd!.size.height.toDouble(),
+                        child: AdWidget(ad: _bannerAd!),
+                      ),
+                    ),
                 ],
               ),
             ),

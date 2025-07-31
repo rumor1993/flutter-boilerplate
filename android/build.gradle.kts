@@ -1,4 +1,8 @@
 buildscript {
+    repositories {
+        google()          // 이 부분이 빠져있었습니다!
+        mavenCentral()
+    }
     dependencies {
         classpath("com.google.gms:google-services:4.4.2")
     }
@@ -18,6 +22,7 @@ subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
 }
+
 subprojects {
     project.evaluationDependsOn(":app")
 }

@@ -13,8 +13,8 @@ class AdIds {
   static const String _androidRewardedAdId = 'ca-app-pub-3940256099942544/5224354917';
   
   // iOS 실제 광고 ID
-  static const String _iosBannerAdId = 'ca-app-pub-3940256099942544/6300978111';
-  static const String _iosInterstitialAdId = 'ca-app-pub-3940256099942544/1033173712';
+  static const String _iosBannerAdId = 'ca-app-pub-3654695184164344/3661304526';
+  static const String _iosInterstitialAdId = 'ca-app-pub-3654695184164344/9731000807';
   static const String _iosRewardedAdId = 'ca-app-pub-3940256099942544/5224354917';
   
   // 플랫폼별 광고 ID 반환 (디버그 모드에서는 테스트 광고 사용)

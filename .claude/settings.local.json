@@ -14,7 +14,10 @@
       "Bash(dart:*)",
       "Bash(find:*)",
       "Bash(mkdir:*)",
-      "Bash(pod install:*)"
+      "Bash(pod install:*)",
+      "Bash(./gradlew:*)",
+      "Bash(mv:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }
