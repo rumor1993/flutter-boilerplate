@@ -15,7 +15,7 @@ class _App extends ConsumerWidget {
 
     return MaterialApp.router(
       theme: ThemeData(
-        cardTheme: const CardTheme(color: Colors.white),
+        cardTheme: const CardThemeData(color: Colors.white),
         brightness: Brightness.light,
         primarySwatch: Colors.blue,
         scaffoldBackgroundColor: const Color(0xFFF8F8F8), // 연한 회색 배경
