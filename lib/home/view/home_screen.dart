@@ -1,93 +1,98 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'dart:io';
+import 'dart:typed_data';
 
-class HomeScreen extends ConsumerWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/home/view/image_cutout_processor.dart';
+import 'package:flutter_boilerplate/home/view/post_processor.dart';
+import 'package:flutter_boilerplate/home/view/selfie_multiclass_segmentation.dart';
+import 'package:flutter_boilerplate/home/view/sticker_border.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as img;
+
+import 'package:gallery_saver_plus/gallery_saver.dart';
+import 'package:path_provider/path_provider.dart';
+
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Welcome to Flutter Boilerplate!',
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'This is a boilerplate Flutter app with:',
-              style: Theme.of(context).textTheme.bodyLarge,
-            ),
-            const SizedBox(height: 12),
-            _FeatureCard(
-              icon: Icons.login,
-              title: 'Authentication',
-              description: 'User login/logout with secure storage',
-            ),
-            const SizedBox(height: 8),
-            _FeatureCard(
-              icon: Icons.navigation,
-              title: 'Navigation',
-              description: 'GoRouter for declarative routing',
-            ),
-            const SizedBox(height: 8),
-            _FeatureCard(
-              icon: Icons.memory,
-              title: 'State Management',
-              description: 'Riverpod for reactive state management',
-            ),
-            const SizedBox(height: 8),
-            _FeatureCard(
-              icon: Icons.api,
-              title: 'API Integration',
-              description: 'Dio for HTTP requests and API calls',
-            ),
-            const SizedBox(height: 8),
-            _FeatureCard(
-              icon: Icons.design_services,
-              title: 'Modern UI',
-              description: 'Material Design 3 components',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _FeatureCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String description;
+class _HomeScreenState extends State<HomeScreen> {
+  XFile? selectedImage;
+  Uint8List? maskImage;
+  Uint8List? transparentMaskImage;
+  Uint8List? processedMaskImage;
+  Uint8List? transparentProcessedMaskImage;
+  final SelfieMulticlassSegmentation _segmentation = SelfieMulticlassSegmentation();
 
-  const _FeatureCard({
-    required this.icon,
-    required this.title,
-    required this.description,
-  });
+  @override
+  void initState() {
+    super.initState();
+    _loadModel();
+  }
+
+  Future<void> _loadModel() async {
+    await _segmentation.loadModel();
+
+    final ImagePicker imagePicker = ImagePicker();
+    final XFile? image = await imagePicker.pickImage(
+        source: ImageSource.gallery,
+        maxWidth: 1024,
+        maxHeight: 1024,
+        imageQuality: 85,
+    );
+
+    if (image != null) {
+      final bytes = await image.readAsBytes();
+      final output = await _segmentation.predict(bytes);
+      final mask = _segmentation.maskToImage(output);
+
+      final processedMask = PostProcessor.processmask(mask);
+      final transparentProcessedMask = ImageCutoutProcessor.createCutout(bytes, processedMask);
+
+      setState(() {
+        selectedImage = image;
+        transparentProcessedMaskImage = StickerBorder.addSimpleBorder(transparentProcessedMask, img.Color.fromRgb(255, 255, 255), borderWidth: 10);
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: Theme.of(context).colorScheme.primary,
+    return Scaffold(
+      appBar: AppBar(title: Text("Segment")),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Container(
+              child:
+                  selectedImage != null
+                      ? Image.file(File(selectedImage!.path))
+                      : Text("이미지 선택해주세요."),
+            ),
+          
+            if (transparentProcessedMaskImage != null) Container(
+                color: Colors.black,
+                child: Image.memory(transparentProcessedMaskImage!)
+            ),
+
+            if (transparentProcessedMaskImage != null) ElevatedButton(
+                onPressed: () async {
+                  final tempDir = await getTemporaryDirectory();
+                  final file = File('${tempDir.path}/temp_image.png');
+
+                  // 2. Uint8List를 파일로 저장
+                  await file.writeAsBytes(transparentProcessedMaskImage!);
+
+                  // 3. 갤러리에 저장
+                  await GallerySaver.saveImage(file.path);
+                },
+                child: Text("Download"),
+            )
+          ],
         ),
-        title: Text(
-          title,
-          style: const TextStyle(fontWeight: FontWeight.w600),
-        ),
-        subtitle: Text(description),
       ),
     );
   }
