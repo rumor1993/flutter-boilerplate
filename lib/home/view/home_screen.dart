@@ -39,9 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
     final ImagePicker imagePicker = ImagePicker();
     final XFile? image = await imagePicker.pickImage(
         source: ImageSource.gallery,
-        maxWidth: 1024,
-        maxHeight: 1024,
-        imageQuality: 85,
+        maxWidth: 1024 * 1.5,
+        maxHeight: 1024 * 1.5,
     );
 
     if (image != null) {
@@ -54,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       setState(() {
         selectedImage = image;
-        transparentProcessedMaskImage = StickerBorder.addSimpleBorder(transparentProcessedMask, img.Color.fromRgb(255, 255, 255), borderWidth: 10);
+        transparentProcessedMaskImage = StickerBorder.addSimpleBorder(transparentProcessedMask, img.Color.fromRgb(255, 255, 255), borderWidth: 15);
       });
     }
   }

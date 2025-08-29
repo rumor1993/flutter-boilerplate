@@ -13,9 +13,13 @@ class StickerBorder {
     final width = cutoutImage.width;
     final height = cutoutImage.height;
 
-    // 테두리만큼 큰 새 이미지
-    final newWidth = width + (borderWidth * 2);
-    final newHeight = height + (borderWidth * 2);
+    // 비율 기반 테두리 두께 (예: 3%)
+    final objectSize = math.max(width, height);
+    final adaptiveBorderWidth = (objectSize * 0.03).round();
+
+    // 새 이미지 캔버스
+    final newWidth = width + (adaptiveBorderWidth * 2);
+    final newHeight = height + (adaptiveBorderWidth * 2);
     final result = img.Image(newWidth, newHeight);
 
     // 투명 배경으로 초기화
