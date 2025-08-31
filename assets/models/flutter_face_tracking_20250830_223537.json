@@ -1,0 +1,306 @@
+{
+  "metadata": {
+    "gif_path": "meme4.gif",
+    "total_frames": 15,
+    "gif_duration_ms": 1500,
+    "frame_duration_ms": 100,
+    "gif_size": [
+      450,
+      379
+    ],
+    "created_at": "2025-08-30T22:35:37.118565",
+    "detection_stats": {
+      "pose_detection_success": 0,
+      "fallback_detection_used": 15,
+      "total_heads_detected": 15
+    },
+    "smoothing_applied": true
+  },
+  "tracking_data": [
+    {
+      "frame_number": 0,
+      "timestamp": 0,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 152,
+          "y": 5,
+          "width": 120,
+          "height": 129,
+          "center_x": 212,
+          "center_y": 69,
+          "confidence": 0.73,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 1,
+      "timestamp": 100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 149,
+          "y": 1,
+          "width": 133,
+          "height": 141,
+          "center_x": 216,
+          "center_y": 71,
+          "confidence": 0.723,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 2,
+      "timestamp": 200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 135,
+          "y": 2,
+          "width": 135,
+          "height": 144,
+          "center_x": 203,
+          "center_y": 74,
+          "confidence": 0.722,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 3,
+      "timestamp": 300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 132,
+          "y": 12,
+          "width": 132,
+          "height": 141,
+          "center_x": 198,
+          "center_y": 83,
+          "confidence": 0.656,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 4,
+      "timestamp": 400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 113,
+          "y": 19,
+          "width": 140,
+          "height": 149,
+          "center_x": 183,
+          "center_y": 93,
+          "confidence": 0.731,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 5,
+      "timestamp": 500,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 89,
+          "y": 31,
+          "width": 140,
+          "height": 149,
+          "center_x": 159,
+          "center_y": 105,
+          "confidence": 0.693,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 6,
+      "timestamp": 600,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 87,
+          "y": 39,
+          "width": 131,
+          "height": 139,
+          "center_x": 153,
+          "center_y": 109,
+          "confidence": 0.73,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 7,
+      "timestamp": 700,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 92,
+          "y": 53,
+          "width": 114,
+          "height": 122,
+          "center_x": 150,
+          "center_y": 113,
+          "confidence": 0.626,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 8,
+      "timestamp": 800,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 118,
+          "y": 18,
+          "width": 151,
+          "height": 162,
+          "center_x": 194,
+          "center_y": 99,
+          "confidence": 0.453,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 9,
+      "timestamp": 900,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 193,
+          "y": 5,
+          "width": 161,
+          "height": 171,
+          "center_x": 274,
+          "center_y": 91,
+          "confidence": 0.589,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 10,
+      "timestamp": 1000,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 244,
+          "y": 1,
+          "width": 153,
+          "height": 162,
+          "center_x": 320,
+          "center_y": 82,
+          "confidence": 0.633,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 11,
+      "timestamp": 1100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 223,
+          "y": 0,
+          "width": 139,
+          "height": 148,
+          "center_x": 293,
+          "center_y": 74,
+          "confidence": 0.613,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 12,
+      "timestamp": 1200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 161,
+          "y": 0,
+          "width": 135,
+          "height": 143,
+          "center_x": 229,
+          "center_y": 71,
+          "confidence": 0.592,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 13,
+      "timestamp": 1300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 147,
+          "y": 0,
+          "width": 135,
+          "height": 145,
+          "center_x": 215,
+          "center_y": 72,
+          "confidence": 0.541,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 14,
+      "timestamp": 1400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 191,
+          "y": 7,
+          "width": 109,
+          "height": 117,
+          "center_x": 246,
+          "center_y": 65,
+          "confidence": 0.722,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    }
+  ]
+}

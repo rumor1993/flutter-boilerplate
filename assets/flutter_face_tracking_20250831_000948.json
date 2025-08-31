@@ -1,0 +1,1926 @@
+{
+  "metadata": {
+    "gif_path": "meme6.gif",
+    "total_frames": 101,
+    "gif_duration_ms": 10100,
+    "frame_duration_ms": 100,
+    "gif_size": [
+      478,
+      206
+    ],
+    "created_at": "2025-08-31T00:09:48.013300",
+    "detection_stats": {
+      "pose_detection_success": 0,
+      "fallback_detection_used": 101,
+      "total_heads_detected": 100
+    },
+    "smoothing_applied": true
+  },
+  "tracking_data": [
+    {
+      "frame_number": 0,
+      "timestamp": 0,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 228,
+          "y": 30,
+          "width": 131,
+          "height": 140,
+          "center_x": 293,
+          "center_y": 100,
+          "confidence": 0.735,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 1,
+      "timestamp": 100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 225,
+          "y": 41,
+          "width": 118,
+          "height": 126,
+          "center_x": 283,
+          "center_y": 104,
+          "confidence": 0.563,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 2,
+      "timestamp": 200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 215,
+          "y": 42,
+          "width": 111,
+          "height": 118,
+          "center_x": 270,
+          "center_y": 101,
+          "confidence": 0.604,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 3,
+      "timestamp": 300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 203,
+          "y": 34,
+          "width": 113,
+          "height": 120,
+          "center_x": 260,
+          "center_y": 94,
+          "confidence": 0.57,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 4,
+      "timestamp": 400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 191,
+          "y": 20,
+          "width": 125,
+          "height": 134,
+          "center_x": 254,
+          "center_y": 87,
+          "confidence": 0.694,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 5,
+      "timestamp": 500,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 183,
+          "y": 17,
+          "width": 129,
+          "height": 138,
+          "center_x": 247,
+          "center_y": 86,
+          "confidence": 0.677,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 6,
+      "timestamp": 600,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 180,
+          "y": 18,
+          "width": 129,
+          "height": 137,
+          "center_x": 244,
+          "center_y": 86,
+          "confidence": 0.608,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 7,
+      "timestamp": 700,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 173,
+          "y": 13,
+          "width": 133,
+          "height": 141,
+          "center_x": 239,
+          "center_y": 84,
+          "confidence": 0.75,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 8,
+      "timestamp": 800,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 177,
+          "y": 8,
+          "width": 130,
+          "height": 138,
+          "center_x": 241,
+          "center_y": 77,
+          "confidence": 0.712,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 9,
+      "timestamp": 900,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 195,
+          "y": 5,
+          "width": 130,
+          "height": 138,
+          "center_x": 260,
+          "center_y": 74,
+          "confidence": 0.567,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 10,
+      "timestamp": 1000,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 203,
+          "y": 20,
+          "width": 123,
+          "height": 131,
+          "center_x": 264,
+          "center_y": 85,
+          "confidence": 0.525,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 11,
+      "timestamp": 1100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 198,
+          "y": 17,
+          "width": 134,
+          "height": 143,
+          "center_x": 265,
+          "center_y": 88,
+          "confidence": 0.465,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 12,
+      "timestamp": 1200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 200,
+          "y": 22,
+          "width": 124,
+          "height": 133,
+          "center_x": 262,
+          "center_y": 88,
+          "confidence": 0.51,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 13,
+      "timestamp": 1300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 178,
+          "y": 8,
+          "width": 135,
+          "height": 144,
+          "center_x": 245,
+          "center_y": 81,
+          "confidence": 0.679,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 14,
+      "timestamp": 1400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 155,
+          "y": 2,
+          "width": 132,
+          "height": 141,
+          "center_x": 221,
+          "center_y": 73,
+          "confidence": 0.75,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 15,
+      "timestamp": 1500,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 145,
+          "y": 0,
+          "width": 130,
+          "height": 139,
+          "center_x": 210,
+          "center_y": 70,
+          "confidence": 0.735,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 16,
+      "timestamp": 1600,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 141,
+          "y": 5,
+          "width": 125,
+          "height": 132,
+          "center_x": 203,
+          "center_y": 72,
+          "confidence": 0.771,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 17,
+      "timestamp": 1700,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 140,
+          "y": 7,
+          "width": 123,
+          "height": 130,
+          "center_x": 201,
+          "center_y": 73,
+          "confidence": 0.773,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 18,
+      "timestamp": 1800,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 142,
+          "y": 9,
+          "width": 120,
+          "height": 129,
+          "center_x": 203,
+          "center_y": 73,
+          "confidence": 0.774,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 19,
+      "timestamp": 1900,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 146,
+          "y": 11,
+          "width": 122,
+          "height": 129,
+          "center_x": 207,
+          "center_y": 75,
+          "confidence": 0.754,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 20,
+      "timestamp": 2000,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 150,
+          "y": 13,
+          "width": 123,
+          "height": 131,
+          "center_x": 212,
+          "center_y": 79,
+          "confidence": 0.784,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 21,
+      "timestamp": 2100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 152,
+          "y": 14,
+          "width": 127,
+          "height": 136,
+          "center_x": 216,
+          "center_y": 82,
+          "confidence": 0.775,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 22,
+      "timestamp": 2200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 151,
+          "y": 14,
+          "width": 131,
+          "height": 140,
+          "center_x": 217,
+          "center_y": 84,
+          "confidence": 0.768,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 23,
+      "timestamp": 2300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 153,
+          "y": 16,
+          "width": 129,
+          "height": 137,
+          "center_x": 217,
+          "center_y": 85,
+          "confidence": 0.773,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 24,
+      "timestamp": 2400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 155,
+          "y": 18,
+          "width": 125,
+          "height": 133,
+          "center_x": 218,
+          "center_y": 85,
+          "confidence": 0.777,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 25,
+      "timestamp": 2500,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 158,
+          "y": 17,
+          "width": 125,
+          "height": 133,
+          "center_x": 220,
+          "center_y": 83,
+          "confidence": 0.778,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 26,
+      "timestamp": 2600,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 160,
+          "y": 15,
+          "width": 127,
+          "height": 135,
+          "center_x": 223,
+          "center_y": 83,
+          "confidence": 0.776,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 27,
+      "timestamp": 2700,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 162,
+          "y": 15,
+          "width": 128,
+          "height": 136,
+          "center_x": 225,
+          "center_y": 83,
+          "confidence": 0.771,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 28,
+      "timestamp": 2800,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 167,
+          "y": 15,
+          "width": 125,
+          "height": 133,
+          "center_x": 229,
+          "center_y": 82,
+          "confidence": 0.766,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 29,
+      "timestamp": 2900,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 171,
+          "y": 18,
+          "width": 121,
+          "height": 130,
+          "center_x": 232,
+          "center_y": 83,
+          "confidence": 0.763,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 30,
+      "timestamp": 3000,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 174,
+          "y": 22,
+          "width": 118,
+          "height": 126,
+          "center_x": 234,
+          "center_y": 85,
+          "confidence": 0.76,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 31,
+      "timestamp": 3100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 175,
+          "y": 21,
+          "width": 121,
+          "height": 128,
+          "center_x": 236,
+          "center_y": 85,
+          "confidence": 0.745,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 32,
+      "timestamp": 3200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 175,
+          "y": 21,
+          "width": 122,
+          "height": 129,
+          "center_x": 236,
+          "center_y": 86,
+          "confidence": 0.741,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 33,
+      "timestamp": 3300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 176,
+          "y": 20,
+          "width": 123,
+          "height": 131,
+          "center_x": 238,
+          "center_y": 86,
+          "confidence": 0.734,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 34,
+      "timestamp": 3400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 179,
+          "y": 22,
+          "width": 119,
+          "height": 126,
+          "center_x": 239,
+          "center_y": 85,
+          "confidence": 0.75,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 35,
+      "timestamp": 3500,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 180,
+          "y": 22,
+          "width": 119,
+          "height": 126,
+          "center_x": 239,
+          "center_y": 85,
+          "confidence": 0.75,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 36,
+      "timestamp": 3600,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 180,
+          "y": 22,
+          "width": 119,
+          "height": 128,
+          "center_x": 240,
+          "center_y": 85,
+          "confidence": 0.752,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 37,
+      "timestamp": 3700,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 185,
+          "y": 25,
+          "width": 115,
+          "height": 123,
+          "center_x": 243,
+          "center_y": 87,
+          "confidence": 0.75,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 38,
+      "timestamp": 3800,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 189,
+          "y": 22,
+          "width": 125,
+          "height": 134,
+          "center_x": 252,
+          "center_y": 89,
+          "confidence": 0.766,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 39,
+      "timestamp": 3900,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 194,
+          "y": 23,
+          "width": 131,
+          "height": 139,
+          "center_x": 260,
+          "center_y": 93,
+          "confidence": 0.763,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 40,
+      "timestamp": 4000,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 199,
+          "y": 23,
+          "width": 133,
+          "height": 142,
+          "center_x": 266,
+          "center_y": 95,
+          "confidence": 0.717,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 41,
+      "timestamp": 4100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 203,
+          "y": 25,
+          "width": 134,
+          "height": 143,
+          "center_x": 270,
+          "center_y": 97,
+          "confidence": 0.754,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 42,
+      "timestamp": 4200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 207,
+          "y": 30,
+          "width": 130,
+          "height": 138,
+          "center_x": 272,
+          "center_y": 99,
+          "confidence": 0.732,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 43,
+      "timestamp": 4300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 204,
+          "y": 29,
+          "width": 133,
+          "height": 142,
+          "center_x": 271,
+          "center_y": 100,
+          "confidence": 0.723,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 44,
+      "timestamp": 4400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 203,
+          "y": 31,
+          "width": 127,
+          "height": 135,
+          "center_x": 266,
+          "center_y": 98,
+          "confidence": 0.683,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 45,
+      "timestamp": 4500,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 197,
+          "y": 34,
+          "width": 124,
+          "height": 131,
+          "center_x": 259,
+          "center_y": 100,
+          "confidence": 0.699,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 46,
+      "timestamp": 4600,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 190,
+          "y": 31,
+          "width": 117,
+          "height": 124,
+          "center_x": 248,
+          "center_y": 94,
+          "confidence": 0.573,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 47,
+      "timestamp": 4700,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 180,
+          "y": 27,
+          "width": 115,
+          "height": 123,
+          "center_x": 238,
+          "center_y": 89,
+          "confidence": 0.57,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 48,
+      "timestamp": 4800,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 173,
+          "y": 39,
+          "width": 109,
+          "height": 116,
+          "center_x": 227,
+          "center_y": 97,
+          "confidence": 0.548,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 49,
+      "timestamp": 4900,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 177,
+          "y": 35,
+          "width": 112,
+          "height": 120,
+          "center_x": 233,
+          "center_y": 95,
+          "confidence": 0.56,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 50,
+      "timestamp": 5000,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 175,
+          "y": 44,
+          "width": 106,
+          "height": 114,
+          "center_x": 228,
+          "center_y": 101,
+          "confidence": 0.548,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 51,
+      "timestamp": 5100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 180,
+          "y": 36,
+          "width": 115,
+          "height": 123,
+          "center_x": 237,
+          "center_y": 97,
+          "confidence": 0.563,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 52,
+      "timestamp": 5200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 176,
+          "y": 29,
+          "width": 124,
+          "height": 132,
+          "center_x": 238,
+          "center_y": 95,
+          "confidence": 0.632,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 53,
+      "timestamp": 5300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 166,
+          "y": 24,
+          "width": 134,
+          "height": 142,
+          "center_x": 233,
+          "center_y": 95,
+          "confidence": 0.772,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 54,
+      "timestamp": 5400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 159,
+          "y": 24,
+          "width": 129,
+          "height": 137,
+          "center_x": 224,
+          "center_y": 93,
+          "confidence": 0.759,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 55,
+      "timestamp": 5500,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 154,
+          "y": 26,
+          "width": 124,
+          "height": 132,
+          "center_x": 217,
+          "center_y": 92,
+          "confidence": 0.729,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 56,
+      "timestamp": 5600,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 155,
+          "y": 26,
+          "width": 117,
+          "height": 125,
+          "center_x": 214,
+          "center_y": 88,
+          "confidence": 0.733,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 57,
+      "timestamp": 5700,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 157,
+          "y": 24,
+          "width": 119,
+          "height": 127,
+          "center_x": 216,
+          "center_y": 88,
+          "confidence": 0.757,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 58,
+      "timestamp": 5800,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 161,
+          "y": 23,
+          "width": 121,
+          "height": 129,
+          "center_x": 222,
+          "center_y": 88,
+          "confidence": 0.749,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 59,
+      "timestamp": 5900,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 168,
+          "y": 24,
+          "width": 119,
+          "height": 127,
+          "center_x": 227,
+          "center_y": 88,
+          "confidence": 0.747,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 60,
+      "timestamp": 6000,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 173,
+          "y": 23,
+          "width": 118,
+          "height": 125,
+          "center_x": 232,
+          "center_y": 85,
+          "confidence": 0.733,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 61,
+      "timestamp": 6100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 177,
+          "y": 23,
+          "width": 115,
+          "height": 123,
+          "center_x": 234,
+          "center_y": 85,
+          "confidence": 0.727,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 62,
+      "timestamp": 6200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 177,
+          "y": 20,
+          "width": 121,
+          "height": 129,
+          "center_x": 237,
+          "center_y": 85,
+          "confidence": 0.737,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 63,
+      "timestamp": 6300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 174,
+          "y": 16,
+          "width": 127,
+          "height": 136,
+          "center_x": 237,
+          "center_y": 84,
+          "confidence": 0.722,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 64,
+      "timestamp": 6400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 176,
+          "y": 16,
+          "width": 124,
+          "height": 131,
+          "center_x": 238,
+          "center_y": 81,
+          "confidence": 0.748,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 65,
+      "timestamp": 6500,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 179,
+          "y": 15,
+          "width": 123,
+          "height": 130,
+          "center_x": 240,
+          "center_y": 80,
+          "confidence": 0.763,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 66,
+      "timestamp": 6600,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 181,
+          "y": 15,
+          "width": 126,
+          "height": 134,
+          "center_x": 244,
+          "center_y": 82,
+          "confidence": 0.77,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 67,
+      "timestamp": 6700,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 184,
+          "y": 14,
+          "width": 127,
+          "height": 135,
+          "center_x": 248,
+          "center_y": 82,
+          "confidence": 0.771,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 68,
+      "timestamp": 6800,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 186,
+          "y": 14,
+          "width": 127,
+          "height": 135,
+          "center_x": 250,
+          "center_y": 82,
+          "confidence": 0.772,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 69,
+      "timestamp": 6900,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 189,
+          "y": 15,
+          "width": 125,
+          "height": 133,
+          "center_x": 252,
+          "center_y": 82,
+          "confidence": 0.777,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 70,
+      "timestamp": 7000,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 190,
+          "y": 15,
+          "width": 124,
+          "height": 132,
+          "center_x": 252,
+          "center_y": 82,
+          "confidence": 0.778,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 71,
+      "timestamp": 7100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 191,
+          "y": 16,
+          "width": 123,
+          "height": 130,
+          "center_x": 252,
+          "center_y": 82,
+          "confidence": 0.778,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 72,
+      "timestamp": 7200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 191,
+          "y": 17,
+          "width": 123,
+          "height": 130,
+          "center_x": 252,
+          "center_y": 82,
+          "confidence": 0.776,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 73,
+      "timestamp": 7300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 190,
+          "y": 14,
+          "width": 127,
+          "height": 136,
+          "center_x": 254,
+          "center_y": 82,
+          "confidence": 0.774,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 74,
+      "timestamp": 7400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 190,
+          "y": 15,
+          "width": 127,
+          "height": 136,
+          "center_x": 254,
+          "center_y": 83,
+          "confidence": 0.771,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 75,
+      "timestamp": 7500,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 190,
+          "y": 15,
+          "width": 128,
+          "height": 136,
+          "center_x": 254,
+          "center_y": 83,
+          "confidence": 0.766,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 76,
+      "timestamp": 7600,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 190,
+          "y": 15,
+          "width": 128,
+          "height": 136,
+          "center_x": 254,
+          "center_y": 83,
+          "confidence": 0.77,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 77,
+      "timestamp": 7700,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 192,
+          "y": 19,
+          "width": 122,
+          "height": 131,
+          "center_x": 254,
+          "center_y": 85,
+          "confidence": 0.771,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 78,
+      "timestamp": 7800,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 191,
+          "y": 20,
+          "width": 123,
+          "height": 131,
+          "center_x": 254,
+          "center_y": 86,
+          "confidence": 0.771,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 79,
+      "timestamp": 7900,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 190,
+          "y": 20,
+          "width": 126,
+          "height": 134,
+          "center_x": 254,
+          "center_y": 87,
+          "confidence": 0.762,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 80,
+      "timestamp": 8000,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 189,
+          "y": 20,
+          "width": 128,
+          "height": 136,
+          "center_x": 253,
+          "center_y": 88,
+          "confidence": 0.749,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 81,
+      "timestamp": 8100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 188,
+          "y": 20,
+          "width": 128,
+          "height": 136,
+          "center_x": 253,
+          "center_y": 88,
+          "confidence": 0.752,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 82,
+      "timestamp": 8200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 188,
+          "y": 20,
+          "width": 129,
+          "height": 138,
+          "center_x": 253,
+          "center_y": 89,
+          "confidence": 0.75,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 83,
+      "timestamp": 8300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 186,
+          "y": 20,
+          "width": 132,
+          "height": 140,
+          "center_x": 253,
+          "center_y": 90,
+          "confidence": 0.747,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 84,
+      "timestamp": 8400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 183,
+          "y": 24,
+          "width": 127,
+          "height": 135,
+          "center_x": 247,
+          "center_y": 92,
+          "confidence": 0.751,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 85,
+      "timestamp": 8500,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 178,
+          "y": 26,
+          "width": 128,
+          "height": 136,
+          "center_x": 242,
+          "center_y": 94,
+          "confidence": 0.753,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 86,
+      "timestamp": 8600,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 175,
+          "y": 21,
+          "width": 130,
+          "height": 138,
+          "center_x": 240,
+          "center_y": 90,
+          "confidence": 0.745,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 87,
+      "timestamp": 8700,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 175,
+          "y": 21,
+          "width": 130,
+          "height": 139,
+          "center_x": 240,
+          "center_y": 91,
+          "confidence": 0.743,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 88,
+      "timestamp": 8800,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 177,
+          "y": 23,
+          "width": 129,
+          "height": 137,
+          "center_x": 241,
+          "center_y": 92,
+          "confidence": 0.751,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 89,
+      "timestamp": 8900,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 176,
+          "y": 21,
+          "width": 133,
+          "height": 141,
+          "center_x": 242,
+          "center_y": 92,
+          "confidence": 0.753,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 90,
+      "timestamp": 9000,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 176,
+          "y": 21,
+          "width": 133,
+          "height": 141,
+          "center_x": 243,
+          "center_y": 91,
+          "confidence": 0.75,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 91,
+      "timestamp": 9100,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 178,
+          "y": 21,
+          "width": 131,
+          "height": 140,
+          "center_x": 244,
+          "center_y": 91,
+          "confidence": 0.748,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 92,
+      "timestamp": 9200,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 178,
+          "y": 21,
+          "width": 133,
+          "height": 141,
+          "center_x": 244,
+          "center_y": 92,
+          "confidence": 0.755,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 93,
+      "timestamp": 9300,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 178,
+          "y": 21,
+          "width": 134,
+          "height": 143,
+          "center_x": 244,
+          "center_y": 92,
+          "confidence": 0.756,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 94,
+      "timestamp": 9400,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 178,
+          "y": 21,
+          "width": 135,
+          "height": 145,
+          "center_x": 246,
+          "center_y": 93,
+          "confidence": 0.761,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 95,
+      "timestamp": 9500,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 179,
+          "y": 21,
+          "width": 134,
+          "height": 142,
+          "center_x": 246,
+          "center_y": 93,
+          "confidence": 0.759,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 96,
+      "timestamp": 9600,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 181,
+          "y": 18,
+          "width": 124,
+          "height": 132,
+          "center_x": 243,
+          "center_y": 85,
+          "confidence": 0.766,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 97,
+      "timestamp": 9700,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 180,
+          "y": 10,
+          "width": 117,
+          "height": 125,
+          "center_x": 238,
+          "center_y": 73,
+          "confidence": 0.701,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 98,
+      "timestamp": 9800,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 175,
+          "y": 3,
+          "width": 111,
+          "height": 118,
+          "center_x": 231,
+          "center_y": 62,
+          "confidence": 0.688,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 99,
+      "timestamp": 9900,
+      "heads": [
+        {
+          "head_id": 0,
+          "x": 164,
+          "y": 0,
+          "width": 117,
+          "height": 125,
+          "center_x": 223,
+          "center_y": 63,
+          "confidence": 0.437,
+          "detection_method": "MediaPipe_Face_Fallback",
+          "scale": 1.0,
+          "rotation": 0.0
+        }
+      ]
+    },
+    {
+      "frame_number": 100,
+      "timestamp": 10000,
+      "heads": []
+    }
+  ]
+}
