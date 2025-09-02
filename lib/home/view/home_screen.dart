@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/common/component/transparent_grid_widget.dart';
+import 'package:flutter_boilerplate/editor/basic_template_editor.dart';
 
 class MenuItem {
   final String title;
@@ -233,9 +236,14 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemBuilder: (context, index) {
                       final template = category.templates[index];
                       return GestureDetector(
-                        onTap: () {
-                          // 템플릿 선택 처리
-                          print('선택된 템플릿: ${template.name}');
+                        onTap: () {Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BasicTemplateEditor(
+                              templateImagePath: template.imagePath,
+                            ),
+                          ),
+                        );
                         },
                         child: Column(
                           children: [
