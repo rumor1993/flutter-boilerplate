@@ -25,7 +25,7 @@ class ImageCutoutProcessor {
       int minX = originalWidth, minY = originalHeight, maxX = 0, maxY = 0;
       for (int y = 0; y < originalHeight; y++) {
         for (int x = 0; x < originalWidth; x++) {
-          final maskValue = img.getRed(resizedMask.getPixel(x, y));
+          final maskValue = resizedMask.getPixel(x, y).r;
           if (maskValue > 128) {
             if (x < minX) minX = x;
             if (y < minY) minY = y;
@@ -40,20 +40,20 @@ class ImageCutoutProcessor {
 
       // 3. 오브젝트 영역 잘라내기
       final cropped = img.copyCrop(originalImage,
-          minX, minY, objectWidth, objectHeight);
+          x: minX, y: minY, width: objectWidth, height: objectHeight);
       final croppedMask = img.copyCrop(resizedMask,
-          minX, minY, objectWidth, objectHeight);
+          x: minX, y: minY, width: objectWidth, height: objectHeight);
 
       // 4. 컷아웃 이미지 만들기
-      final cutout = img.Image(objectWidth, objectHeight);
+      final cutout = img.Image(width: objectWidth, height: objectHeight);
       for (int y = 0; y < objectHeight; y++) {
         for (int x = 0; x < objectWidth; x++) {
-          final maskValue = img.getRed(croppedMask.getPixel(x, y));
+          final maskValue = croppedMask.getPixel(x, y).r;
           final pixel = cropped.getPixel(x, y);
           if (maskValue > 128) {
             cutout.setPixel(x, y, pixel);
           } else {
-            cutout.setPixel(x, y, img.Color.fromRgba(0, 0, 0, 0));
+            cutout.setPixel(x, y, img.ColorRgba8(0, 0, 0, 0));
           }
         }
       }
@@ -73,10 +73,10 @@ class ImageCutoutProcessor {
       );
 
       // 6. 중앙에 배치
-      final result = img.Image(originalWidth, originalHeight);
+      final result = img.Image(width: originalWidth, height: originalHeight);
       final offsetX = (originalWidth - targetWidth) ~/ 2;
       final offsetY = (originalHeight - targetHeight) ~/ 2;
-      img.copyInto(result, scaledCutout, dstX: offsetX, dstY: offsetY);
+      img.compositeImage(result, scaledCutout, dstX: offsetX, dstY: offsetY);
 
       return Uint8List.fromList(img.encodePng(result));
     }

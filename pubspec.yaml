@@ -46,13 +46,14 @@ dependencies:
   google_fonts: ^6.2.1
   material_symbols_icons: ^4.2815.1
   photo_view: ^0.15.0
-  image: ^3.0.0
+  image: ^4.0.15
   tflite_flutter: ^0.11.0
   camera: ^0.10.5+5
   permission_handler: ^11.0.1
   image_picker: ^1.2.0
   gallery_saver_plus: ^3.2.9
   path_provider: ^2.1.5
+  pro_image_editor: ^11.5.5
 
 dev_dependencies:
   flutter_test:
@@ -85,6 +86,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/models/
+    - assets/images/
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
