@@ -17,7 +17,6 @@ class ImageLayer {
     this.isSelected = false,
   });
 
-  // 레이어 복사 (immutable한 업데이트를 위해)
   ImageLayer copyWith({
     String? id,
     String? imagePath,
