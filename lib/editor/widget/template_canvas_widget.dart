@@ -19,13 +19,13 @@ class TemplateCanvasWidget extends StatefulWidget {
 
 class _TemplateCanvasWidgetState extends State<TemplateCanvasWidget> {
   // 크기 변경을 위한 필드
-  Map<String, double> _initialScales = {};
+  final Map<String, double> _initialScales = {};
   // 위치 이동을 위한 필드
-  Map<String, Offset> _initialPositions = {};
+  final Map<String, Offset> _initialPositions = {};
   // 제스처 시작할 때의 절대 좌표
-  Map<String, Offset> _initialFocalPoints = {};
+  final Map<String, Offset> _initialFocalPoints = {};
   // 회전을 위한 필드
-  Map<String, double> _initialRotations = {}; // 회전 초기값 추가!
+  final Map<String, double> _initialRotations = {}; // 회전 초기값 추가!
 
 
   @override

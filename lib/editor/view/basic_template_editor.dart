@@ -33,7 +33,10 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('템플릿 에디터'),
+        title: const Text(
+          'Canvas',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
@@ -41,7 +44,13 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
       body: Column(
         children: [
           TemplateCanvasWidget(containerKey: _containerKey, layers: _layers),
-          // StickerSelectionWidget(),
+          StickerSelectionWidget(
+            onLayerAdded: (newLayer) {
+              setState(() {
+                _layers.add(newLayer); // 여기서 setState
+              });
+            },
+          ),
           Container(
             padding: EdgeInsets.all(20),
             color: Colors.black,
@@ -54,7 +63,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                     child: Column(
                       children: [
                         Container(
-                          width:50,
+                          width: 50,
                           height: 50,
                           decoration: BoxDecoration(
                             color: const Color(0xFF00FF57),
@@ -63,7 +72,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                           child: const Icon(
                             Icons.photo_library,
                             color: Colors.black,
-                            size: 28,
+                            size: 38,
                           ),
                         ),
                         SizedBox(height: 8),
@@ -87,7 +96,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                     child: Column(
                       children: [
                         Container(
-                          width:50,
+                          width: 50,
                           height: 50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
@@ -95,7 +104,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                           child: const Icon(
                             Icons.title,
                             color: Colors.white,
-                            size: 28,
+                            size: 38,
                           ),
                         ),
                         SizedBox(height: 8),
@@ -119,7 +128,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                     child: Column(
                       children: [
                         Container(
-                          width:50,
+                          width: 50,
                           height: 50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
@@ -127,7 +136,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                           child: const Icon(
                             Icons.wallpaper,
                             color: Colors.white,
-                            size: 28,
+                            size: 38,
                           ),
                         ),
                         SizedBox(height: 8),

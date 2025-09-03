@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_boilerplate/editor/model/image_layer.dart';
 
 class StickerSelectionWidget extends StatefulWidget {
-  const StickerSelectionWidget({super.key});
+  final Function(ImageLayer) onLayerAdded;
+
+  const StickerSelectionWidget({super.key, required this.onLayerAdded});
 
   @override
   State<StickerSelectionWidget> createState() => _StickerSelectionWidgetState();
@@ -34,7 +37,7 @@ class _StickerSelectionWidgetState extends State<StickerSelectionWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Add a \n sticker',
+                      'Add a \n Photos',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 14,
@@ -48,15 +51,22 @@ class _StickerSelectionWidgetState extends State<StickerSelectionWidget> {
             } else {
               // 나머지는 실제 스티커들
               return GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  widget.onLayerAdded(
+                    ImageLayer(
+                      id: 'template_${DateTime.now().millisecondsSinceEpoch}',
+                      imagePath: "assets/images/image_picker_107E0FCD.png",
+                      position: const Offset(0, 0),
+                      scale: 1.0,
+                    ),
+                  );
+                },
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.grey,
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Image.asset(
-                    "assets/images/image_picker_107E0FCD.png",
-                  ),
+                  child: Image.asset("assets/images/image_picker_107E0FCD.png"),
                 ),
               );
             }
