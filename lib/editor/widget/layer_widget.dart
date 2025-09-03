@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_boilerplate/editor/models/image_layer.dart';
+import 'package:flutter_boilerplate/editor/model/image_layer.dart';
 
 class LayerWidget extends StatelessWidget {
   final ImageLayer layer;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/common/component/transparent_grid_widget.dart';
-import 'package:flutter_boilerplate/editor/models/image_layer.dart';
-import 'package:flutter_boilerplate/editor/widgets/layer_widget.dart';
+import 'package:flutter_boilerplate/editor/model/image_layer.dart';
+import 'package:flutter_boilerplate/editor/widget/layer_widget.dart';
 
 class BasicTemplateEditor extends StatefulWidget {
   final String templateImagePath;

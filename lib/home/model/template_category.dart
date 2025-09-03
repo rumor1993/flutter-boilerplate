@@ -1,4 +1,5 @@
-import 'package:flutter_boilerplate/home/models/tempate_item.dart';
+
+import 'package:flutter_boilerplate/home/model/tempate_item.dart';
 
 class TemplateCategory {
   final String title;
