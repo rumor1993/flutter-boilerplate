@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/common/component/transparent_grid_widget.dart';
 import 'package:flutter_boilerplate/editor/model/image_layer.dart';
-import 'package:flutter_boilerplate/editor/widget/layer_widget.dart';
+import 'package:flutter_boilerplate/editor/model/text_layer.dart';
+import 'package:flutter_boilerplate/editor/widget/image_layer_widget.dart';
+import 'package:flutter_boilerplate/editor/widget/text_layer_widget.dart';
+import 'package:text_editor/text_editor.dart';
 
 class TemplateCanvasWidget extends StatefulWidget {
   final GlobalKey containerKey;
-  final List<ImageLayer> layers;
+  final List<ImageLayer> imageLayers;
+  final List<TextLayer> textLayers;
 
   const TemplateCanvasWidget({
     super.key,
     required this.containerKey,
-    required this.layers,
+    required this.imageLayers,
+    required this.textLayers,
   });
 
   @override
@@ -19,13 +24,18 @@ class TemplateCanvasWidget extends StatefulWidget {
 
 class _TemplateCanvasWidgetState extends State<TemplateCanvasWidget> {
   // 크기 변경을 위한 필드
-  Map<String, double> _initialScales = {};
+  final Map<String, double> _imageInitialScales = {};
   // 위치 이동을 위한 필드
-  Map<String, Offset> _initialPositions = {};
+  final Map<String, Offset> _imageInitialPositions = {};
   // 제스처 시작할 때의 절대 좌표
-  Map<String, Offset> _initialFocalPoints = {};
+  final Map<String, Offset> _imageInitialFocalPoints = {};
   // 회전을 위한 필드
-  Map<String, double> _initialRotations = {}; // 회전 초기값 추가!
+  final Map<String, double> _imageInitialRotations = {}; // 회전 초기값 추가!
+
+  final Map<String, double> _textInitialScales = {};
+  final Map<String, Offset> _textInitialPositions = {};
+  final Map<String, Offset> _textInitialFocalPoints = {};
+  final Map<String, double> _textInitialRotations = {}; // 회전 초기값 추가!
 
 
   @override
@@ -41,31 +51,97 @@ class _TemplateCanvasWidgetState extends State<TemplateCanvasWidget> {
               height: 500,
             ),
           ),
-          ...widget.layers.map((layer) => LayerWidget(
+          ...widget.imageLayers.map((layer) => ImageLayerWidget(
               layer: layer,
               onScaleStart: (details) {
-                _initialScales[layer.id] = layer.scale;
-                _initialPositions[layer.id] = layer.position;
-                _initialFocalPoints[layer.id] = details.focalPoint;
-                _initialRotations[layer.id] = layer.rotation; // 회전 초기값 저장
+                _imageInitialScales[layer.id] = layer.scale;
+                _imageInitialPositions[layer.id] = layer.position;
+                _imageInitialFocalPoints[layer.id] = details.focalPoint;
+                _imageInitialRotations[layer.id] = layer.rotation; // 회전 초기값 저장
               },
               onScaleUpdate: (details) {
                 setState(() {
-                  if (_initialScales[layer.id] != null) {
-                    layer.scale = _initialScales[layer.id]! * details.scale;
+                  if (_imageInitialScales[layer.id] != null) {
+                    layer.scale = _imageInitialScales[layer.id]! * details.scale;
                   }
 
-                  if (_initialPositions[layer.id] != null) {
-                    final deltaPosition = details.focalPoint - _initialFocalPoints[layer.id]!;
-                    layer.position = _initialPositions[layer.id]! + deltaPosition;
+                  if (_imageInitialPositions[layer.id] != null) {
+                    final deltaPosition = details.focalPoint - _imageInitialFocalPoints[layer.id]!;
+                    layer.position = _imageInitialPositions[layer.id]! + deltaPosition;
                   }
 
-                  if (_initialRotations[layer.id] != null) {
-                    layer.rotation = _initialRotations[layer.id]! + details.rotation;
+                  if (_imageInitialRotations[layer.id] != null) {
+                    layer.rotation = _imageInitialRotations[layer.id]! + details.rotation;
                   }
                 });
               },
           )),
+
+          ...widget.textLayers.map((layer) => TextLayerWidget(
+            layer: layer,
+            onTap: () {
+              showGeneralDialog(
+                  context: context,
+                  pageBuilder: (_, __, ___) {
+                    return Container(
+                      color: Colors.black.withOpacity(0.4),
+                      child: Scaffold(
+                        backgroundColor: Colors.transparent,
+                        body: SafeArea(
+                          // top: false,
+                          child: Container(
+                            child: TextEditor(
+                              fonts: ['1','2'],
+                              text: layer.text,
+                              textStyle: layer.textStyle,
+                              textAlingment: layer.textAlign,
+                              minFontSize: 10,
+                              onEditCompleted: (style, align, text) {
+                                setState(() {
+                                  final updatedLayer = layer
+                                      .updateText(text)
+                                      .changeTextStyle(style)
+                                      .changeTextAlign(align);
+
+                                  final index = widget.textLayers.indexWhere((l) => l.id == layer.id);
+                                  if (index >= 0) {
+                                    widget.textLayers[index] = updatedLayer;
+                                  }
+                                });
+
+                                Navigator.pop(context);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+              );
+            },
+            onScaleStart: (details) {
+              _textInitialScales[layer.id] = layer.scale;
+              _textInitialPositions[layer.id] = layer.position;
+              _textInitialFocalPoints[layer.id] = details.focalPoint;
+              _textInitialRotations[layer.id] = layer.rotation; // 회전 초기값 저장
+            },
+            onScaleUpdate: (details) {
+              setState(() {
+                if (_textInitialScales[layer.id] != null) {
+                  layer.scale = _textInitialScales[layer.id]! * details.scale;
+                }
+
+                if (_textInitialPositions[layer.id] != null) {
+                  final deltaPosition = details.focalPoint - _textInitialFocalPoints[layer.id]!;
+                  layer.position = _textInitialPositions[layer.id]! + deltaPosition;
+                }
+
+                if (_textInitialRotations[layer.id] != null) {
+                  layer.rotation = _textInitialRotations[layer.id]! + details.rotation;
+                }
+              });
+            },
+          ))
         ],
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/editor/model/image_layer.dart';
+import 'package:flutter_boilerplate/editor/model/text_layer.dart';
 import 'package:flutter_boilerplate/editor/widget/sticker_selection_widget.dart';
 import 'package:flutter_boilerplate/editor/widget/template_canvas_widget.dart';
 
@@ -14,14 +15,15 @@ class BasicTemplateEditor extends StatefulWidget {
 
 class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
   final GlobalKey _containerKey = GlobalKey();
-  List<ImageLayer> _layers = [];
+  List<ImageLayer> _imageLayers = [];
+  List<TextLayer> _textLayers = [];
 
   @override
   void initState() {
     super.initState();
-    _layers.add(
+    _imageLayers.add(
       ImageLayer(
-        id: 'template',
+        id: 'template-image',
         imagePath: widget.templateImagePath,
         position: const Offset(0, 0),
         scale: 1.0,
@@ -33,15 +35,28 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('템플릿 에디터'),
+        title: const Text(
+          'Canvas',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,
       ),
       backgroundColor: Colors.grey.shade200,
       body: Column(
         children: [
-          TemplateCanvasWidget(containerKey: _containerKey, layers: _layers),
-          // StickerSelectionWidget(),
+          TemplateCanvasWidget(
+            containerKey: _containerKey,
+            imageLayers: _imageLayers,
+            textLayers: _textLayers,
+          ),
+          StickerSelectionWidget(
+            onLayerAdded: (newLayer) {
+              setState(() {
+                _imageLayers.add(newLayer); // 여기서 setState
+              });
+            },
+          ),
           Container(
             padding: EdgeInsets.all(20),
             color: Colors.black,
@@ -54,7 +69,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                     child: Column(
                       children: [
                         Container(
-                          width:50,
+                          width: 50,
                           height: 50,
                           decoration: BoxDecoration(
                             color: const Color(0xFF00FF57),
@@ -63,7 +78,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                           child: const Icon(
                             Icons.photo_library,
                             color: Colors.black,
-                            size: 28,
+                            size: 38,
                           ),
                         ),
                         SizedBox(height: 8),
@@ -87,7 +102,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                     child: Column(
                       children: [
                         Container(
-                          width:50,
+                          width: 50,
                           height: 50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
@@ -95,7 +110,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                           child: const Icon(
                             Icons.title,
                             color: Colors.white,
-                            size: 28,
+                            size: 38,
                           ),
                         ),
                         SizedBox(height: 8),
@@ -119,7 +134,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                     child: Column(
                       children: [
                         Container(
-                          width:50,
+                          width: 50,
                           height: 50,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
@@ -127,7 +142,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                           child: const Icon(
                             Icons.wallpaper,
                             color: Colors.white,
-                            size: 28,
+                            size: 38,
                           ),
                         ),
                         SizedBox(height: 8),

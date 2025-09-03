@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/editor/model/image_layer.dart';
 
-class LayerWidget extends StatelessWidget {
+class ImageLayerWidget extends StatelessWidget {
   final ImageLayer layer;
   final bool isTemplate;
   final VoidCallback? onTap;
@@ -9,7 +9,7 @@ class LayerWidget extends StatelessWidget {
   final Function(ScaleStartDetails)? onScaleStart;
   final Function(ScaleUpdateDetails)? onScaleUpdate;
 
-  const LayerWidget({
+  const ImageLayerWidget({
     super.key,
     required this.layer,
     this.isTemplate = false,
