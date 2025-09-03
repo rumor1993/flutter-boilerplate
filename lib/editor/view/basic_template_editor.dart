@@ -40,11 +40,113 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
       backgroundColor: Colors.grey.shade200,
       body: Column(
         children: [
-          TemplateCanvasWidget(
-              containerKey: _containerKey,
-              layers: _layers,
+          TemplateCanvasWidget(containerKey: _containerKey, layers: _layers),
+          // StickerSelectionWidget(),
+          Container(
+            padding: EdgeInsets.all(20),
+            color: Colors.black,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                GestureDetector(
+                  child: SizedBox(
+                    width: 90,
+                    child: Column(
+                      children: [
+                        Container(
+                          width:50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF00FF57),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Icon(
+                            Icons.photo_library,
+                            color: Colors.black,
+                            size: 28,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "Photo", // 단수형으로 변경
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                GestureDetector(
+                  child: SizedBox(
+                    width: 90,
+                    child: Column(
+                      children: [
+                        Container(
+                          width:50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Icon(
+                            Icons.title,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "Text",
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                GestureDetector(
+                  child: SizedBox(
+                    width: 90, // 동일한 너비
+                    child: Column(
+                      children: [
+                        Container(
+                          width:50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: const Icon(
+                            Icons.wallpaper,
+                            color: Colors.white,
+                            size: 28,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          "Background", // 단수형으로 변경
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-          StickerSelectionWidget()
         ],
       ),
     );
