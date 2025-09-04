@@ -6,8 +6,8 @@ import 'package:flutter_boilerplate/crop/widget/image_cutout_processor.dart';
 import 'package:flutter_boilerplate/crop/widget/post_processor.dart';
 import 'package:flutter_boilerplate/crop/widget/selfie_multiclass_segmentation.dart';
 import 'package:flutter_boilerplate/crop/widget/sticker_border.dart';
+import 'package:flutter_boilerplate/editor/view/basic_template_editor.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:gallery_saver_plus/gallery_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
 class CropScreen extends StatefulWidget {
@@ -42,6 +42,27 @@ class _CropScreenState extends State<CropScreen> {
     );
 
     if (image != null) {
+      // 로딩 다이얼로그 표시
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+            child: Container(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CircularProgressIndicator(),
+                  SizedBox(height: 20),
+                  Text("Processing your image..."),
+                ],
+              ),
+            ),
+          );
+        },
+      );
+
       final bytes = await image.readAsBytes();
       final output = await _segmentation.predict(bytes);
       final mask = _segmentation.maskToImage(output);
@@ -49,45 +70,50 @@ class _CropScreenState extends State<CropScreen> {
       final processedMask = PostProcessor.processmask(mask);
       final transparentProcessedMask = ImageCutoutProcessor.createCutout(bytes, processedMask);
 
-      setState(() {
-        selectedImage = image;
-        transparentProcessedMaskImage = StickerBorder.addSimpleBorder(transparentProcessedMask, 0xFFFFFFFF, borderWidth: 15);
-      });
+      final borderedImage = StickerBorder.addSimpleBorder(transparentProcessedMask, 0xFFFFFFFF, borderWidth: 15);
+      
+      // 다이얼로그 닫기
+      Navigator.of(context).pop();
+      
+      // 바로 에디터로 이동
+      _navigateToEditor(borderedImage);
+    } else {
+      // 이미지 선택 취소한 경우 이전 화면으로
+      Navigator.of(context).pop();
     }
+  }
+
+  Future<void> _navigateToEditor(Uint8List imageBytes) async {
+    // 임시 파일로 저장
+    final tempDir = await getTemporaryDirectory();
+    final file = File('${tempDir.path}/cropped_image_${DateTime.now().millisecondsSinceEpoch}.png');
+    await file.writeAsBytes(imageBytes);
+    
+    // BasicTemplateEditor로 이동
+    Navigator.pushReplacement( // pushReplacement로 CropScreen을 대체
+      context,
+      MaterialPageRoute(
+        builder: (context) => BasicTemplateEditor(
+          templateImagePath: file.path,
+        ),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Segment")),
-      body: SingleChildScrollView(
+      appBar: AppBar(title: Text("Select Image")),
+      body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              child:
-              selectedImage != null
-                  ? Image.file(File(selectedImage!.path))
-                  : Text("이미지 선택해주세요."),
-            ),
-
-            if (transparentProcessedMaskImage != null) Container(
-                color: Colors.black,
-                child: Image.memory(transparentProcessedMaskImage!)
-            ),
-
-            if (transparentProcessedMaskImage != null) ElevatedButton(
-              onPressed: () async {
-                final tempDir = await getTemporaryDirectory();
-                final file = File('${tempDir.path}/temp_image.png');
-
-                // 2. Uint8List를 파일로 저장
-                await file.writeAsBytes(transparentProcessedMaskImage!);
-
-                // 3. 갤러리에 저장
-                await GallerySaver.saveImage(file.path);
-              },
-              child: Text("Download"),
-            )
+            Icon(Icons.photo_library, size: 80, color: Colors.grey),
+            SizedBox(height: 20),
+            Text("Loading AI model...", style: TextStyle(fontSize: 16)),
+            SizedBox(height: 10),
+            Text("Image picker will open automatically", 
+                 style: TextStyle(fontSize: 12, color: Colors.grey)),
           ],
         ),
       ),

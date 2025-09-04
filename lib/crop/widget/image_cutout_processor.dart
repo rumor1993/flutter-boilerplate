@@ -23,10 +23,13 @@ class ImageCutoutProcessor {
 
       // 2. 바운딩 박스 찾기
       int minX = originalWidth, minY = originalHeight, maxX = 0, maxY = 0;
+      bool hasValidPixel = false;
+
       for (int y = 0; y < originalHeight; y++) {
         for (int x = 0; x < originalWidth; x++) {
           final maskValue = img.getRed(resizedMask.getPixel(x, y));
           if (maskValue > 128) {
+            hasValidPixel = true;
             if (x < minX) minX = x;
             if (y < minY) minY = y;
             if (x > maxX) maxX = x;
@@ -35,8 +38,21 @@ class ImageCutoutProcessor {
         }
       }
 
+      // 마스크가 비어있는 경우
+      if (!hasValidPixel) {
+        print('Empty mask - no valid pixels found');
+        return Uint8List.fromList(img.encodePng(originalImage));
+      }
+
       final objectWidth = maxX - minX + 1;
       final objectHeight = maxY - minY + 1;
+
+      // 안전장치: 유효하지 않은 바운딩 박스인 경우
+      if (objectWidth <= 0 || objectHeight <= 0 || minX >= originalWidth || minY >= originalHeight) {
+        print('Invalid bounding box: width=$objectWidth, height=$objectHeight, minX=$minX, minY=$minY');
+        // 전체 이미지를 반환
+        return Uint8List.fromList(img.encodePng(originalImage));
+      }
 
       // 3. 오브젝트 영역 잘라내기
       final cropped = img.copyCrop(originalImage,
@@ -45,7 +61,7 @@ class ImageCutoutProcessor {
           minX, minY, objectWidth, objectHeight);
 
       // 4. 컷아웃 이미지 만들기
-      final cutout = img.Image(objectWidth, objectHeight);
+      final cutout = img.Image( objectWidth, objectHeight);
       for (int y = 0; y < objectHeight; y++) {
         for (int x = 0; x < objectWidth; x++) {
           final maskValue = img.getRed(croppedMask.getPixel(x, y));
@@ -73,7 +89,7 @@ class ImageCutoutProcessor {
       );
 
       // 6. 중앙에 배치
-      final result = img.Image(originalWidth, originalHeight);
+      final result = img.Image( originalWidth,  originalHeight);
       final offsetX = (originalWidth - targetWidth) ~/ 2;
       final offsetY = (originalHeight - targetHeight) ~/ 2;
       img.copyInto(result, scaledCutout, dstX: offsetX, dstY: offsetY);
