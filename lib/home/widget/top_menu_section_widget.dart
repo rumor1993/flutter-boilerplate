@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/common/component/transparent_grid_widget.dart';
+import 'package:flutter_boilerplate/crop/view/crop_screen.dart';
 import 'package:flutter_boilerplate/home/data/menu_item_data.dart';
 
 class TopMenuSectionWidget extends StatefulWidget {
@@ -12,7 +13,7 @@ class TopMenuSectionWidget extends StatefulWidget {
 class _TopMenuSectionWidgetState extends State<TopMenuSectionWidget> {
   @override
   Widget build(BuildContext context) {
-    return   GridView.builder(
+    return GridView.builder(
       shrinkWrap: true,
       physics: NeverScrollableScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -27,27 +28,38 @@ class _TopMenuSectionWidgetState extends State<TopMenuSectionWidget> {
           children: [
             // 이미지 부분
             Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey.shade400,
-                    width: 1.0,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder:
+                          (context) => CropScreen()
+                    ),
+                  );
+                },
+                child: Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.grey.shade400,
+                      width: 1.0,
+                    ),
+                    borderRadius: BorderRadius.circular(8.0),
                   ),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8.0),
-                  child: TransparentGridWidget(
-                    tileSize: 20.0,
-                    lightColor: Colors.white,
-                    darkColor: Colors.grey.shade300,
-                    child: AspectRatio(
-                      aspectRatio: 1.0,
-                      child: Padding(
-                        padding: EdgeInsets.all(
-                          menuItems[index].padding,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: TransparentGridWidget(
+                      tileSize: 20.0,
+                      lightColor: Colors.white,
+                      darkColor: Colors.grey.shade300,
+                      child: AspectRatio(
+                        aspectRatio: 1.0,
+                        child: Padding(
+                          padding: EdgeInsets.all(
+                            menuItems[index].padding,
+                          ),
+                          child: Image.asset(menuItems[index].imagePath),
                         ),
-                        child: Image.asset(menuItems[index].imagePath),
                       ),
                     ),
                   ),

@@ -3,7 +3,6 @@ import 'package:flutter_boilerplate/home/data/template_data.dart';
 import 'package:flutter_boilerplate/home/widget/template_category_section_widget.dart';
 import 'package:flutter_boilerplate/home/widget/top_menu_section_widget.dart';
 
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
