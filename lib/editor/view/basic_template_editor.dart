@@ -3,6 +3,7 @@ import 'package:flutter_boilerplate/editor/model/image_layer.dart';
 import 'package:flutter_boilerplate/editor/model/text_layer.dart';
 import 'package:flutter_boilerplate/editor/widget/sticker_selection_widget.dart';
 import 'package:flutter_boilerplate/editor/widget/template_canvas_widget.dart';
+import 'package:text_editor/text_editor.dart';
 
 class BasicTemplateEditor extends StatefulWidget {
   final String templateImagePath;
@@ -49,6 +50,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
             containerKey: _containerKey,
             imageLayers: _imageLayers,
             textLayers: _textLayers,
+            onTextLayerEdit: _showTextEditor,
           ),
           StickerSelectionWidget(
             onLayerAdded: (newLayer) {
@@ -97,6 +99,17 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                 ),
 
                 GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      final newLayer = TextLayer(
+                        id: "text-${DateTime.now().millisecondsSinceEpoch}", // 고유 ID
+                        text: "sample text",
+                      );
+
+                      _textLayers.add(newLayer);
+                      _showTextEditor(newLayer);
+                    });
+                  },
                   child: SizedBox(
                     width: 90,
                     child: Column(
@@ -166,4 +179,54 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
       ),
     );
   }
+  // 여기에 추가!
+  void _showTextEditor(TextLayer layer) {
+    // 편집 시작하면 기본 위치에 있던걸 잠시 숨김
+    setState(() {
+      final index = _textLayers.indexWhere((l) => l.id == layer.id);
+      if (index >= 0) {
+        _textLayers[index] = layer.hide();
+      }
+    });
+
+    showGeneralDialog(
+        context: context,
+        pageBuilder: (_, __, ___) {
+          return Container(
+            color: Colors.black.withOpacity(0.4),
+            child: Scaffold(
+              backgroundColor: Colors.transparent,
+              body: SafeArea(
+                // top: false,
+                child: Container(
+                  child: TextEditor(
+                    fonts: ['1','2'],
+                    text: layer.text,
+                    textStyle: layer.textStyle,
+                    textAlingment: layer.textAlign,
+                    minFontSize: 10,
+                    onEditCompleted: (style, align, text) {
+                      setState(() {
+                        final updatedLayer = layer
+                            .updateText(text)
+                            .changeTextStyle(style)
+                            .changeTextAlign(align);
+
+                        final index = _textLayers.indexWhere((l) => l.id == layer.id);
+                        if (index >= 0) {
+                          _textLayers[index] = updatedLayer;
+                        }
+                      });
+
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ),
+            ),
+          );
+        }
+    );
+  }
+
 }

@@ -10,12 +10,13 @@ class TemplateCanvasWidget extends StatefulWidget {
   final GlobalKey containerKey;
   final List<ImageLayer> imageLayers;
   final List<TextLayer> textLayers;
+  final void Function(TextLayer layer) onTextLayerEdit;
 
   const TemplateCanvasWidget({
     super.key,
     required this.containerKey,
     required this.imageLayers,
-    required this.textLayers,
+    required this.textLayers, required this.onTextLayerEdit,
   });
 
   @override
@@ -80,44 +81,7 @@ class _TemplateCanvasWidgetState extends State<TemplateCanvasWidget> {
           ...widget.textLayers.map((layer) => TextLayerWidget(
             layer: layer,
             onTap: () {
-              showGeneralDialog(
-                  context: context,
-                  pageBuilder: (_, __, ___) {
-                    return Container(
-                      color: Colors.black.withOpacity(0.4),
-                      child: Scaffold(
-                        backgroundColor: Colors.transparent,
-                        body: SafeArea(
-                          // top: false,
-                          child: Container(
-                            child: TextEditor(
-                              fonts: ['1','2'],
-                              text: layer.text,
-                              textStyle: layer.textStyle,
-                              textAlingment: layer.textAlign,
-                              minFontSize: 10,
-                              onEditCompleted: (style, align, text) {
-                                setState(() {
-                                  final updatedLayer = layer
-                                      .updateText(text)
-                                      .changeTextStyle(style)
-                                      .changeTextAlign(align);
-
-                                  final index = widget.textLayers.indexWhere((l) => l.id == layer.id);
-                                  if (index >= 0) {
-                                    widget.textLayers[index] = updatedLayer;
-                                  }
-                                });
-
-                                Navigator.pop(context);
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-              );
+              widget.onTextLayerEdit(layer);
             },
             onScaleStart: (details) {
               _textInitialScales[layer.id] = layer.scale;

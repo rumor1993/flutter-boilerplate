@@ -9,6 +9,7 @@ class TextLayer {
   bool isSelected;
   TextStyle textStyle;
   TextAlign textAlign;
+  bool isHidden;
   
   TextLayer({
     required this.id,
@@ -23,6 +24,7 @@ class TextLayer {
       fontWeight: FontWeight.normal,
     ),
     this.textAlign = TextAlign.center,
+    this.isHidden = false,
   });
 
   TextLayer copyWith({
@@ -34,6 +36,7 @@ class TextLayer {
     bool? isSelected,
     TextStyle? textStyle,
     TextAlign? textAlign,
+    bool? isHidden,
   }) {
     return TextLayer(
       id: id ?? this.id,
@@ -44,6 +47,7 @@ class TextLayer {
       isSelected: isSelected ?? this.isSelected,
       textStyle: textStyle ?? this.textStyle,
       textAlign: textAlign ?? this.textAlign,
+      isHidden: isHidden ?? this.isHidden,
     );
   }
 
@@ -81,6 +85,9 @@ class TextLayer {
   TextLayer changeTextAlign(TextAlign newAlign) {
     return copyWith(textAlign: newAlign);
   }
+
+  TextLayer hide() => copyWith(isHidden: true);
+  TextLayer show() => copyWith(isHidden: false);
 
   // 스케일이 적용된 TextStyle 반환
   TextStyle get scaledTextStyle {
