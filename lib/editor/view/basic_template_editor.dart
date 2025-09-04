@@ -217,6 +217,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
       initialChildSize: 0.6,
       builder: (context, scrollController) {
         final themeColors = [
+          {'name': 'Transparent', 'color': Colors.transparent},
           {'name': 'White', 'color': Color(0xFFFFFFFF)},
           {'name': 'Off-White', 'color': Color(0xFFF5F5F5)},
           {'name': 'Soft Pink', 'color': Color(0xFFF8BBD0)},

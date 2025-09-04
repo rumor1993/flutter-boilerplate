@@ -48,7 +48,7 @@ class TransparentGridWidget extends StatelessWidget {
     }
 
     // 배경색이 있으면 단색 배경
-    if (backgroundColor != null) {
+    if (backgroundColor != null && backgroundColor != Colors.transparent) {
       return Container(color: backgroundColor);
     }
 
