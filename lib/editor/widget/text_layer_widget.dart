@@ -7,6 +7,8 @@ class TextLayerWidget extends StatelessWidget {
   final VoidCallback? onDelete;
   final Function(ScaleStartDetails)? onScaleStart;
   final Function(ScaleUpdateDetails)? onScaleUpdate;
+  final VoidCallback? onDragStart;
+  final VoidCallback? onDragEnd;
 
   const TextLayerWidget({
     super.key,
@@ -15,6 +17,8 @@ class TextLayerWidget extends StatelessWidget {
     this.onDelete,
     this.onScaleStart,
     this.onScaleUpdate,
+    this.onDragStart,
+    this.onDragEnd,
   });
 
   @override
@@ -26,58 +30,106 @@ class TextLayerWidget extends StatelessWidget {
     return Positioned(
       left: layer.position.dx,
       top: layer.position.dy,
-      child: GestureDetector(
-        onTap: onTap,
-        onScaleStart: onScaleStart,
-        onScaleUpdate: onScaleUpdate,
-        child: Container(
+      child: Draggable<String>(
+        data: layer.id,
+        onDragStarted: onDragStart,
+        onDragEnd: (details) => onDragEnd?.call(),
+        childWhenDragging: Container(
           decoration: BoxDecoration(
-            border: layer.isSelected 
-                ? Border.all(color: Colors.blue, width: 2)
-                : Border.all(color: Colors.transparent, width: 2),
+            border: Border.all(color: Colors.blue.withOpacity(0.3), width: 2),
             borderRadius: BorderRadius.circular(4),
           ),
-          child: Stack(
-            children: [
-              // 메인 텍스트
-              Transform.scale(
-                scale: layer.scale,
-                child: Transform.rotate(
-                  angle: layer.rotation,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    child: Text(
-                      layer.text,
-                      style: layer.textStyle,
-                      textAlign: layer.textAlign,
-                    ),
+          child: Transform.scale(
+            scale: layer.scale,
+            child: Transform.rotate(
+              angle: layer.rotation,
+              child: Opacity(
+                opacity: 0.3,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    layer.text,
+                    style: layer.textStyle,
+                    textAlign: layer.textAlign,
                   ),
                 ),
               ),
-              
-              // 삭제 버튼 (선택된 경우에만 표시)
-              if (layer.isSelected && onDelete != null)
-                Positioned(
-                  top: -10,
-                  right: -10,
-                  child: GestureDetector(
-                    onTap: onDelete,
+            ),
+          ),
+        ),
+        feedback: Material(
+          color: Colors.transparent,
+          child: Transform.scale(
+            scale: layer.scale * 0.8,
+            child: Transform.rotate(
+              angle: layer.rotation,
+              child: Opacity(
+                opacity: 0.7,
+                child: Container(
+                  padding: const EdgeInsets.all(8),
+                  child: Text(
+                    layer.text,
+                    style: layer.textStyle,
+                    textAlign: layer.textAlign,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        child: GestureDetector(
+          onTap: onTap,
+          onScaleStart: onScaleStart,
+          onScaleUpdate: onScaleUpdate,
+          child: Container(
+            decoration: BoxDecoration(
+              border: layer.isSelected 
+                  ? Border.all(color: Colors.blue, width: 2)
+                  : Border.all(color: Colors.transparent, width: 2),
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Stack(
+              children: [
+                // 메인 텍스트
+                Transform.scale(
+                  scale: layer.scale,
+                  child: Transform.rotate(
+                    angle: layer.rotation,
                     child: Container(
-                      width: 20,
-                      height: 20,
-                      decoration: const BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                        size: 14,
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        layer.text,
+                        style: layer.textStyle,
+                        textAlign: layer.textAlign,
                       ),
                     ),
                   ),
                 ),
-            ],
+                
+                // 삭제 버튼 (선택된 경우에만 표시)
+                if (layer.isSelected && onDelete != null)
+                  Positioned(
+                    top: -10,
+                    right: -10,
+                    child: GestureDetector(
+                      onTap: onDelete,
+                      child: Container(
+                        width: 20,
+                        height: 20,
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: const Icon(
+                          Icons.close,
+                          color: Colors.white,
+                          size: 14,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
           ),
         ),
       ),

@@ -8,6 +8,7 @@ import 'package:flutter_boilerplate/editor/model/image_layer.dart';
 import 'package:flutter_boilerplate/editor/model/text_layer.dart';
 import 'package:flutter_boilerplate/editor/widget/editor_bottom_toolbar.dart';
 import 'package:flutter_boilerplate/editor/widget/template_canvas_widget.dart';
+import 'package:flutter_boilerplate/editor/widget/delete_drop_zone.dart';
 import 'package:gallery_saver_plus/gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -31,6 +32,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
   String? _backgroundImagePath;
   bool _isSaving = false;
   bool _isVisible = true;
+  bool _isDragging = false;
 
   @override
   void initState() {
@@ -66,69 +68,93 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
           ),
         ],
       ),
-      body: Flex(
-        direction: Axis.vertical,
+      body: Stack(
         children: [
-          Flexible(
-            flex: 6,
-            child: TemplateCanvasWidget(
-              containerKey: _containerKey,
-              imageLayers: _imageLayers,
-              textLayers: _textLayers,
-              backgroundColor: _backgroundColor,
-              backgroundImagePath: _backgroundImagePath,
-              onTextLayerEdit: _showTextEditor,
-              isSaving: _isSaving
-            ),
-          ),
-
-          Flexible(
-            flex: 3,
-            child: Center(
-              child: EditorBottomToolbar(
-                isVisible: _isVisible,
-                onPhotoTap: () async {
-                  final picker = ImagePicker();
-                  final XFile? image = await picker.pickImage(
-                    source: ImageSource.gallery,
-                  );
-
-                  if (image != null) {
-                    setState(() {
-                      _imageLayers.add(
-                        ImageLayer(
-                          id: "image-${DateTime.now().millisecondsSinceEpoch}",
-                          imagePath: image.path,
-                        ),
-                      );
-                    });
-                  }
-                },
-                onTextTap: () {
-                  setState(() {
-                    final newLayer = TextLayer(
-                      id: "text-${DateTime.now().millisecondsSinceEpoch}", // 고유 ID
-                      text: "text",
-                    );
-
-                    _textLayers.add(newLayer);
-                    _showTextEditor(newLayer);
-                  });
-                },
-                onBackgroundTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (context) => _buildDiscoverDrawer(),
-                  );
-                },
+          Flex(
+            direction: Axis.vertical,
+            children: [
+              Flexible(
+                flex: 6,
+                child: TemplateCanvasWidget(
+                  containerKey: _containerKey,
+                  imageLayers: _imageLayers,
+                  textLayers: _textLayers,
+                  backgroundColor: _backgroundColor,
+                  backgroundImagePath: _backgroundImagePath,
+                  onTextLayerEdit: _showTextEditor,
+                  isSaving: _isSaving,
+                  onDragStart: () {
+                    setState(() => _isDragging = true);
+                  },
+                  onDragEnd: () {
+                    setState(() => _isDragging = false);
+                  },
+                  onLayerDelete: _deleteLayer,
+                ),
               ),
-            ),
+
+              Flexible(
+                flex: 3,
+                child: Center(
+                  child: EditorBottomToolbar(
+                    isVisible: _isVisible && !_isDragging,
+                    onPhotoTap: () async {
+                      final picker = ImagePicker();
+                      final XFile? image = await picker.pickImage(
+                        source: ImageSource.gallery,
+                      );
+
+                      if (image != null) {
+                        setState(() {
+                          _imageLayers.add(
+                            ImageLayer(
+                              id: "image-${DateTime.now().millisecondsSinceEpoch}",
+                              imagePath: image.path,
+                            ),
+                          );
+                        });
+                      }
+                    },
+                    onTextTap: () {
+                      setState(() {
+                        final newLayer = TextLayer(
+                          id: "text-${DateTime.now().millisecondsSinceEpoch}", // 고유 ID
+                          text: "text",
+                        );
+
+                        _textLayers.add(newLayer);
+                        _showTextEditor(newLayer);
+                      });
+                    },
+                    onBackgroundTap: () {
+                      showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        backgroundColor: Colors.transparent,
+                        builder: (context) => _buildDiscoverDrawer(),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+          DeleteDropZone(
+            isVisible: _isDragging,
+            onDelete: (layerId) {
+              _deleteLayer(layerId);
+            },
           ),
         ],
       ),
     );
+  }
+
+  void _deleteLayer(String layerId) {
+    setState(() {
+      _imageLayers.removeWhere((layer) => layer.id == layerId);
+      _textLayers.removeWhere((layer) => layer.id == layerId);
+    });
   }
 
   // 여기에 추가!
