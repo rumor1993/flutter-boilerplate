@@ -103,7 +103,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
                     setState(() {
                       final newLayer = TextLayer(
                         id: "text-${DateTime.now().millisecondsSinceEpoch}", // 고유 ID
-                        text: "sample text",
+                        text: "text",
                       );
 
                       _textLayers.add(newLayer);
