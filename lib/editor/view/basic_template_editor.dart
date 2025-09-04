@@ -29,6 +29,8 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
   final List<TextLayer> _textLayers = [];
   Color? _backgroundColor;
   String? _backgroundImagePath;
+  bool _isSaving = false;
+  bool _isVisible = true;
 
   @override
   void initState() {
@@ -76,6 +78,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
               backgroundColor: _backgroundColor,
               backgroundImagePath: _backgroundImagePath,
               onTextLayerEdit: _showTextEditor,
+              isSaving: _isSaving
             ),
           ),
 
@@ -83,6 +86,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
             flex: 3,
             child: Center(
               child: EditorBottomToolbar(
+                isVisible: _isVisible,
                 onPhotoTap: () async {
                   final picker = ImagePicker();
                   final XFile? image = await picker.pickImage(
@@ -131,6 +135,7 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
   void _showTextEditor(TextLayer layer) {
     // 편집 시작하면 기본 위치에 있던걸 잠시 숨김
     setState(() {
+      _isVisible = false;
       final index = _textLayers.indexWhere((l) => l.id == layer.id);
       if (index >= 0) {
         _textLayers[index] = layer.hide();
@@ -146,31 +151,31 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
             backgroundColor: Colors.transparent,
             body: SafeArea(
               // top: false,
-              child: Container(
-                child: TextEditor(
-                  fonts: ['1', '2'],
-                  text: layer.text,
-                  textStyle: layer.textStyle,
-                  textAlingment: layer.textAlign,
-                  minFontSize: 10,
-                  onEditCompleted: (style, align, text) {
-                    setState(() {
-                      final updatedLayer = layer
-                          .updateText(text)
-                          .changeTextStyle(style)
-                          .changeTextAlign(align);
+              child: TextEditor(
+                fonts: ['1', '2'],
+                text: layer.text,
+                textStyle: layer.textStyle,
+                textAlingment: layer.textAlign,
+                minFontSize: 10,
+                onEditCompleted: (style, align, text) {
+                  setState(() {
+                    final updatedLayer = layer
+                        .updateText(text)
+                        .changeTextStyle(style)
+                        .changeTextAlign(align);
 
-                      final index = _textLayers.indexWhere(
-                        (l) => l.id == layer.id,
-                      );
-                      if (index >= 0) {
-                        _textLayers[index] = updatedLayer;
-                      }
-                    });
+                    final index = _textLayers.indexWhere(
+                      (l) => l.id == layer.id,
+                    );
+                    if (index >= 0) {
+                      _textLayers[index] = updatedLayer;
+                    }
 
-                    Navigator.pop(context);
-                  },
-                ),
+                    _isVisible = true;
+                  });
+
+                  Navigator.pop(context);
+                },
               ),
             ),
           ),
@@ -326,34 +331,40 @@ class _BasicTemplateEditorState extends State<BasicTemplateEditor> {
 
   void _saveImage() async {
     try {
-      // 1. 권한 확인
-      final PermissionState ps = await PhotoManager.requestPermissionExtend();
-      if (ps == PermissionState.authorized || ps == PermissionState.limited) {
+      setState(() => _isSaving = true);
 
-        // 2. 위젯을 이미지로 캡처
-        RenderRepaintBoundary boundary = _containerKey.currentContext!
-            .findRenderObject() as RenderRepaintBoundary;
+      // 다음 프레임이 렌더링된 후 실행
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        // 1. 권한 확인
+        final PermissionState ps = await PhotoManager.requestPermissionExtend();
+        if (ps == PermissionState.authorized || ps == PermissionState.limited) {
 
-        ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-        ByteData? byteData = await image.toByteData(
-          format: ui.ImageByteFormat.png,
-        );
+          // 2. 위젯을 이미지로 캡처
+          RenderRepaintBoundary boundary = _containerKey.currentContext!
+              .findRenderObject() as RenderRepaintBoundary;
 
-        // 3. 임시 파일로 저장
-        final directory = await getTemporaryDirectory();
-        final file = File('${directory.path}/meme_${DateTime.now().millisecondsSinceEpoch}.png');
-        await file.writeAsBytes(byteData!.buffer.asUint8List());
+          ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+          ByteData? byteData = await image.toByteData(
+            format: ui.ImageByteFormat.png,
+          );
 
-        // 4. 갤러리에 저장
-        await GallerySaver.saveImage(file.path);
+          // 3. 임시 파일로 저장
+          final directory = await getTemporaryDirectory();
+          final file = File('${directory.path}/meme_${DateTime.now().millisecondsSinceEpoch}.png');
+          await file.writeAsBytes(byteData!.buffer.asUint8List());
 
-        // 5. 성공 메시지
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('갤러리에 저장되었습니다!')),
-        );
+          // 4. 갤러리에 저장
+          await GallerySaver.saveImage(file.path);
 
-        Navigator.pop(context);
-      }
+          // 5. 성공 메시지
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('갤러리에 저장되었습니다!')),
+          );
+
+          setState(() => _isSaving = false);
+          Navigator.pop(context);
+        }
+      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('저장 실패: $e')),

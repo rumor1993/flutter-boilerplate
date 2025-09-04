@@ -4,7 +4,6 @@ import 'package:flutter_boilerplate/editor/model/image_layer.dart';
 import 'package:flutter_boilerplate/editor/model/text_layer.dart';
 import 'package:flutter_boilerplate/editor/widget/image_layer_widget.dart';
 import 'package:flutter_boilerplate/editor/widget/text_layer_widget.dart';
-import 'package:text_editor/text_editor.dart';
 
 class TemplateCanvasWidget extends StatefulWidget {
   final GlobalKey containerKey;
@@ -13,12 +12,13 @@ class TemplateCanvasWidget extends StatefulWidget {
   final void Function(TextLayer layer) onTextLayerEdit;
   final Color? backgroundColor;
   final String? backgroundImagePath;
+  final bool isSaving;
 
   const TemplateCanvasWidget({
     super.key,
     required this.containerKey,
     required this.imageLayers,
-    required this.textLayers, required this.onTextLayerEdit, this.backgroundColor, this.backgroundImagePath,
+    required this.textLayers, required this.onTextLayerEdit, this.backgroundColor, this.backgroundImagePath, required this.isSaving,
   });
 
   @override
@@ -53,6 +53,7 @@ class _TemplateCanvasWidgetState extends State<TemplateCanvasWidget> {
             darkColor: Color(0xFF1F1F1F),
             backgroundColor: widget.backgroundColor,
             backgroundImagePath: widget.backgroundImagePath,
+            isSaving: widget.isSaving,
             child: SizedBox(
               width: double.infinity,
             ),

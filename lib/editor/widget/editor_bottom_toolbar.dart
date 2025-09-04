@@ -4,8 +4,9 @@ class EditorBottomToolbar extends StatefulWidget {
   final void Function() onPhotoTap;
   final void Function() onTextTap;
   final void Function() onBackgroundTap;
+  final bool isVisible; // 추가
 
-  const EditorBottomToolbar({super.key, required this.onPhotoTap, required this.onTextTap, required this.onBackgroundTap});
+  const EditorBottomToolbar({super.key, required this.onPhotoTap, required this.onTextTap, required this.onBackgroundTap, required this.isVisible});
 
   @override
   State<EditorBottomToolbar> createState() => _EditorBottomToolbarState();
@@ -14,6 +15,10 @@ class EditorBottomToolbar extends StatefulWidget {
 class _EditorBottomToolbarState extends State<EditorBottomToolbar> {
   @override
   Widget build(BuildContext context) {
+    if (!widget.isVisible) {
+      return SizedBox.shrink(); // 또는 Container()
+    }
+
     return Container(
       padding: EdgeInsets.all(20),
       color: Color(0xff1A1A1A),

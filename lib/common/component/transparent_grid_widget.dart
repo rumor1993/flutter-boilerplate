@@ -10,6 +10,7 @@ class TransparentGridWidget extends StatelessWidget {
   final Color darkColor;
   final Color? backgroundColor;  // 추가
   final String? backgroundImagePath;  // 추가
+  final bool isSaving; // 추가
 
   const TransparentGridWidget({
     super.key,
@@ -19,6 +20,7 @@ class TransparentGridWidget extends StatelessWidget {
     this.darkColor = const Color(0xFFC0C0C0),
     this.backgroundColor,  // 추가
     this.backgroundImagePath,  // 추가
+    this.isSaving = false, // 기본값 false
   });
 
   @override
@@ -48,6 +50,11 @@ class TransparentGridWidget extends StatelessWidget {
     // 배경색이 있으면 단색 배경
     if (backgroundColor != null) {
       return Container(color: backgroundColor);
+    }
+
+    // 저장 모드면 투명 배경
+    if (isSaving) {
+      return Container(color: Colors.transparent);
     }
 
     // 둘 다 없으면 기본 체커보드
