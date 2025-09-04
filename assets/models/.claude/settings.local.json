@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/**)",
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/lib/**)",
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/lib/**)",
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/lib/home/view/**)",
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/lib/home/view/**)",
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/**)",
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/lib/**)",
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/lib/home/view/**)",
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/lib/home/view/**)",
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/lib/home/view/**)",
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/lib/editor/widget/**)",
+      "Read(/Users/rumor1993/Develop/flutter-boilerplate/lib/editor/widget/**)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

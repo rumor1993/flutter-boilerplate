@@ -11,12 +11,14 @@ class TemplateCanvasWidget extends StatefulWidget {
   final List<ImageLayer> imageLayers;
   final List<TextLayer> textLayers;
   final void Function(TextLayer layer) onTextLayerEdit;
+  final Color? backgroundColor;
+  final String? backgroundImagePath;
 
   const TemplateCanvasWidget({
     super.key,
     required this.containerKey,
     required this.imageLayers,
-    required this.textLayers, required this.onTextLayerEdit,
+    required this.textLayers, required this.onTextLayerEdit, this.backgroundColor, this.backgroundImagePath,
   });
 
   @override
@@ -41,15 +43,18 @@ class _TemplateCanvasWidgetState extends State<TemplateCanvasWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      flex: 2,
+    return RepaintBoundary(
+      key: widget.containerKey,
       child: Stack(
         children: [
           TransparentGridWidget(
+            tileSize: 12.5,
+            lightColor: Color(0xFF262626),
+            darkColor: Color(0xFF1F1F1F),
+            backgroundColor: widget.backgroundColor,
+            backgroundImagePath: widget.backgroundImagePath,
             child: SizedBox(
-              key: widget.containerKey, // 키 추가
               width: double.infinity,
-              height: 500,
             ),
           ),
           ...widget.imageLayers.map((layer) => ImageLayerWidget(

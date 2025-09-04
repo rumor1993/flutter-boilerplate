@@ -19,9 +19,10 @@ class TextLayer {
     this.rotation = 0.0,
     this.isSelected = false,
     this.textStyle = const TextStyle(
-      color: Colors.black,
+      color: Colors.white,
       fontSize: 24.0,
       fontWeight: FontWeight.normal,
+
     ),
     this.textAlign = TextAlign.center,
     this.isHidden = false,
