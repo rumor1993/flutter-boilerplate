@@ -28,42 +28,10 @@ class ImageLayerWidget extends StatelessWidget {
     return Positioned(
       left: layer.position.dx,
       top: layer.position.dy,
-      child: Draggable<String>(
+      child: LongPressDraggable<String>(
         data: layer.id,
         onDragStarted: onDragStart,
         onDragEnd: (details) => onDragEnd?.call(),
-        childWhenDragging: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.blue.withOpacity(0.3), width: 2),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Transform.scale(
-            scale: layer.scale,
-            child: Transform.rotate(
-              angle: layer.rotation,
-              child: Opacity(
-                opacity: 0.3,
-                child: Image.asset(
-                  layer.imagePath,
-                  width: 200,
-                  height: 200,
-                  fit: BoxFit.contain,
-                  errorBuilder: (context, error, stackTrace) {
-                    return Container(
-                      width: 200,
-                      height: 200,
-                      color: Colors.grey[300],
-                      child: const Icon(
-                        Icons.broken_image,
-                        color: Colors.grey,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ),
-        ),
         feedback: Material(
           color: Colors.transparent,
           child: Transform.scale(

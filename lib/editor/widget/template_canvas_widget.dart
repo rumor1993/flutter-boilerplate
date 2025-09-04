@@ -55,41 +55,19 @@ class _TemplateCanvasWidgetState extends State<TemplateCanvasWidget> {
   Widget build(BuildContext context) {
     return RepaintBoundary(
       key: widget.containerKey,
-      child: DragTarget<String>(
-        onAcceptWithDetails: (details) {
-          final layerId = details.data;
-          final globalPosition = details.offset;
-          
-          // 글로벌 좌표를 로컬 좌표로 변환
-          final RenderBox renderBox = context.findRenderObject() as RenderBox;
-          final localPosition = renderBox.globalToLocal(globalPosition);
-          
-          // 이미지 레이어 위치 업데이트
-          final imageLayerIndex = widget.imageLayers.indexWhere((layer) => layer.id == layerId);
-          if (imageLayerIndex >= 0) {
-            widget.imageLayers[imageLayerIndex].position = localPosition;
-          }
-          
-          // 텍스트 레이어 위치 업데이트
-          final textLayerIndex = widget.textLayers.indexWhere((layer) => layer.id == layerId);
-          if (textLayerIndex >= 0) {
-            widget.textLayers[textLayerIndex].position = localPosition;
-          }
-        },
-        builder: (context, candidateData, rejectedData) {
-          return Stack(
-            children: [
-              TransparentGridWidget(
-                tileSize: 12.5,
-                lightColor: Color(0xFF262626),
-                darkColor: Color(0xFF1F1F1F),
-                backgroundColor: widget.backgroundColor,
-                backgroundImagePath: widget.backgroundImagePath,
-                isSaving: widget.isSaving,
-                child: SizedBox(
-                  width: double.infinity,
-                ),
-              ),
+      child: Stack(
+        children: [
+          TransparentGridWidget(
+            tileSize: 12.5,
+            lightColor: Color(0xFF262626),
+            darkColor: Color(0xFF1F1F1F),
+            backgroundColor: widget.backgroundColor,
+            backgroundImagePath: widget.backgroundImagePath,
+            isSaving: widget.isSaving,
+            child: SizedBox(
+              width: double.infinity,
+            ),
+          ),
           ...widget.imageLayers.map((layer) => ImageLayerWidget(
               layer: layer,
               onScaleStart: (details) {
@@ -148,9 +126,7 @@ class _TemplateCanvasWidgetState extends State<TemplateCanvasWidget> {
             onDragStart: widget.onDragStart,
             onDragEnd: widget.onDragEnd,
           ))
-            ],
-          );
-        },
+        ],
       ),
     );
   }

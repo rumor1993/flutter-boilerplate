@@ -30,33 +30,10 @@ class TextLayerWidget extends StatelessWidget {
     return Positioned(
       left: layer.position.dx,
       top: layer.position.dy,
-      child: Draggable<String>(
+      child: LongPressDraggable<String>(
         data: layer.id,
         onDragStarted: onDragStart,
         onDragEnd: (details) => onDragEnd?.call(),
-        childWhenDragging: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.blue.withOpacity(0.3), width: 2),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Transform.scale(
-            scale: layer.scale,
-            child: Transform.rotate(
-              angle: layer.rotation,
-              child: Opacity(
-                opacity: 0.3,
-                child: Container(
-                  padding: const EdgeInsets.all(8),
-                  child: Text(
-                    layer.text,
-                    style: layer.textStyle,
-                    textAlign: layer.textAlign,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
         feedback: Material(
           color: Colors.transparent,
           child: Transform.scale(
