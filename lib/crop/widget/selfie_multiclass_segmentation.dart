@@ -31,9 +31,9 @@ class SelfieMulticlassSegmentation {
     for (int y = 0; y < 256; y++) {
       for (int x = 0; x < 256; x++) {
         final pixel = resized.getPixel(x, y);
-        input[0][y][x][0] = img.getRed(pixel) / 255.0;
-        input[0][y][x][1] = img.getGreen(pixel) / 255.0;
-        input[0][y][x][2] = img.getBlue(pixel) / 255.0;
+        input[0][y][x][0] = pixel.r / 255.0;
+        input[0][y][x][1] = pixel.g / 255.0;
+        input[0][y][x][2] = pixel.b / 255.0;
       }
     }
 
@@ -50,7 +50,8 @@ class SelfieMulticlassSegmentation {
   Uint8List maskToImage(List<List<List<List<double>>>> output, {
     List<MultiSegmentationType> targetClasses = const [MultiSegmentationType.hair, MultiSegmentationType.faceSkin, MultiSegmentationType.others],
   }) {
-    final maskImage = img.Image(256, 256);
+    final maskImage = img.Image(width: 256, height: 256, numChannels: 4);
+    img.fill(maskImage, color: img.ColorRgba8(0, 0, 0, 0));
 
     for (int y = 0; y < 256; y++) {
       for (int x = 0; x < 256; x++) {
@@ -61,11 +62,10 @@ class SelfieMulticlassSegmentation {
         }
 
         final value = (totalProb * 255).clamp(0, 255).round();
-        final pixel = img.Color.fromRgb(value, value, value);
+        final pixel = img.ColorRgb8(value, value, value);
         maskImage.setPixel(x, y, pixel);
       }
     }
-
     return Uint8List.fromList(img.encodePng(maskImage));
   }
 

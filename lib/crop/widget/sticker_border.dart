@@ -16,16 +16,16 @@ class StickerBorder {
     // 테두리만큼 큰 새 이미지
     final newWidth = width + (borderWidth * 2);
     final newHeight = height + (borderWidth * 2);
-    final result = img.Image(newWidth, newHeight);
+    final result = img.Image(width: newWidth, height: newHeight, numChannels: 4);
 
     // 투명 배경으로 초기화
-    img.fill(result, img.Color.fromRgba(0, 0, 0, 0));
+    img.fill(result, color: img.ColorRgba8(0, 0, 0, 0));
 
     // 테두리 찾기 및 그리기
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         final pixel = cutoutImage.getPixel(x, y);
-        final alpha = img.getAlpha(pixel);
+        final alpha = pixel.a;
 
         if (alpha > 0) {
           // 얼굴 픽셀 - 원본 위치에 복사
@@ -50,7 +50,7 @@ class StickerBorder {
 
   static bool _isEdgePixel(img.Image image, int x, int y) {
     final pixel = image.getPixel(x, y);
-    if (img.getAlpha(pixel) == 0) return false;
+    if (pixel.a == 0) return false;
 
     // 8방향 체크
     for (int dy = -1; dy <= 1; dy++) {
@@ -64,7 +64,7 @@ class StickerBorder {
             nx >= image.width ||
             ny < 0 ||
             ny >= image.height ||
-            img.getAlpha(image.getPixel(nx, ny)) == 0) {
+            image.getPixel(nx, ny).a == 0) {
           return true;
         }
       }
@@ -87,12 +87,22 @@ class StickerBorder {
           final y = centerY + dy;
           if (x >= 0 && x < image.width && y >= 0 && y < image.height) {
             final existing = image.getPixel(x, y);
-            if (img.getAlpha(existing) == 0) {
-              image.setPixel(x, y, color);
+            if (existing.a == 0) {
+              image.setPixel(x, y, hexToImgColor(color));
             }
           }
         }
       }
     }
   }
+
+  static img.Color hexToImgColor(int hexValue) {
+    int a = (hexValue >> 24) & 0xFF;
+    int r = (hexValue >> 16) & 0xFF;
+    int g = (hexValue >> 8) & 0xFF;
+    int b = hexValue & 0xFF;
+
+    return img.ColorRgba8(r, g, b, a);
+  }
+
 }

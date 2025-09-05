@@ -23,12 +23,44 @@ class _EditorBottomToolbarState extends State<EditorBottomToolbar> {
       padding: EdgeInsets.all(20),
       color: Color(0xff1A1A1A),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          GestureDetector(
-            onTap: widget.onPhotoTap,
-            child: SizedBox(
-              width: 90,
+          Expanded(
+            child: GestureDetector(
+              onTap: widget.onPhotoTap,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: const Icon(
+                      Icons.face_5,
+                      color: Colors.white,
+                      size: 38,
+                    ),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    "Face", // 단수형으로 변경
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          Expanded(
+            child: GestureDetector(
+              onTap: widget.onPhotoTap,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -59,10 +91,9 @@ class _EditorBottomToolbarState extends State<EditorBottomToolbar> {
             ),
           ),
 
-          GestureDetector(
-            onTap: widget.onTextTap,
-            child: SizedBox(
-              width: 90,
+          Expanded(
+            child: GestureDetector(
+              onTap: widget.onTextTap,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -94,10 +125,9 @@ class _EditorBottomToolbarState extends State<EditorBottomToolbar> {
             ),
           ),
 
-          GestureDetector(
-            onTap: widget.onBackgroundTap,
-            child: SizedBox(
-              width: 90, // 동일한 너비
+          Expanded(
+            child: GestureDetector(
+              onTap: widget.onBackgroundTap,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

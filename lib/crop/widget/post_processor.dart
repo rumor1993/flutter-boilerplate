@@ -14,7 +14,7 @@ class PostProcessor {
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         final pixel = maskImage.getPixel(x, y);
-        final gray = img.getRed(pixel);
+        final gray = pixel.r;
         binaryMask[y][x] = gray > 128; // 임계값 128
       }
     }
@@ -48,14 +48,14 @@ class PostProcessor {
     }
 
     // 결과 이미지 생성
-    final resultImage = img.Image(width, height);
-    img.fill(resultImage, img.Color.fromRgb(0, 0, 0)); // 검은색으로 초기화
+    final resultImage = img.Image(width: width, height: height, numChannels: 4);
+    img.fill(resultImage, color: img.ColorRgba8(0, 0, 0, 0)); // 검은색으로 초기화
 
     // 가장 큰 성분만 흰색으로 칠하기
     for (final point in components[maxIndex]) {
       final x = point[0];
       final y = point[1];
-      resultImage.setPixel(x, y, img.Color.fromRgb(255, 255, 255));
+      resultImage.setPixel(x, y, img.ColorRgb8(255, 255, 255));
     }
 
     return Uint8List.fromList(img.encodePng(resultImage));
@@ -108,7 +108,7 @@ class PostProcessor {
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         final pixel = maskImage.getPixel(x, y);
-        binary[y][x] = img.getRed(pixel) > 128;
+        binary[y][x] = pixel.r > 128;
       }
     }
 
@@ -121,12 +121,12 @@ class PostProcessor {
     final closed = _erode(dilated, 2);
 
     // 결과 이미지 생성
-    final resultImage = img.Image(width, height);
+    final resultImage = img.Image(width: width, height: height, numChannels: 4);
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         final color = closed[y][x] ?
-        img.Color.fromRgb(255, 255, 255) :
-        img.Color.fromRgb(0, 0, 0);
+        img.ColorRgb8(255, 255, 255) :
+        img.ColorRgb8(0, 0, 0);
         resultImage.setPixel(x, y, color);
       }
     }
@@ -208,7 +208,7 @@ class PostProcessor {
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
         final pixel = maskImage.getPixel(x, y);
-        final gray = img.getRed(pixel);
+        final gray = pixel.r;
         binaryMask[y][x] = gray > 64;
       }
     }
@@ -242,8 +242,8 @@ class PostProcessor {
     }
 
     // ✅ 핵심 수정: 원본 픽셀 값 보존!
-    final resultImage = img.Image(width, height);
-    img.fill(resultImage, img.Color.fromRgb(0, 0, 0));
+    final resultImage = img.Image(width: width, height: height, numChannels: 4);
+    img.fill(resultImage, color: img.ColorRgba8(0, 0, 0, 0));
 
     // 가장 큰 성분만 원본 값으로 칠하기
     for (final point in components[maxIndex]) {
@@ -258,19 +258,20 @@ class PostProcessor {
     return Uint8List.fromList(img.encodePng(resultImage));
   }
 
-  static Uint8List addGaussianBlur(Uint8List maskBytes, {double radius = 1.0}) {
+  static Uint8List addGaussianBlur(Uint8List maskBytes, {double radius = 2.0}) {
     final maskImage = img.decodePng(maskBytes)!;
-    final blurred = img.gaussianBlur(maskImage, radius.round());
+    final blurred = img.gaussianBlur(maskImage, radius: radius.round());
     return Uint8List.fromList(img.encodePng(blurred));
   }
+
   // 3. 전체 후처리 파이프라인
   static Uint8List processmask(Uint8List rawMask) {
     // 1단계: 형태학적 정리
-    final cleaned = morphologicalClean(rawMask);
+    // final cleaned = morphologicalClean(rawMask);
 
     // 2단계: 가장 큰 성분만 남기기
-    final filtered = keepLargestComponentSmooth(cleaned);
-    final blurred = addGaussianBlur(filtered, radius: 1.0);
+    final filtered = keepLargestComponentSmooth(rawMask);
+    final blurred = addGaussianBlur(filtered, radius: 3);
     return blurred;
   }
 }

@@ -71,7 +71,6 @@ class _CropScreenState extends State<CropScreen> {
       final transparentProcessedMask = ImageCutoutProcessor.createCutout(bytes, processedMask);
 
       final borderedImage = StickerBorder.addSimpleBorder(transparentProcessedMask, 0xFFFFFFFF, borderWidth: 15);
-      
       // 다이얼로그 닫기
       Navigator.of(context).pop();
       
