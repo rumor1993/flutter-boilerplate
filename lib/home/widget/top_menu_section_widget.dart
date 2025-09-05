@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_boilerplate/common/component/transparent_grid_widget.dart';
+import 'package:flutter_boilerplate/crop/view/body_screen.dart';
 import 'package:flutter_boilerplate/crop/view/crop_screen.dart';
 import 'package:flutter_boilerplate/home/data/menu_item_data.dart';
 
@@ -22,22 +23,14 @@ class _TopMenuSectionWidgetState extends State<TopMenuSectionWidget> {
         mainAxisSpacing: 14.0,
         childAspectRatio: 0.8, // 타이틀 공간을 위해 세로를 더 길게
       ),
-      itemCount: 2,
+      itemCount: menuItems.length,
       itemBuilder: (context, index) {
         return Column(
           children: [
             // 이미지 부분
             Expanded(
               child: GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder:
-                          (context) => CropScreen()
-                    ),
-                  );
-                },
+                onTap: () => menuItems[index].onTap(context),
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(

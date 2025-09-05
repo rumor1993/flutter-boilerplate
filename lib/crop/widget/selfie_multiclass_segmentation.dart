@@ -55,19 +55,26 @@ class SelfieMulticlassSegmentation {
 
     for (int y = 0; y < 256; y++) {
       for (int x = 0; x < 256; x++) {
-        // 원하는 클래스들의 확률 합계
-        double totalProb = 0.0;
-        for (MultiSegmentationType type in targetClasses) {
-          totalProb += output[0][y][x][type.classIndex];
+        // 아그맥스 찾기
+        double maxProb = double.negativeInfinity;
+        int argmaxClass = -1;
+
+        for (int classIndex = 0; classIndex < output[0][y][x].length; classIndex++) {
+          if (output[0][y][x][classIndex] > maxProb) {
+            maxProb = output[0][y][x][classIndex];
+            argmaxClass = classIndex;
+          }
         }
 
-        final value = (totalProb * 255).clamp(0, 255).round();
+        // 아그맥스 클래스가 타겟에 포함되는지 확인
+        bool isTargetClass = targetClasses.any((type) => type.classIndex == argmaxClass);
+
+        final value = isTargetClass ? 255 : 0;
         final pixel = img.ColorRgb8(value, value, value);
         maskImage.setPixel(x, y, pixel);
       }
     }
+
     return Uint8List.fromList(img.encodePng(maskImage));
   }
-
-
 }
